@@ -1,0 +1,1 @@
+# OpenStrata.MSBuild
