@@ -1,0 +1,3 @@
+**OpenStrata.MSBuild** contains build definitions that are shared across the various OpenStrata project types. Many of the build definitions are designed to facilitate production of high-quality distribution packages.
+
+Install **[OpenStrata.NET.Templates](https://www.nuget.org/packages/OpenStrata.NET.Templates)** to get started.  

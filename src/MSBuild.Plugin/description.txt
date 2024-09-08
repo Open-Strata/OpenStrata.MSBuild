@@ -1,0 +1,17 @@
+**OpenStrata.MSBuild.Plugin** will contain build definitions that are used in conjunction with Microsoft.PowerApps.MSBuild.Plugin package.
+
+Future functionality may include the automatic generation of plugin metadata, ensuring publishers are able to manage and tighlty couple in version control UID and the corresponding source code.  
+***
+
+Install **[OpenStrata.NET.Templates](https://www.nuget.org/packages/OpenStrata.NET.Templates)** to get started.
+
+After **OpenStrata.NET.Templates** is installed, create a Plugin project using the `openstrata-plugin` template.
+
+```
+dotnet new openstrata-plugin --name [preferred-name]
+```
+
+
+***
+
+$disclaimer$

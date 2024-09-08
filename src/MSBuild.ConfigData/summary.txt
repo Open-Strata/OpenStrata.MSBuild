@@ -1,0 +1,1 @@
+OpenStrata.MSBuild.ConfigData contains build definitions that allow for an OpenStrata ConfigData project to manage ConfigData packages generated using the Power Platform Configuration Migration tool.

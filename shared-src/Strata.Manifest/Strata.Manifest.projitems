@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>2528dca1-54f7-49f0-8f8a-dfb508c931d8</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Strata.Manifest</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\StrataManifestXDocument.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\StrataManifestXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\GitInfoXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\StratiXElement.cs" />
+  </ItemGroup>
+</Project>

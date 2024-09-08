@@ -1,0 +1,1 @@
+OpenStrata.MSBuild.Stratify contains build definitions that allow for an OpenStrata Srati project to produce a Nuget package containing all applicable components required for a Dataverse solution to be production ready.

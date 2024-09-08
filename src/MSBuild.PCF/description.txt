@@ -1,0 +1,18 @@
+**OpenStrata.MSBuild.PCF** will contain build definitions that are used in conjunction with Microsoft.PowerApps.MSBuild.Pcf package.
+
+Future functionality is TBD.  
+
+***
+
+Install **[OpenStrata.NET.Templates](https://www.nuget.org/packages/OpenStrata.NET.Templates)** to get started.
+
+After **OpenStrata.NET.Templates** is installed, create a PCF project using the `openstrata-pcf` template.
+
+```
+dotnet new openstrata-pcf --name [preferred-name]
+```
+
+
+***
+
+$disclaimer$

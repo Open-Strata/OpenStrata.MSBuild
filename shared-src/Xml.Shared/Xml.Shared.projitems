@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>715df31c-f44f-4193-b871-43bee964b8b9</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>OpenStrata.Xml</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocument.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocument.Generic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocument.Generic.CustomRoot.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocumentExtensions.cs" />
+  </ItemGroup>
+</Project>

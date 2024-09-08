@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configdatastorage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                   installsampledata="false"
+                   waitforsampledatatoinstall="true"
+                   agentdesktopzipfile=""
+		               agentdesktopexename=""
+                   crmmigdataimportfile="">
+  <solutions>
+    <!--<configsolutionfile solutionpackagefilename="solutionFile.zip" />-->
+  </solutions>
+  <filestoimport>
+    <!--<configimportfile filename="File.csv" filetype="CSV" associatedmap="" importtoentity="FileEntity" datadelimiter="" fielddelimiter="comma" enableduplicatedetection="true" isfirstrowheader="true"  isrecordownerateam="false" owneruser="" waitforimporttocomplete="true"/>-->
+    <!--<configimportfile filename="File.zip" filetype="ZIP" associatedmap="ZipFileMap" importtoentity="FileEntity" datadelimiter="" fielddelimiter="comma" enableduplicatedetection="true" isfirstrowheader="true"  isrecordownerateam="false" owneruser="" waitforimporttocomplete="true"/>-->
+    <zipimportdetails>
+      <!--<zipimportdetail filename="subfile1.csv" filetype="csv" importtoentity="account" />-->
+      <!--<zipimportdetail filename="subfile2.txt" filetype="csv" importtoentity="contact" />-->
+    </zipimportdetails>
+  </filestoimport>
+  <filesmapstoimport>
+    <!--<configimportmapfile filename="FileMap.xml" />-->
+    <!--<configimportmapfile filename="ZipFileMap.xml" />-->
+  </filesmapstoimport>
+</configdatastorage>

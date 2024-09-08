@@ -1,0 +1,1 @@
+OpenStrata.MSBuild.Package contains build definitions that allow for an OpenStrata Package project to create packages for the Power Platform Package Deployer and Microsoft's Appsource.

@@ -1,0 +1,118 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.Solution.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+
+	<!--//Ensure the following requird package references are present.
+		Microsoft.PowerApps.MSBuild.Solution
+		Restratify.Build
+	-->
+
+	<PropertyGroup Label='OpenStrata Project Properties'>
+		<OpenStrataProjectType Condition="'$(OpenStrataProjectType)' == ''">solution</OpenStrataProjectType>
+		<OpenStrataDuplicateProjectTypes Condition="'$(OpenStrataDuplicateProjectTypes)' != '' AND '$(OpenStrataDuplicateProjectTypes)' != 'solution' ">true</OpenStrataDuplicateProjectTypes>
+		<ProducesStrati>true</ProducesStrati>
+		<IsPackable>false</IsPackable>
+		<LocalImportSequence Condition="'$(LocalImportSequence)' == ''">99</LocalImportSequence>
+	</PropertyGroup>
+
+	<PropertyGroup Label='Properties used by Microsoft.PowerApps.MSBuild.Solution '>
+		<MimicPacProjectBehavior Condition="'$(MimicPacProjectBehavior)' == ''">false</MimicPacProjectBehavior>
+		<PowerAppsTargetsPath Condition="'$(MimicPacProjectBehavior)' == 'true'">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\PowerApps</PowerAppsTargetsPath>
+	</PropertyGroup>
+
+	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Solution.props"
+			Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Solution.props') and '$(MimicPacProjectBehavior)' == 'true'" />
+
+	<PropertyGroup Label='Properties used by Microsoft.PowerApps.MSBuild.Solution '>
+		<SolutionRootPath Condition="'$(SolutionRootPath)' == ''">Metadata</SolutionRootPath>
+		<!--Solution Packager overrides, un-comment to use: SolutionPackagerType (Managed, Unmanaged, Both)-->
+		<SolutionPackageType Condition="'$(SolutionPackageType)' == ''">Managed</SolutionPackageType>
+		<SolutionPackageType Condition="'$(Configuration)' == 'Debug'">Both</SolutionPackageType>
+
+		<IncludeAutoNumbering Condition="'$(IncludeAutoNumbering)'==''">false</IncludeAutoNumbering>
+		<IncludeCalendar Condition="'$(IncludeCalendar)'==''">false</IncludeCalendar>
+		<IncludeCustomization Condition="'$(IncludeCustomization)'==''">false</IncludeCustomization>
+		<IncludeEmailTracking Condition="'$(IncludeEmailTracking)'==''">false</IncludeEmailTracking>
+		<IncludeAutoNumbering Condition="'$(IncludeAutoNumbering)'==''">false</IncludeAutoNumbering>
+		<IncludeGeneral Condition="'$(IncludeGeneral)'==''">false</IncludeGeneral>
+		<IncludeISVConfig Condition="'$(IncludeISVConfig)'==''">false</IncludeISVConfig>
+		<IncludeMarketing Condition="'$(IncludeMarketing)'==''">false</IncludeMarketing>
+		<IncludeOutlookSynchronization Condition="'$(IncludeOutlookSynchronization)'==''">false</IncludeOutlookSynchronization>
+		<IncludeRelationshipRoles Condition="'$(IncludeRelationshipRoles)'==''">false</IncludeRelationshipRoles>
+		<IncludeSales Condition="'$(IncludeSales)'==''">false</IncludeSales>
+
+	</PropertyGroup>
+
+
+	<PropertyGroup Label="Attach to DependsOn">
+
+		<InitializeSolutionTemplateDependsOn>
+			$(InitializeSolutionTemplateDependsOn)
+		</InitializeSolutionTemplateDependsOn>
+
+		<SpecifyStratiFilesDependsOn>
+			SpecifySolutionStratiFiles;
+			$(SpecifyStratiFilesDependsOn)
+		</SpecifyStratiFilesDependsOn>
+
+	</PropertyGroup>
+
+	<PropertyGroup Label='Default Property Values'>
+		<DataverseSolutionName Condition="'$(DataverseSolutionName)' == ''">$(SolutionName)</DataverseSolutionName>
+		<DataverseSolutionName Condition="'$(DataverseSolutionName)' == ''">$(MSBuildProjectName)</DataverseSolutionName>
+		<DataversePublisherUniqueName Condition="'$(DataversePublisherUniqueName)' == ''">$(Company)</DataversePublisherUniqueName>
+		<DataversePublisherUniqueName Condition="'$(DataversePublisherUniqueName)' == ''">$(UserName)</DataversePublisherUniqueName>
+		<DataversePublisherPrefix Condition="'$(DataversePublisherPrefix)' == ''">new</DataversePublisherPrefix>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(MimicPacProjectBehavior)' == 'true'">
+		<ExcludeDirectories Include="$(MSBuildThisFileDirectory)\.gitignore" />
+		<ExcludeDirectories Include="$(MSBuildThisFileDirectory)\bin\**" />
+		<ExcludeDirectories Include="$(MSBuildThisFileDirectory)\obj\**" />
+		<ExcludeDirectories Include="$(MSBuildThisFileDirectory)\*.cdsproj" />
+		<ExcludeDirectories Include="$(MSBuildThisFileDirectory)\*.cdsproj.user" />
+		<ExcludeDirectories Include="$(MSBuildThisFileDirectory)\*.sln" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(MimicPacProjectBehavior)' == 'true'">
+		<None Include="$(MSBuildThisFileDirectory)\**" Exclude="@(ExcludeDirectories)" />
+		<Content Include="$(SolutionPackageZipFilePath)">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<OpenStrataProject Include="$(MSBuildProjectFullPath)">
+			<OpenStrataProjectType>solution</OpenStrataProjectType>
+			<ProjectName>$(MSBuildProjectName)</ProjectName>
+		</OpenStrataProject>
+
+		<CommonMergeVersionDiffFiles Include="$(ProjectDir)$(SolutionRootPath)\pluginpackages\**\pluginpackage.xml"/>
+		<CommonMergeVersionDiffFiles Include="$(ProjectDir)$(SolutionRootPath)\Other\Solution.xml"/>
+
+
+	</ItemGroup>
+
+	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Solution.targets"
+			Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Solution.targets') and '$(MimicPacProjectBehavior)' == 'true'" />
+
+
+	<PropertyGroup>
+		<!--Setting AfterMicrosoftNETSdkTargets to trigger the late importing fix for buggy microsoft code-->
+		<AfterMicrosoftNETSdkTargets>
+			$(AfterMicrosoftNETSdkTargets);
+			$(MSBuildThisFileDirectory)OpenStrata.Sdk.Override.targets;
+		</AfterMicrosoftNETSdkTargets>
+	</PropertyGroup>
+
+</Project>

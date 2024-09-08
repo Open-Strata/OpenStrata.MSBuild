@@ -1,0 +1,1 @@
+OpenStrata.MSBuild contains build definitions that are shared across the various OpenStrata project types.

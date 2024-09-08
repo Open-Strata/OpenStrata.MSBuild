@@ -1,0 +1,73 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.ConfigData.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<PropertyGroup Label='OpenStrata Project Properties'>
+		<OpenStrataProjectType Condition="'$(OpenStrataProjectType)' == ''">configdata</OpenStrataProjectType>
+		<RestatifyDuplicateProjectTypes Condition="'$(RestatifyDuplicateProjectTypes)' != '' AND '$(OpenStrataProjectType)' != 'configdata' ">true</RestatifyDuplicateProjectTypes>
+		<ProducesStrati>true</ProducesStrati>
+		<IsPackable>false</IsPackable>
+		<LocalImportSequence Condition="'$(LocalImportSequence)' == ''">99</LocalImportSequence>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<ConfigDataZipOutPath>$(MSBuildProjectDirectory)\$(BaseOutputPath)$(Configuration)\configdata.zip</ConfigDataZipOutPath>
+		<ConfigDataXmlDir Condition="'$(ConfigDataXmlDir)' == ''">$(MSBuildProjectDirectory)\data\</ConfigDataXmlDir>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Attach to DependsOn">
+		<SpecifyStratiFilesDependsOn>
+			SpecifyConfigDataStratiFiles;
+			$(SpecifyStratiFilesDependsOn)
+		</SpecifyStratiFilesDependsOn>
+
+		<PrepareForOpenStrataBuildDependsOn>
+			EnsureDefaultDataXml;
+			$(PrepareForOpenStrataBuildDependsOn)
+		</PrepareForOpenStrataBuildDependsOn>
+
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<OpenStrataProject Include="$(MSBuildProjectFullPath)">
+			<OpenStrataProjectType>configdata</OpenStrataProjectType>
+			<ProjectName>$(MSBuildProjectName)</ProjectName>
+		</OpenStrataProject>
+	</ItemGroup>
+
+
+	<ItemGroup>
+
+		<CommonFieldsToRemove Include="createdby" />
+		<CommonFieldsToRemove Include="createdonbehalfby" />
+		<CommonFieldsToRemove Include="createdon" />
+		<CommonFieldsToRemove Include="importsequencenumber"  />
+		<CommonFieldsToRemove Include="modifiedby"  />
+		<CommonFieldsToRemove Include="modifiedonbehalfby" />
+		<CommonFieldsToRemove Include="modifiedon"  />
+		<CommonFieldsToRemove Include="ownerid" />
+		<CommonFieldsToRemove Include="owningbusinessunit"  />
+		<CommonFieldsToRemove Include="owningteam" />
+		<CommonFieldsToRemove Include="owninguser"  />
+		<CommonFieldsToRemove Include="overriddencreatedon" />
+		<!--<CommonFieldsToRemove Include="statecode" />-->
+		<!--<CommonFieldsToRemove Include="statuscode" />-->
+		<CommonFieldsToRemove Include="timezoneruleversionnumber" />
+		<CommonFieldsToRemove Include="utcconversiontimezonecode"/>
+		<CommonFieldsToRemove Include="versionnumber" />
+		<CommonFieldsToRemove Include="organizationid" />		
+
+	</ItemGroup>	
+	
+
+</Project>

@@ -1,0 +1,110 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.DocumentTemplates.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+
+	<PropertyGroup Condition="'$(OpenStrataBuildSolutionAssemblyFile)' == ''">
+		<OpenStrataBuildDocTemplatesAssemblyFile>$(MSBuildThisFileDirectory)..\tasks\OpenStrata.MSBuild.DocumentTemplates.dll</OpenStrataBuildDocTemplatesAssemblyFile>
+		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+	</PropertyGroup>
+
+	<!-- Tasks -->
+	<UsingTask TaskName="OpenStrata.MSBuild.DocumentTemplates.Tasks.AnalyzeDocumentTemplates" AssemblyFile="$(OpenStrataBuildDocTemplatesAssemblyFile)"     TaskFactory="TaskHostFactory" />
+
+
+
+	<Target Name="SpecifyDocumentTemplateStratiFiles" DependsOnTargets="AnalyzeDocTemplates"  >
+
+		<ItemGroup>
+			<StratiFiles Include="$(ProjectDir)%(Content.Identity)" Condition="'%(Content.Extension)' == '.docx' or '%(Content.Extension)' == '.xlsx'" >
+				<PackagePath>\strati\document-templates\</PackagePath>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</StratiFiles>
+
+			<StratiFiles Include="$(ProjectDir)%(Content.Identity).xml" Condition="'%(Content.Extension)' == '.docx' or '%(Content.Extension)' == '.xlsx'" >
+				<PackagePath>\strati\document-templates\</PackagePath>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</StratiFiles>
+
+		</ItemGroup>
+
+	</Target>
+
+	<Target Name="UnpackDocumentTemplates" Returns="@(UnpackDocs)">
+
+		<ItemGroup>
+			<UnpackDocs Remove="@(UnpackDocs)" />
+			<UnpackDocs Include="$(ProjectDir)%(Content.Identity)" Condition="'%(Content.Extension)' == '.docx' or '%(Content.Extension)' == '.xlsx'" >
+				<UnpackPath>$(ProjectDir)%(Content.Identity).Meta</UnpackPath>
+			</UnpackDocs>
+		</ItemGroup>
+
+		<RemoveDir Directories="%(UnpackDocs.UnpackPath)" Condition="Exists('%(UnpackDocs.UnpackPath)')" />
+
+		<Unzip SourceFiles="%(UnpackDocs.FullPath)" DestinationFolder="%(UnpackDocs.UnpackPath)" Condition="Exists('%(UnpackDocs.FullPath)')" />
+
+	</Target>
+
+
+	<UsingTask
+	  TaskName="EnumerateMetaDirs"
+	  TaskFactory="RoslynCodeTaskFactory"
+	  AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
+		<ParameterGroup>
+			<rootDir Required="true" />
+			<metaDirs ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="True" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System.IO" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[        
+
+            var dotmeta = ".meta";
+            var dotMetaLength = dotmeta.Length;
+
+            var dirArray = Directory.EnumerateDirectories(rootDir, "*.meta", System.IO.SearchOption.TopDirectoryOnly).ToArray();
+
+         Console.WriteLine("enum restuls = " + dirArray.Length.ToString());
+
+            metaDirs = new TaskItem[dirArray.Length];
+            for (int i = 0; i < dirArray.Length; i++)
+            {
+              Console.WriteLine(dirArray[i]);
+                metaDirs[i] = new TaskItem(dirArray[i]);
+                metaDirs[i].SetMetadata("ZipFile",Path.Combine(rootDir, dirArray[i].Remove(dirArray[i].Length - dotMetaLength, dotMetaLength)));          
+            }
+ ]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+	<Target Name="PackDocumentTemplates">
+
+		<EnumerateMetaDirs rootDir="$(ProjectDir)" >
+			<Output TaskParameter="metaDirs" ItemName="MetaDirs" />
+		</EnumerateMetaDirs>
+
+		<Warning Text="%(MetaDirs.ZipFile)" />
+
+		<ZipDirectory DestinationFile="%(MetaDirs.ZipFile)" SourceDirectory="%(MetaDirs.Identity)" Overwrite="true" />
+
+	</Target>
+
+	<Target Name="AnalyzeDocTemplates" DependsOnTargets="UnpackDocumentTemplates">
+
+		<AnalyzeDocumentTemplates UnpackDocs="@(UnpackDocs)" />
+
+	</Target>
+
+</Project>

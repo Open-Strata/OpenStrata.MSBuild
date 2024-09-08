@@ -1,0 +1,43 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.Deployment.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<PropertyGroup Label='OpenStrata Project Properties'>
+		<OpenStrataProjectType Condition="'$(OpenStrataProjectType)' == ''">deployment</OpenStrataProjectType>
+		<RestatifyDuplicateProjectTypes Condition="'$(RestatifyDuplicateProjectTypes)' != '' AND '$(OpenStrataProjectType)' != 'deployment' ">true</RestatifyDuplicateProjectTypes>
+		<ProducesStrati>true</ProducesStrati>
+		<IsPackable>false</IsPackable>
+		<LocalImportSequence Condition="'$(LocalImportSequence)' == ''">99</LocalImportSequence>
+
+		<SignAssembly Condition="'$(SignAssembly)' == ''">true</SignAssembly>
+
+	</PropertyGroup>
+
+	<PropertyGroup Label="Attach to DependsOn">
+
+		<SpecifyStratiFilesDependsOn>
+			SpecifyDeploymentStratiFiles;
+			$(SpecifyStratiFilesDependsOn)
+		</SpecifyStratiFilesDependsOn>
+
+	</PropertyGroup>
+
+
+
+	<ItemGroup>
+		<OpenStrataProject Include="$(MSBuildProjectFullPath)">
+			<OpenStrataProjectType>deployment</OpenStrataProjectType>
+			<ProjectName>$(MSBuildProjectName)</ProjectName>
+		</OpenStrataProject>
+	</ItemGroup>
+
+</Project>

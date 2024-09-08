@@ -1,0 +1,1 @@
+OpenStrata.MSBuild.Deployment contains build definitions that allow for an OpenStrata Deployment project to produce exportable deployment tasks that are automatically recognized by an OpenStrata Package project when added as a project reference or a Strati package reference.

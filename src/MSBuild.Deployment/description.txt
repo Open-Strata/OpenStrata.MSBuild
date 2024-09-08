@@ -1,0 +1,24 @@
+**OpenStrata.MSBuild.Deployment** contains build definitions that allow for an OpenStrata Deployment project to produce exportable deployment tasks that are automatically recognized by an OpenStrata Package project when added as a project reference or a Strati package reference.
+
+This allows for code intended to be run during a Package Deployer Import be incorporated into the execution of the import even though it was not part of the original compiled code base. Achieving this requires the ImportPackage defined in an OpenStrata Package project be built using the OpenStrata.Deployment.Sdk in which the ImportPackageStrataBase base class is defined.
+
+The output of an OpenStrata Deployment project is a single Assembly in which one or more exportable components are defined.
+
+The output is distributed as part of the Strati package produced by the OpenStrata Strati project or automatically added into the OpenStrata Package project as a package reference.
+
+The benefit of producing deployment steps as exportable components are:
+
+- Deployment tasks can be automated and managed as a version control item.
+- Deployment tasks and Dataverse solution configuration management are tightly coupled.
+- As part of a Strati package, solutions and the required code-based deployment steps can be incorporated into downstream packages often produced by customers or other publishers.
+
+***
+
+Install **[OpenStrata.NET.Templates](https://www.nuget.org/packages/OpenStrata.NET.Templates)** to get started.
+
+After **OpenStrata.NET.Templates** is installed, create a Deployment project using the `openstrata-deployment` template.
+
+```
+dotnet new openstrata-deployment --name [preferred-name]
+```
+

@@ -1,0 +1,63 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.Deployment.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<Target Name="SpecifyDeploymentStratiFiles" DependsOnTargets="Build">
+
+		<PropertyGroup>
+			<_UseTargetPath Condition="'@(InnerOutput)' == ''">true</_UseTargetPath>
+		</PropertyGroup>
+
+		<ItemGroup Condition="'$(_UseTargetPath)' != 'true' ">
+			<StratiFiles Include="%(InnerOutput.Identity)">
+				<PackagePath>\strati\deployment\</PackagePath>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</StratiFiles>
+		</ItemGroup>
+
+		<ItemGroup Condition="'$(_UseTargetPath)' == 'true' ">
+			<StratiFiles Include="$(TargetPath)">
+				<PackagePath>\strati\deployment\</PackagePath>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</StratiFiles>
+		</ItemGroup>
+	</Target>
+
+	<Target Name="SpecifyLocalPackageStratiRuntimes" DependsOnTargets="Build"
+			Returns="@(LocalPackageStratiRuntimes)">
+
+		<PropertyGroup>
+			<_UseTargetPath Condition="'@(InnerOutput)' == ''">true</_UseTargetPath>
+		</PropertyGroup>
+
+		<ItemGroup Condition="'$(_UseTargetPath)' != 'true' ">
+			<LocalPackageStratiRuntimes Include="%(InnerOutput.Identity)">
+				<NuGetPackageId>$(MSBuildProjectName)</NuGetPackageId>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</LocalPackageStratiRuntimes>
+		</ItemGroup>
+
+		<ItemGroup Condition="'$(_UseTargetPath)' == 'true' ">
+			<LocalPackageStratiRuntimes Include="$(TargetPath)">
+				<NuGetPackageId>$(MSBuildProjectName)</NuGetPackageId>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</LocalPackageStratiRuntimes>
+		</ItemGroup>
+
+	</Target>
+
+
+</Project>

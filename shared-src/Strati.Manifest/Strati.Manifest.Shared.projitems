@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>8f22604f-fcd8-481b-9e24-007d70f117ac</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>OpenStrata.Strati.Manifest</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ManifestTools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StrataSequenceFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\ConfigDataPackageXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\DataverseSolutionXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\DeploymentExtensionXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\DocumentTemplateXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\ImportStrataManifestXDocument.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\ImportStrataManifestXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xml\PowerPagesXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\StratiManifestXDocument.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\StratiManifestXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\StratiSequenceXElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\StratiXElement.cs" />
+  </ItemGroup>
+</Project>

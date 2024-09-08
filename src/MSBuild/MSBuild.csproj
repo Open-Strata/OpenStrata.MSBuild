@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" />
+
+	<ItemGroup>
+		<None Include="Tools\sn.exe" Pack="true" PackagePath="\tools" />
+	</ItemGroup>
+	
+
+	<ItemGroup>
+		<PackageReferenceRequiredForInstall Include="Microsoft.Build.Artifacts" Version="2.2.0" />
+		<!--<PackageReferenceRequiredForInstall Include="GitInfo" Version="3.3.3" />-->
+	</ItemGroup>
+	 
+    <ItemGroup>
+		<None Include="templates\**\*.*" Pack="true" PackagePath="\templates\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Media\**\*.*" Pack="true" PackagePath="\media\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Build\**\*.*" Pack="true" PackagePath="\build\" />
+		<None Include="Build\**\*.*" Pack="true" PackagePath="\buildMultiTargeting\" />		
+	</ItemGroup>
+
+	<PropertyGroup>
+		<!-- This property tells MSBuild where the root folder of the package's build assets should be. Because we are not a library package, we should not pack to 'lib'. Instead, we choose 'tasks' by convention. -->
+		<BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+		<!-- NuGet does validation that libraries in a package are exposed as dependencies, but we _explicitly_ do not want that behavior for MSBuild tasks. They are isolated by design. Therefore we ignore this specific warning. -->
+		<NoWarn>NU5100</NoWarn>
+
+	</PropertyGroup>
+
+	<!--<ItemGroup>
+	  <ProjectReference Include="..\MSBuild.Nuget\MSBuild.Nuget.csproj">
+		  <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+		  <Private>false</Private>
+		  <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+	  </ProjectReference>
+	</ItemGroup>-->
+
+
+
+	<!--<ItemGroup>
+	  <PackageReference Update="OpenStrata.MSBuild.Nuget">
+	    <PrivateAssets>none</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>-->
+
+</Project>

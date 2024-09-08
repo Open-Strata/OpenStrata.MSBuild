@@ -1,0 +1,15 @@
+**OpenStrata.MSBuild.Solution** contains build definitions that are used in conjunction with Microsoft.PowerApps.MSBuild.Solution to build a DataVerse (aka CDS) Solution project and incorporate the Dataverse Solution into AppSource and/or Strati distribution packages.  
+***
+
+Install **[OpenStrata.NET.Templates](https://www.nuget.org/packages/OpenStrata.NET.Templates)** to get started.
+
+After **OpenStrata.NET.Templates** is installed, create a Dataverse Solution project using the `openstrata-solution` template.
+
+```
+dotnet new openstrata-solution --name [preferred-name]
+```
+
+
+***
+
+$disclaimer$

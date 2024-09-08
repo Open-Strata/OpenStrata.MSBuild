@@ -1,0 +1,120 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+
+	<PropertyGroup>
+		<!--This property is required to ensure transitive project behavior-->
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+
+		<OstrataBuildMode Condition="'$(OstrataBuildMode)' == ''">ide</OstrataBuildMode>
+		
+		<!--<UseGitInfoForVersions Condition="'$(UseGitInfoForVersions)' == ''">false</UseGitInfoForVersions>-->
+		<!--<IncludeGitInfoInPackage Condition="'$(IncludeGitInfoInPackage)' == ''">false</IncludeGitInfoInPackage>-->
+
+		<AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == ''">$(MSBuildProjectName).snk</AssemblyOriginatorKeyFile>
+		<FXPATH Condition="'$(FXPATH)' == ''">$(MSBuildThisFileDirectory)..\tools</FXPATH>
+		<SNExe Condition="'$(SNExe)' == ''">"$(FXPATH)\sn.exe"</SNExe>
+
+		<SolutionDir Condition="'$(SolutionDir)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)', '**\*.sln'))</SolutionDir>
+		<SolutionName Condition="'$(SolutionDir)' != '' and '$(SolutionName)' == ''">$([System.IO.Path]::GetFileNameWithoutExtension($([System.IO.Directory]::GetFiles("$(SolutionDir)", "*.sln")[0])))</SolutionName>
+		
+		<BuildModeSolutionExtensionsDir>$(SolutionDir).$(OstrataBuildMode)\</BuildModeSolutionExtensionsDir>
+		<BuildModeProjectExtensionsDir>.$(OstrataBuildMode)\</BuildModeProjectExtensionsDir>
+		<ConfigurationSolutionExtensionsDir>$(SolutionDir).$(OstrataBuildMode)\</ConfigurationSolutionExtensionsDir>
+		<ConfigurationProjectExtensionsDir>.$(OstrataBuildMode)\</ConfigurationProjectExtensionsDir>		
+
+	</PropertyGroup>
+
+
+	<!--Extension Prop Sources-->
+
+
+	<Import Project="$(OpenStrataExtensionProps)" Condition="'$(OpenStrataExtensionProps)' != ''"/>
+	<!--<Import Project=".extensions\**\*.props" />-->
+	<!--<Import Project="$(BuildModeSolutionExtensionsDir)**\*.props" />-->
+	<!--<Import Project="$(BuildModeProjectExtensionsDir)**\*.props" />-->
+	<!--<Import Project="$(ConfigurationSolutionExtensionsDir)**\*.props" />-->
+	<!--<Import Project="$(ConfigurationProjectExtensionsDir)**\*.props" />-->
+
+	<!--Legacy support inclusions-->
+	<Import Project="$(SolutionDir)environments.props" Condition="Exists('$(SolutionDir)environments.props')" />
+	<Import Project="$(SolutionDir)dotnetsolution.props" Condition="Exists('$(SolutionDir)dotnetsolution.props')" />
+
+
+	<!--Extension Target Sources-->
+
+	<!--<ItemGroup Label="Extensension Sources">
+
+		<openStrataExtensionsTargets Include="$(SolutionDir)\.extensions\**\*.targets" />
+		<openStrataExtensionsTargets Include=".extensions\**\*.targets" />
+		<openStrataExtensionsTargets Include="$(BuildModeSolutionExtensionsDir)**\*.targets" />
+		<openStrataExtensionsTargets Include="$(BuildModeProjectExtensionsDir)**\*.targets" />
+		<openStrataExtensionsTargets Include="$(ConfigurationSolutionExtensionsDir)**\*.targets" />
+		<openStrataExtensionsTargets Include="$(ConfigurationProjectExtensionsDir)**\*.targets" />
+
+		--><!--Legacy support inclusions--><!--
+		<openStrataExtensionsTargets Include="$(SolutionDir)environments.targets" Condition="Exists('$(SolutionDir)environments.targets')" />
+		<openStrataExtensionsTargets Include="$(SolutionDir)dotnetsolution.targets" Condition="Exists('$(SolutionDir)dotnetsolution.targets')" />
+
+	</ItemGroup>-->
+
+	<PropertyGroup>
+		<DefaultLogoPath>$(MSBuildThisFileDirectory)..\media\DefaultIcon.png</DefaultLogoPath>
+
+		<!--<LocalDebugPackageFeedPath Condition="'$(LocalDebugPackageFeedPath)' == ''">C:\DebugPackages</LocalDebugPackageFeedPath>-->
+
+		<!--<PushAfterBuild Condition="'$(PushAfterBuild)'==''">false</PushAfterBuild>-->
+		<!--<PushAfterBuild Condition="'$(Configuration)'=='Release'">true</PushAfterBuild>-->
+
+		<!--<DotOstrataPath>$(SolutionDir).ostrata\</DotOstrataPath>-->
+
+	</PropertyGroup>
+
+	<PropertyGroup Label="Get Nuget Package Metadata from files">
+		<PackageDescriptionPath Condition="'$(PackageDescriptionPath)' == ''">description.txt</PackageDescriptionPath>
+		<PackageReleaseNotesPath Condition="'$(PackageReleaseNotesPath)' == ''">releaseNotes.txt</PackageReleaseNotesPath>
+		<PackageReadmePath Condition="'$(PackageReadmePath)' == ''">readme.md</PackageReadmePath>
+		<PackageReadmeFile Condition="Exists('$(PackageReadmePath)')">docs\readme.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="$(PackageReadmePath)" Condition="Exists('$(PackageReadmePath)')">
+			<Pack>true</Pack>
+			<PackagePath>docs\</PackagePath>
+		</None>
+		<None Include="$(PackageDescriptionPath)" Condition="Exists('$(PackageDescriptionPath)')">
+			<Pack>false</Pack>
+		</None>
+		<None Include="$(PackageReleaseNotesPath)" Condition="Exists('$(PackageReleaseNotesPath)')">
+			<Pack>false</Pack>
+		</None>
+		<None Include="$(PackageSummaryPath)" Condition="Exists('$(PackageSummaryPath)')">
+			<Pack>false</Pack>
+		</None>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<PrepareForBuildDependsOn>PrepareForOpenStrataBuild; $(PrepareForBuildDependsOn)</PrepareForBuildDependsOn>
+		<PrepareForOpenStrataBuildDependsOn>
+			FixMergeDiffVersionMarkup;
+			Manifest;
+			PrepareMSBuildForOpenStataBuild;
+			$(PrepareForOpenStrataBuildDependsOn)
+		</PrepareForOpenStrataBuildDependsOn>
+		<!--<GenerateNuspecDependsOn>SetGitInfoForPackage; SetVersionFromGitInfo; $(GenerateNuspecDependsOn)</GenerateNuspecDependsOn>-->
+		<!--<CoreCompileDependsOn>SetVersionFromGitInfo; CheckForCommitBeforePacking; $(CoreCompileDependsOn)</CoreCompileDependsOn>-->
+	</PropertyGroup>
+
+
+
+</Project>

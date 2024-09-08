@@ -1,0 +1,57 @@
+﻿<!--
+***********************************************************************************************
+$Rename$.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<PropertyGroup Label='OpenStrata Project Properties'>
+		<OpenStrataProjectType Condition="'$(OpenStrataProjectType)' == ''">powerpages</OpenStrataProjectType>
+		<RestatifyDuplicateProjectTypes Condition="'$(RestatifyDuplicateProjectTypes)' != '' AND '$(OpenStrataProjectType)' != '$projecttype$' ">true</RestatifyDuplicateProjectTypes>
+		<IsPackable>false</IsPackable>
+
+		<WebSiteFolder Condition="'$(WebSiteFolder)'==''"  >$(SolutionName)</WebSiteFolder>
+		<WebSiteContentPath>.</WebSiteContentPath>
+
+		<DeploymentProfile Condition="'$(DeploymentProfile)'==''" >$(Stage)</DeploymentProfile>
+		<DeploymentProfile Condition="'$(DeploymentProfile)'==''" >$(Configuration)</DeploymentProfile>
+		<DeploymentYml>$(WebSiteContentPath)\$(DeploymentProfile).deployment.yml</DeploymentYml>
+		<DeploymentYmlTemplate Condition="'$(DeploymentYmlTemplate)'==''" >template.deployment.yml</DeploymentYmlTemplate>
+
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<OpenStrataProject Include="$(MSBuildProjectFullPath)">
+			<OpenStrataProjectType>powerpages</OpenStrataProjectType>
+			<ProjectName>$(MSBuildProjectName)</ProjectName>
+		</OpenStrataProject>
+
+		<PowerPagesPaths Include="$(WebSiteFolder)" />
+
+		<!--<StratiPackageReferenceRequiredForInstall Include="OpenStrata.Deployment.PowerPages" Version="0.8.*" />-->
+
+	</ItemGroup>
+
+
+	<PropertyGroup Label="Attach to DependsOn">
+		<SpecifyStratiFilesDependsOn>
+			SpecifyPowerPagesStratiFiles;
+			SpecifyDeploymentYmlStratiFiles;
+			$(SpecifyStratiFilesDependsOn)
+		</SpecifyStratiFilesDependsOn>
+
+		<PrepareForOpenStrataBuildDependsOn>
+			$(PrepareForOpenStrataBuildDependsOn)
+		</PrepareForOpenStrataBuildDependsOn>
+
+	</PropertyGroup>
+
+
+</Project>

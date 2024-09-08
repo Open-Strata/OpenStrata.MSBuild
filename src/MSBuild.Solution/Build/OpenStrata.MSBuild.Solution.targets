@@ -1,0 +1,263 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.Solution.targets
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<PropertyGroup Condition="'$(OpenStrataBuildSolutionAssemblyFile)' == ''">
+		<OpenStrataBuildSolutionAssemblyFile>$(MSBuildThisFileDirectory)..\tasks\OpenStrata.MSBuild.Solution.dll</OpenStrataBuildSolutionAssemblyFile>
+		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+	</PropertyGroup>
+
+	<!-- Tasks -->
+	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.CreateDataverseSolutionFromTemplate" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.FixUpDataverseSolutionPublisher" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.GetSolutionInfo" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.SetSolutionInfo" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.FixSolutionXml" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
+
+
+	<!--OS_GetDataverseSolutionInfo-->
+
+	<PropertyGroup>
+		<PushTargets>PowerAppsPackage;$(PushTargets)</PushTargets>
+	</PropertyGroup>
+
+	<Target Name="ProcessPluginReferences" BeforeTargets="PowerAppsPackage" DependsOnTargets="FixMergeDiffVersionMarkup;OS_GetDataverseSolutionInfo;">
+		<MSBuild Projects="@(PluginReference)"
+				 Targets="Build;GetPluginPackageInfo"
+				 Properties="SolutionMetadataDir=$([System.IO.Path]::GetFullPath($(MSBuildProjectDirectory)/$(SolutionRootPath)));SolutionPublisherPrefix=$(DataverseSolutionCustomizationPrefix)"
+			     RunEachTargetSeparately="true">
+			<!-- <Output TaskParameter="TargetOutputs" ItemName="ProjectReferenceCopyLocalPaths"/> -->
+		</MSBuild>
+
+	</Target>
+
+	<Target Name="OpenStrata_BeforePowerAppsPackage" BeforeTargets="PowerAppsPackage" DependsOnTargets="BeforeBuild" />
+
+
+	<Target Name="InitializeSolutionTemplate" BeforeTargets="CopyCdsSolutionContent"
+			DependsOnTargets="$(InitializeSolutionTemplateDependsOn)"
+			Condition="!Exists('$(ProjectDir)$(SolutionRootPath)')">
+
+		<MakeDir
+		   Directories="$(ProjectDir)$(SolutionRootPath)"/>
+
+		<ItemGroup>
+			<OpenStrataSolutionTemplateFiles Include="$(MSBuildThisFileDirectory)..\templates\Metadata\**\*.*"/>
+		</ItemGroup>
+
+		<Copy
+		SourceFiles="@(OpenStrataSolutionTemplateFiles)"
+		DestinationFiles="@(OpenStrataSolutionTemplateFiles->'$(ProjectDir)$(SolutionRootPath)\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
+		<FixUpDataverseSolutionPublisher
+			PublisherUniqueName="$(DataversePublisherUniqueName)"
+
+			>
+			<Output TaskParameter="FixedPublisherUniqueName"
+                  PropertyName="FixedPublisherUniqueName" />
+		</FixUpDataverseSolutionPublisher>
+
+		<CreateDataverseSolutionFromTemplate
+			TemplatePath="$(ProjectDir)$(SolutionRootPath)\Other\template_Solution.xml"
+			SolutionName="$(DataverseSolutionName)"
+			PublisherUniqueName="$(FixedPublisherUniqueName)"
+			CustomizationPrefix="$(DataversePublisherPrefix)" />
+	</Target>
+
+	<Target Name="OpenStrataBeforeSolutionPublish" BeforeTargets="Publish" DependsOnTargets="PowerAppsPackage" />
+
+	<Target Name="SpecifySolutionStratiFiles" DependsOnTargets="PowerAppsPackage">
+
+		<PropertyGroup Condition="'$(LocalStrati)' != 'true'">
+			<_SolutionPackageStratiZipFilePath>$(SolutionPackageZipPath)\$(SolutionPackageZipFile)</_SolutionPackageStratiZipFilePath>
+			<_SolutionPackageStratiZipFilePath Condition="'$(SolutionPackageType)' == 'Both'">$(_SolutionPackageStratiZipFilePath.Replace(".zip","_managed.zip"))</_SolutionPackageStratiZipFilePath>
+		</PropertyGroup>
+
+		<PropertyGroup Condition="'$(LocalStrati)' == 'true'">
+			<_SolutionPackageStratiZipFilePath>$(SolutionPackageZipPath)\$(SolutionPackageZipFile)</_SolutionPackageStratiZipFilePath>
+		</PropertyGroup>
+
+		<!--TODO: Show Error if the project package type is unmanaged.-->
+
+		<ItemGroup>
+			<StratiFiles Include="$(_SolutionPackageStratiZipFilePath)" Condition="">
+				<PackagePath>\strati\solution\</PackagePath>
+				<UniqueName>$(DataverseSolutionUniqueName)</UniqueName>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</StratiFiles>
+		</ItemGroup>
+	</Target>
+
+
+	<Target Name="SpecifyImportPackageSolutionFile"
+		Returns="@(ImportPackageSolutionFiles)" DependsOnTargets="PowerAppsPackage">
+
+
+		<ItemGroup>
+			<ImportPackageSolutionFiles Include="$(SolutionPackageZipPath)\$(SolutionPackageZipFile)">
+				<IsProjectReference>true</IsProjectReference>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+				<overwriteunmanagedcustomizations Condition="'$(overwriteunmanagedcustomizations)'=='true'">$(overwriteunmanagedcustomizations)</overwriteunmanagedcustomizations>
+				<publishworkflowsandactivateplugins Condition="'$(publishworkflowsandactivateplugins)'=='true'">$(publishworkflowsandactivateplugins)</publishworkflowsandactivateplugins>
+			</ImportPackageSolutionFiles>
+		</ItemGroup>
+	</Target>
+
+	<Target Name="SpecifyDataverseSolutionUniqueName"
+			Returns="$(DataverseSolutionUniqueName)" DependsOnTargets="OS_GetDataverseSolutionInfo">
+
+	</Target>
+
+
+	<PropertyGroup>
+
+		<CopyCdsSolutionContentDependsOn>
+			OS_GetDataverseSolutionInfo;
+			OS_SetDataverseSolutionInfo;
+			$(CopyCdsSolutionContentDependsOn)
+		</CopyCdsSolutionContentDependsOn>
+
+		<GetDataverseSolutionInfo>
+			$(GetDataverseSolutionInfo)
+		</GetDataverseSolutionInfo>
+
+		<SetDataverseSolutionInfo>
+			$(SetDataverseSolutionInfo)
+		</SetDataverseSolutionInfo>
+
+		<DebuggingFixSolutionXml Condition="'$(DebuggingFixSolutionXml)'==''">false</DebuggingFixSolutionXml>
+		<RemoveActiveDependencies Condition="'$(RemoveActiveDependencies)'==''">false</RemoveActiveDependencies>
+
+	</PropertyGroup>
+
+
+	<ItemGroup Label="FixSolutionXml defaults">
+		<AttributeDependenciesToRemove Include="ownerid" />
+		<SolutionDependenciesToRemove Include="Active" Condition="'$(RemoveActiveDependencies)'=='true'" />
+	</ItemGroup>
+
+
+
+
+	<Target Name="FixSolutionXml" DependsOnTargets="FixMergeDiffVersionMarkup;OS_SetDataverseSolutionInfo;$(FixSolutionXmlDependsOn)" AfterTargets="Export" BeforeTargets="PowerAppsPackage">
+		<FixSolutionXml
+             RootPath="$(SolutionRootPath)"
+			 AttributeDependenciesToRemove="@(AttributeDependenciesToRemove)"
+			 SolutionDependenciesToRemove="@(SolutionDependenciesToRemove)"
+			 RequiredTypeDependenciesToRemove="@(RequiredTypeDependenciesToRemove)"
+			 DependentTypeDependenciesToRemove="@(DependentTypeDependenciesToRemove)"			 
+			 SolutionDependencyMinVersion="@(SolutionDependencyMinVersion)"
+			 Debugging="$(DebuggingFixSolutionXml)"
+			>
+		</FixSolutionXml>
+	</Target>
+
+	<PropertyGroup Label="RemoveSolutionClutterProperties">
+		<RemoveSolutionClutter Condition="'$(RemoveSolutionClutter)'==''">true</RemoveSolutionClutter>
+		<KeepDVTable Condition="'$(KeepDVTable)'==''">false</KeepDVTable>
+		<dvtablesearchentitiespath>$(SolutionRootPath)\dvtablesearchentities</dvtablesearchentitiespath>
+		<dvtablesearchspath>$(SolutionRootPath)\dvtablesearchs</dvtablesearchspath>
+		<FixSolutionXmlDependsOn Condition="'$(RemoveSolutionClutter)'=='true'">$(FixSolutionXmlDependsOn);RemoveSolutionClutter</FixSolutionXmlDependsOn>
+	</PropertyGroup>
+
+	<ItemGroup Label ="SolutionClutterItems">
+		<SolutionClutterDirectory Include="$(dvtablesearchentitiespath)" Condition="'$(KeepDVTable)'=='false'" />
+		<SolutionClutterDirectory Include="$(dvtablesearchspath)" Condition="'$(KeepDVTable)'=='false'" />
+	</ItemGroup>
+
+	<Target Name="RemoveSolutionClutter" Condition="'$(RemoveSolutionClutter)'=='true'" >
+		<RemoveDir Directories="%(SolutionClutterDirectory.Identity)" Condition="Exists('%(SolutionClutterDirectory.Identity)')" >
+			<Output TaskParameter="RemovedDirectories" ItemName="DeletedSolutionClutterDirectories" />
+		</RemoveDir>
+		<Delete  Files="@(SolutionClutterFiles)" ContinueOnError="true" TreatErrorsAsWarnings="true">
+			<Output TaskParameter="DeletedFiles" ItemName="DeletedSolutionClutterFiles"/>
+		</Delete>
+	</Target>
+
+	<Target Name="BeforeCopyCdsSolutionContent" BeforeTargets="CopyCdsSolutionContent"
+			DependsOnTargets="$(CopyCdsSolutionContentDependsOn)" >
+
+	</Target>
+
+
+
+	<Target Name="OS_GetDataverseSolutionInfo" DependsOnTargets="OS_SetDataverseSolutionInfo;$(GetDataverseSolutionInfo)">
+		<GetSolutionInfo
+             RootPath="$(SolutionRootPath)"
+			>
+			<Output TaskParameter="DataverseSolutionUniqueName"
+                  PropertyName="DataverseSolutionUniqueName" />
+			<Output TaskParameter="DataverseSolutionVersion"
+                  PropertyName="DataverseSolutionVersion" />
+			<Output TaskParameter="DataverseSolutionManaged"
+                  PropertyName="DataverseSolutionManaged" />
+			<Output TaskParameter="DataverseSolutionPublisherUniqueName"
+                  PropertyName="DataverseSolutionPublisherUniqueName" />
+			<Output TaskParameter="DataverseSolutionCustomizationPrefix"
+                  PropertyName="DataverseSolutionCustomizationPrefix" />
+		</GetSolutionInfo>
+	</Target>
+
+	<Target Name="OS_SetDataverseSolutionInfo" DependsOnTargets="FixMergeDiffVersionMarkup;SetVersionInfo;$(SetDataverseSolutionInfo)">
+		<SetSolutionInfo
+             RootPath="$(SolutionRootPath)"
+             DataverseSolutionVersion="$(Version)"
+			 PublisherXmlPath="$(PublisherSolutionXmlPath)"
+			>
+		</SetSolutionInfo>
+		<PropertyGroup>
+			<SolutionVersion>$(Version)</SolutionVersion>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="EnsureSolutionUniqueName" Condition="'$(SolutionUniqueName)'==''"  >
+
+		<Message Text="Ensuring a value for solution unique name" Importance="High" />
+
+	</Target>
+
+	<Target Name="EnsureExportIncludes" Returns="@(ExportSolIncludes)" >
+
+		<ItemGroup>
+			<ExportSolIncludes Include="autonumbering" Condition="'$(IncludeAutoNumbering)'=='true'" />
+			<ExportSolIncludes Include="calendar" Condition="'$(IncludeCalendar)'=='true'" />
+			<ExportSolIncludes Include="customization" Condition="'$(IncludeCustomization)'=='true'" />
+			<ExportSolIncludes Include="emailtracking" Condition="'$(IncludeEmailTracking)'=='true'" />
+			<ExportSolIncludes Include="externalapplications" Condition="'$(IncludeExternalApplications)'=='true'" />
+			<ExportSolIncludes Include="general" Condition="'$(IncludeGeneral)'=='true'" />
+			<ExportSolIncludes Include="isvconfig" Condition="'$(IncludeISVConfig)'=='true'" />
+			<ExportSolIncludes Include="marketing" Condition="'$(IncludeMarketing)'=='true'" />
+			<ExportSolIncludes Include="outlooksynchronization" Condition="'$(IncludeOutlookSynchronization)'=='true'" />
+			<ExportSolIncludes Include="relationshiproles" Condition="'$(IncludeRelationshipRoles)'=='true'" />
+			<ExportSolIncludes Include="sales" Condition="'$(IncludeSales)'=='true'" />
+		</ItemGroup>
+
+	</Target>
+
+
+	
+	<!--Need to update the targets-->
+	<Target Name="CustomApiAfterExportFix" AfterTargets="PacExportSolution" BeforeTargets="PowerAppsPackage" Condition="'$(UseCustomApiPluginTypeFix)'=='true' ">
+		<ItemGroup>
+			<CustomAPIToDelete Include="$(SolutionRootPath)\customapis\*\customapi.xml" />
+		</ItemGroup>
+		<Warning Text="Running CustomApiAfterExportFix.  Attempting to delete following files" />
+		<Warning Text="%(CustomAPIToDelete.identity)" />
+		<Delete Files="@(CustomAPIToDelete)" />
+	</Target>
+
+
+
+</Project>

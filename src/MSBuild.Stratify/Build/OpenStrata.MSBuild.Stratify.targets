@@ -1,0 +1,216 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.Package.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+
+
+	<PropertyGroup Condition="'$(OpenStrataMSBuildStratifyAssemblyFile)' == ''">
+		<OpenStrataMSBuildStratifyAssemblyFile>$(MSBuildThisFileDirectory)..\tasks\OpenStrata.MSBuild.Stratify.dll</OpenStrataMSBuildStratifyAssemblyFile>
+		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+
+		<!--Safety Measure to ensure packaging is complete.-->
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<!-- Tasks -->
+	<UsingTask TaskName="OpenStrata.MSBuild.Stratify.Tasks.GenerateBuildTransitiveProps" AssemblyFile="$(OpenStrataMSBuildStratifyAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Stratify.Tasks.GenerateStratiManifest" AssemblyFile="$(OpenStrataMSBuildStratifyAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Stratify.Tasks.GenerateStrataStratifyManifest" AssemblyFile="$(OpenStrataMSBuildStratifyAssemblyFile)"     TaskFactory="TaskHostFactory" />
+
+	<Target Name="CreateStrati" DependsOnTargets="$(CreateStratiDependsOn)"
+		   Condition="$(IsPackable) == 'true'"
+          Inputs="@(NuGetPackInput)" Outputs="@(NuGetPackOutput)">
+	</Target>
+
+	<PropertyGroup>
+		<overwriteunmanagedcustomizations Condition="'$(overwriteunmanagedcustomizations)'==''">false</overwriteunmanagedcustomizations>
+		<publishworkflowsandactivateplugins Condition="'$(publishworkflowsandactivateplugins)'==''">true</publishworkflowsandactivateplugins>
+	</PropertyGroup>
+
+	<Target Name="GenerateBuildTransitiveProps" BeforeTargets="_GetPackageFiles" DependsOnTargets="SetVersionInfo;GenerateStratiManifest;_GetAbsoluteOutputPathsForPack">
+
+		<GenerateBuildTransitiveProps
+			 PackageId="$(PackageId)"
+			 PackageVersion="$(PackageVersion)"
+			 UniqueName="$(StratiUniqueName)"
+			 GitRepositoryUrl="$(GitRepositoryUrl)"
+			 GitCommit="$(GitCommit)"
+			 GitCommitDate="$(GitCommitDate)"
+			 OverwriteUnmanaged="$(overwriteunmanagedcustomizations)"
+			 PublishAndActivate="$(publishworkflowsandactivateplugins)"
+		     NuspecOutPath="$(NuspecOutputAbsolutePath)"
+			 TemplatePath="$(MSBuildThisFileDirectory)..\templates\buildTransitiveTemplate.props">
+
+			<Output TaskParameter="CreatedPropsPath"
+                  PropertyName="GeneratedBuildTransitivePropsPath" />
+		</GenerateBuildTransitiveProps>
+
+		<GenerateBuildTransitiveProps
+			 PackageId="$(PackageId)"
+			 PackageVersion="$(PackageVersion)"
+			 UniqueName="$(StratiUniqueName)"
+			 GitRepositoryUrl="$(GitRepositoryUrl)"
+			 GitCommit="$(GitCommit)"
+			 GitCommitDate="$(GitCommitDate)"
+			 OverwriteUnmanaged="$(overwriteunmanagedcustomizations)"
+			 PublishAndActivate="$(publishworkflowsandactivateplugins)"
+		     NuspecOutPath="$(NuspecOutputAbsolutePath)"
+			 TemplatePath="$(MSBuildThisFileDirectory)..\templates\buildTransitiveTemplate.targets">
+			<Output TaskParameter="CreatedPropsPath"
+                  PropertyName="GeneratedBuildTransitiveTargetsPath" />
+		</GenerateBuildTransitiveProps>
+
+		<ItemGroup>
+			<None Include="$(GeneratedBuildTransitivePropsPath)" Pack="true" PackagePath="\build;\buildTransitive" />
+			<None Include="$(GeneratedBuildTransitiveTargetsPath)" Pack="true" PackagePath="\build;\buildTransitive" />
+			
+		</ItemGroup>
+
+		<PropertyGroup>
+			<NoneConent>@(None)</NoneConent>
+		</PropertyGroup>
+
+	</Target>
+
+	<Target Name="GenerateStratiManifest" BeforeTargets="_GetPackageFiles" DependsOnTargets="GetStratiFiles;_GetAbsoluteOutputPathsForPack">
+
+		<GenerateStratiManifest
+		     NuspecOutputPath="$(NuspecOutputPath)"
+			 PackageId="$(PackageId)"
+			 PackageVersion="$(PackageVersion)"
+			 ProjectReferenceStrati="@(_specifiedStratiFiles)"
+			 PackageReferenceStrati="@(StratiPackageReference)"
+			 OverwriteUnmanaged="$(overwriteunmanagedcustomizations)"
+			 PublishAndActivate="$(publishworkflowsandactivateplugins)"
+			 >
+			<Output TaskParameter="CreatedStratiManifestPath"
+                  PropertyName="CreatedStratiManifestPath" />
+			<Output TaskParameter="StratiUniqueName"
+                  PropertyName="StratiUniqueName" />
+		</GenerateStratiManifest>
+
+		<ItemGroup>
+			<None Include="$(CreatedStratiManifestPath)" Pack="true" PackagePath="\strati\" />
+		</ItemGroup>
+
+		<PropertyGroup>
+			<NoneConent>@(None)</NoneConent>
+		</PropertyGroup>
+
+	</Target>
+
+
+	<Target Name="AddTransitiveStratiPackageReferencesToNuspec" DependsOnTargets="AddNoTargetProjectReferencesToNuspec">
+
+		<AddPackageReferencesRequiredForInstall
+			AbsoluteNuspecPath="$(NuspecFileAbsolutePath)"
+			PackageReferences="@(StratiPackageReference)" />
+
+	</Target>
+
+
+
+	<!--<Target Name="GetOpenStrataProjects" AfterTargets="Build" DependsOnTargets="_GetOpenStrataProjects;GetStratiFiles">
+
+		<Message Text="Found %(_OpenStrataProjects.OpenStrataProjectType) Project %(_OpenStrataProjects.ProjectName) at %(_OpenStrataProjects.Id) "
+				  Condition="'true'" Importance="high"/>
+
+		<Message Text="Found Strati File: %(_specifiedStratiFiles.Id)" Importance="high" />
+
+	</Target>-->
+
+
+	<Target Name="GetStratiPackageReferences" BeforeTargets="_GetPackageFiles" >
+
+		<MSBuild
+		  Projects="@(ProjectReference)"
+		  Targets="SpecifyStratiPackageReference"
+		  SkipNonexistentTargets="true"
+		  SkipNonexistentProjects="true"
+		  Properties="Configuration=$(Configuration);">
+			<Output
+			  TaskParameter="TargetOutputs"
+			  ItemName="PackageReferenceRequiredForInstall"/>
+		</MSBuild>
+
+	</Target>
+
+
+	<Target Name="GetStratiFiles" BeforeTargets="_GetPackageFiles" >
+
+		<MSBuild
+		  Projects="@(ProjectReference)"
+		  Targets="SpecifyStratiFiles"
+		  SkipNonexistentTargets="true"
+		  SkipNonexistentProjects="true"
+		  Properties="Configuration=$(Configuration);">
+			<Output
+			  TaskParameter="TargetOutputs"
+			  ItemName="_specifiedStratiFiles"/>
+		</MSBuild>
+
+		<ItemGroup>
+			<None Include="%(_specifiedStratiFiles.Identity)" Pack="true" PackagePath="%(_specifiedStratiFiles.PackagePath)" />
+		</ItemGroup>
+
+	</Target>
+
+
+
+	<PropertyGroup>
+		<ManifestTargets>GenerateOstrataStratifyManifest;$(ManifestTargets)</ManifestTargets>
+	</PropertyGroup>
+
+	<Target Name="GenerateOstrataStratifyManifest" >
+
+		<GenerateStrataStratifyManifest
+			SolutionDir="$(SolutionDir)"
+			ostrataVersion="$(ostrataStratifyVersion)"
+			PackageReferenceStrati="@(StratiPackageReference)" />
+
+	</Target>
+
+
+	<PropertyGroup>
+		<PushTargets>PushStrati;$(PushTargets)</PushTargets>
+	</PropertyGroup>
+
+	<Target Name="PushStrati" DependsOnTargets="Build;GenerateNuspec;Pack;$(MoveNugetPackageToLocalPackageFeedDependsOn)">
+		<Message Text="Attempting to push package" Importance="high" />
+
+		<PropertyGroup>
+			<PushPackagePath>$(ProjectDir)$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg</PushPackagePath>
+			<PushSource Condition="'$(PushSource)'==''">$(DevPushSource)</PushSource>
+		</PropertyGroup>
+
+		<!--<MakeDir Directories="$(LocalDebugPackageFeedPath)" Condition="!Exists('$(LocalDebugPackageFeedPath)')"  />-->
+
+		<!--<Copy
+		SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg"
+		DestinationFolder="$(LocalDebugPackageFeedPath)" Condition="Exists('$(PushPackagePath)')"
+        />-->
+		<Warning Text='dotnet nuget push "$(PushPackagePath)" -k $(PushKey) -s "$(PushSource)" --skip-duplicate' />
+
+		<Exec Command='dotnet nuget push "$(PushPackagePath)" -k $(PushKey) -s "$(PushSource)" --skip-duplicate' Condition="Exists('$(PushPackagePath)')" IgnoreExitCode="true" >
+			<Output TaskParameter="ExitCode" ItemName="PushExitCode"/>
+		</Exec>
+
+		<Exec Command='echo "##vso[task.logissue type=warning;]Conflict - The feed already contains $(PackageId) $(PackageVersion)"' Condition="'$(PushExitCode)'=='409' and '$(IsPipeline)'=='true'" />
+		<Exec Command='echo "##vso[task.setvariable variable=PushConflict;]true"' Condition="'$(PushExitCode)'=='409' and '$(IsPipeline)'=='true'" />
+		<Exec Command='echo "##vso[task.complete result=SucceededWithIssues;]"' Condition="'$(PushExitCode)'=='409' and '$(IsPipeline)'=='true'" />
+
+		<Warning Text="Conflict - The feed already contains $(PackageId) $(PackageVersion)'"  Condition="'$(PushExitCode)'=='409' and '$(IsPipeline)'!='true'" />
+
+	</Target>
+
+
+</Project>

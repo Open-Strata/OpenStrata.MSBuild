@@ -1,0 +1,90 @@
+﻿<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+     <!--Unmodified Target to override-->
+	<!--<Target Name="_PowerAppsPlugin_PublishAfterBuild"
+	  AfterTargets="Build"
+	  Condition="'$(PublishOnBuild)' == 'true'"
+	  DependsOnTargets="Publish">
+	</Target>-->
+
+	<!--<Target Name="Publish"
+			DependsOnTargets="PowerAppsPackage;Build;$(_CorePublishTargets)" >
+
+		<Message Text="Used Solution Override for Publish Target" />
+
+		--><!--<Error Text="This is running" />--><!--
+		
+	</Target>-->
+
+	<!--<Target Name="OpenStrataBeforeSolutionPublish" BeforeTargets="Publish" DependsOnTargets="PowerAppsPackage" />-->
+	
+	
+
+	<!--<Target Name="Build"
+			DependsOnTargets="PowerAppsPackage;" >
+
+		<Message Text="Used Solution Override for Build Target" />
+
+	</Target>-->
+
+	<!--Unmodifed Publish targets to override -->
+
+	<!--<Target Name="_PublishBuildAlternative"
+			Condition="'$(NoBuild)' != 'true'"
+			DependsOnTargets="Build;$(_CorePublishTargets)" />-->
+
+	<!--<Target Name="_PublishNoBuildAlternative"
+			Condition="'$(NoBuild)' == 'true'"
+			DependsOnTargets="$(_PublishNoBuildAlternativeDependsOn)" />
+
+	<Target Name="Publish"
+			Condition="$(IsPublishable) == 'true'"
+			DependsOnTargets="_PublishBuildAlternative;_PublishNoBuildAlternative" />-->
+
+	<!--Fix to override buggy Microsoft.PowerApps.MSBuild.Plugin target-->
+	<!--<Target Name="_PowerAppsPlugin_PublishAfterBuild"
+	  AfterTargets="Build">
+
+		<Message Text="Calling Publish in _PowerAppsPlugin_PublishAfterBuild override target"
+				  Importance="high" />
+		
+		<CallTarget Targets="Publish" />
+		
+	</Target>-->
+
+		<!--<PropertyGroup>
+			<OpenstrataIsPublishBuild>false</OpenstrataIsPublishBuild>
+			<PublishDependsOn>OpenStrataDetectedPublish;$(PublishDependsOn)</PublishDependsOn>
+		</PropertyGroup>
+
+		<Target Name="OpenStrataDetectedPublish" BeforeTargets="Publish" >
+			<Message Text="Openstrata Detected Publish"
+						  Importance="high" />
+			<PropertyGroup>
+				<OpenstrataIsPublishBuild>true</OpenstrataIsPublishBuild>
+			</PropertyGroup>
+		</Target>
+
+
+		<Target Name="_OstrataPublishBuildAlternative"
+				Condition="'$(NoBuild)' != 'true'"
+				DependsOnTargets="Build;$(_CorePublishTargets)" />
+
+		<Target Name="_OstrataPublishNoBuildAlternative"
+				Condition="'$(NoBuild)' == 'true'"
+				DependsOnTargets="$(_PublishNoBuildAlternativeDependsOn)" />
+
+
+		<Target Name="_PowerAppsPlugin_PublishAfterBuild"
+		   AfterTargets="Build"
+			DependsOnTargets="_OstrataPublishBuildAlternative;_OstrataPublishNoBuildAlternative" >
+
+			<Message Text="Calling Publish in _PowerAppsPlugin_PublishAfterBuild override target"
+						  Importance="high" />
+
+			<CallTarget Targets="Publish"  Condition="'$(OpenstrataIsPublishBuild)'!='true'"  />
+
+
+		</Target>-->
+
+</Project>

@@ -1,0 +1,88 @@
+﻿<!--
+***********************************************************************************************
+$Rename$.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+
+	<PropertyGroup>
+		<BuildDependsOn>$(BuildDependsOn);PackPowerPages</BuildDependsOn>
+		<!--<CompilePowerPagesDependsOn>PackPowerPages;$(CompilePowerPagesDependsOn)</CompilePowerPagesDependsOn>-->
+		<UploadSitesTargets>$(UploadSitesTargets);UploadPowerPageSite</UploadSitesTargets>
+		<DownloadSitesTargets>$(DownloadSitesTargets);DownloadPowerPageSite</DownloadSitesTargets>
+		<EnsureProjectOutputDependsOn>$(EnsureProjectOutputDependsOn);</EnsureProjectOutputDependsOn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PowerPagesFiles Include="$(ProjectDir)%(PowerPagesPaths.Identity)\**\*" />
+		<PowerPagesOutputs Include="$(ProjectDir)$(OutDir)%(PowerPagesPaths.Identity).zip" />
+	</ItemGroup>
+
+
+	<!--<Target Name="CompilePowerPages" DependsOnTargets="$(CompilePowerPagesDependsOn)" />-->
+	<Target Name="EnsurePowerPagesOutput" DependsOnTargets="PackPowerPages" />
+	<Target Name="SpecifyPowerPagesStratiFiles" DependsOnTargets="EnsurePowerPagesOutput" >
+
+		<ItemGroup>
+			<StratiFiles Include="@(PowerPagesArchives)">
+				<PackagePath>\strati\powerpages\</PackagePath>
+				<DeploymentYml>$(DeploymentYml)</DeploymentYml>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</StratiFiles>
+		</ItemGroup>
+	</Target>
+
+	<Target Name="SpecifyDeploymentYmlStratiFiles" DependsOnTargets="EnsureDeploymentProfile;"  >
+
+		<ItemGroup>
+			<StratiFiles Include="$(ProjectDir)$(DeploymentYml)">
+				<PackagePath>\strati\powerpages\</PackagePath>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</StratiFiles>
+		</ItemGroup>
+
+	</Target>
+
+	<Target Name="EnsureDeploymentProfile">
+
+		<Copy SourceFiles="$(DeploymentYmlTemplate)" DestinationFiles="$(DeploymentYml)" Condition="!Exists('$(DeploymentYml)')" />
+
+	</Target>
+
+
+	<Target Name="PackPowerPages" Returns="@(PowerPagesArchives)" Inputs="@(PowerPagesFiles)" Outputs="@(PowerPagesOutputs)" >
+		<!--Send power pages to an archive file-->
+
+		<ZipDirectory
+            SourceDirectory="%(PowerPagesPaths.Identity)"
+            DestinationFile="$(ProjectDir)$(OutDir)%(PowerPagesPaths.Identity).zip" Overwrite="true" />
+
+		<ItemGroup>
+			<PowerPagesArchives Include="$(ProjectDir)$(OutDir)%(PowerPagesPaths.Identity).zip" />
+		</ItemGroup>
+
+	</Target>
+
+	<PropertyGroup>
+		<InitEnvDevopsExportDependsOn>InitPowerPagesEnvDevopsExport;$(InitEnvDevopsExportDependsOn)</InitEnvDevopsExportDependsOn>
+	</PropertyGroup>
+
+	<Target Name="InitPowerPagesEnvDevopsExport" Condition="'$(WebSiteId)'!='' And '$(WebSiteFolder)'!=''">
+		<Warning Text="Running InitPowerPagesEnvDevopsExport" />
+		<Warning Text="Power Pages website id is $(WebSiteId)"   />
+		<Warning Text="Power Pages WebSiteFolder id is $(WebSiteFolder)"   />
+		<Exec Command='echo ##vso[task.setvariable variable=DownloadPowerPageWebsite]true'  />
+		<Exec Command='echo ##vso[task.setvariable variable=PowerPageWebsiteId]$(WebSiteId)' />
+		<Exec Command='echo ##vso[task.setvariable variable=PowerPageWebsiteFolder]$(WebSiteFolder)' />
+	</Target>	
+
+</Project>

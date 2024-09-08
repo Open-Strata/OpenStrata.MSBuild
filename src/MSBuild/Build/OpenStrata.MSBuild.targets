@@ -1,0 +1,313 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.targets
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<PropertyGroup Condition="'$(OpenStrataBuildSolutionAssemblyFile)' == ''">
+		<OpenStrataBuildAssemblyFile>$(MSBuildThisFileDirectory)..\Tasks\OpenStrata.MSBuild.dll</OpenStrataBuildAssemblyFile>
+		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+		<SignAssembly Condition="'$(SignAssembly)' == ''">false</SignAssembly>
+	</PropertyGroup>
+
+	<!-- Tasks -->
+	<UsingTask TaskName="OpenStrata.MSBuild.Tasks.CreateStrongNameKeyFile" AssemblyFile="$(OpenStrataBuildAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Tasks.FixUpMergeDiffVersionMarkup" AssemblyFile="$(OpenStrataBuildAssemblyFile)"     TaskFactory="TaskHostFactory" />
+
+
+	<UsingTask TaskName="OpenStrataTokenReplace" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<Path ParameterType="System.String" Required="true" />
+			<Token ParameterType="System.String" Required="true" />
+			<Replacement ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+					string content = File.ReadAllText(Path);
+					content = content.Replace(Token, Replacement);
+					File.WriteAllText(Path, content);
+					]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+	<UsingTask TaskName="OpenStrataGetTextFileContents" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<TxtFilePath ParameterType="System.String" Required="true"   />
+			<FileTxt ParameterType="System.String" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System.IO"/>
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+				
+					FileTxt = string.Empty;
+
+					if (File.Exists(TxtFilePath))
+					{
+						FileTxt = File.ReadAllText(TxtFilePath);
+					}
+				
+					]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+
+	<Target Name="FixMergeDiffVersionMarkup" >
+		<FixUpMergeDiffVersionMarkup CommonMergeVersionDiffFiles="@(CommonMergeVersionDiffFiles)" />
+	</Target>
+	
+	<Target Name="_EnsureStrongNameKeyExists" Condition="!Exists('$(MSBuildProjectName).snk') and '$(SignAssembly)' == 'true'" >
+
+		<CreateStrongNameKeyFile Path="$(MSBuildProjectName).snk" />
+
+	</Target>
+
+	<Target Name="PrepareForOpenStrataBuild"
+			DependsOnTargets="_EnsureStrongNameKeyExists; $(PrepareForOpenStrataBuildDependsOn)">
+	</Target>
+
+	<Target Name="GetOutputItemsFromPackDependsOn" BeforeTargets="_GetOutputItemsFromPack"
+			DependsOnTargets="$(GetPackageVersionDependsOn)">
+
+	</Target>
+
+	<Target Name="PackDocs" DependsOnTargets="$(PackDocsDependsOn)" />
+	<Target Name="UnpackDocs" DependsOnTargets="$(UnpackDocsDependsOn)" />
+
+	<Target Name="SetVersionInfo" DependsOnTargets="$(SetVersionInfoDependsOn)" />
+	<Target Name="GetVersionInfo" DependsOnTargets="$(GetVersionInfoDependsOn)" />
+
+	<Target Name="Refresh" DependsOnTargets="$(RefreshDependsOn)" />
+	<Target Name="Init"  DependsOnTargets="$(InitDependsOn)" />
+	<Target Name="Update"  DependsOnTargets="$(UpdateDependsOn)" />
+
+	<Target Name="Push" DependsOnTargets="Build" >
+		<CallTarget Targets="$(PushTargets)" />
+	</Target>
+
+	<Target Name="InitEnvDevopsExport" DependsOnTargets="$(InitEnvDevopsExportDependsOn)">
+		<Warning Text="Finished Running InitEnvDevopsExport Target"   />
+	</Target>
+
+	<!--The following targets are used for managing strati-->
+	<Target Name="GetOpenStrataProjects" DependsOnTargets="ResolveProjectReferences"
+			Returns="@(_OpenStrataProjects)" Condition="">
+
+		<MSBuild
+		  Projects="@(ProjectReference)"
+		  Targets="_GetOpenStrataProjects"
+		  SkipNonexistentTargets="true"
+		  SkipNonexistentProjects="true"
+		  Properties="BuildProjectReferences=false;">
+			<Output
+			  TaskParameter="TargetOutputs"
+			  ItemName="_OpenStrataProjects"/>
+		</MSBuild>
+
+		<ItemGroup Condition="'$(OpenStrataProjectType)' != ''">
+			<_OpenStrataProjects Include="$(MSBuildProjectFullPath)">
+				<OpenStrataProjectType Condition="'$(PackageVersion)' != ''">$(OpenStrataProjectType)</OpenStrataProjectType>
+				<ProjectName>$(MSBuildProjectName)</ProjectName>
+				<ProducesStrati>$(ProducesStrati)</ProducesStrati>
+			</_OpenStrataProjects>
+		</ItemGroup>
+
+	</Target>
+
+	<!--<Target Name="SpecifyStratiFiles" DependsOnTargets="$(SpecifyStratiFilesDependsOn); Build"
+		Returns="@(StratiFiles)" Condition="'$(ProducesStrati)' == 'true'">
+	</Target>-->
+
+	<Target Name="SpecifyStratiFiles" DependsOnTargets="$(SpecifyStratiFilesDependsOn)"
+	Returns="@(StratiFiles)" >
+	</Target>
+
+	<Target Name="SpecifyStratiPackageReference" DependsOnTargets="$(SpecifyStratiPackageReferenceDependsOn)"
+	    Returns="@(StratiPackageReferenceRequiredForInstall)" >
+	</Target>
+
+	<PropertyGroup>
+		<GetPreReferencedLibrariesDependsOn>_GetCommonMicrosoftLibraries; _GetCommonOpenStrataLibraries $(GetPreReferencedLibrariesDependsOn)</GetPreReferencedLibrariesDependsOn>
+		<PreReferencedAssemblyPath Condition="'$(PreReferencedAssemblyPath)' == ''" >$(MSBuildProjectDirectory)\$(OutputPath)\</PreReferencedAssemblyPath>
+	</PropertyGroup>
+
+	<!--For future reference
+	"@(ReferencePathWithRefAssemblies)  or 
+	5>            C:\Users\RyanMillett\.nuget\packages\microsoft.crmsdk.coreassemblies\9.0.2.23\lib\net462\Microsoft.Crm.Sdk.Proxy.dll
+	5>                    CopyLocal=false
+	5>                    ExternallyResolved=true
+	5>                    FusionName=Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+	5>                    HintPath=C:\Users\RyanMillett\.nuget\packages\microsoft.crmsdk.coreassemblies\9.0.2.23\lib\net462\Microsoft.Crm.Sdk.Proxy.dll
+	5>                    ImageRuntime=v4.0.30319
+	5>                    NuGetPackageId=Microsoft.CrmSdk.CoreAssemblies
+	5>                    NuGetPackageVersion=9.0.2.23
+	5>                    NuGetSourceType=Package
+	5>                    OriginalItemSpec=C:\Users\RyanMillett\.nuget\packages\microsoft.crmsdk.coreassemblies\9.0.2.23\lib\net462\Microsoft.Crm.Sdk.Proxy.dll
+	5>                    PathInPackage=lib/net462/Microsoft.Crm.Sdk.Proxy.dll
+	5>                    Private=false
+	5>                    ReferenceAssembly=C:\Users\RyanMillett\.nuget\packages\microsoft.crmsdk.coreassemblies\9.0.2.23\lib\net462\Microsoft.Crm.Sdk.Proxy.dll
+	5>                    ReferenceSourceTarget=ResolveAssemblyReference
+	5>                    ResolvedFrom={HintPathFromItem}
+	5>                    Version=9.0.0.0-->
+
+
+	<!--@RuntimeCopyLocalItems=
+	2>    Output Item(s):
+	2>        RuntimeCopyLocalItems=
+	2>            C:\Users\RyanMillett\.nuget\packages\microsoft.crmsdk.coreassemblies\9.0.2.23\lib\net462\Microsoft.Crm.Sdk.Proxy.dll
+	2>                    AssetType=runtime
+	2>                    CopyLocal=true
+	2>                    CopyToPublishDirectory=false
+	2>                    DestinationSubPath=Microsoft.Crm.Sdk.Proxy.dll
+	2>                    NuGetPackageId=Microsoft.CrmSdk.CoreAssemblies
+	2>                    NuGetPackageVersion=9.0.2.23
+	2>                    PathInPackage=lib/net462/Microsoft.Crm.Sdk.Proxy.dll-->
+
+	<PropertyGroup>
+		<GetPackageMetadataFromFilesDependsOn>
+			GetPackageReleaseNotesFromTextFile;
+			GetPackageDescriptionFromTextFile;
+			$(GetPackageMetadataFromFilesDependsOn)
+		</GetPackageMetadataFromFilesDependsOn>
+
+
+		<GetPackageReleaseNotesFromTextFileDependsOn>
+			$(GetPackageReleaseNotesFromTextFileDependsOn)
+		</GetPackageReleaseNotesFromTextFileDependsOn>
+
+		<GetPackageDescriptionFromTextFileDependsOn>
+			$(GetPackageDescriptionFromTextFileDependsOn)
+		</GetPackageDescriptionFromTextFileDependsOn>
+
+		<PrepareMSBuildForOpenStataBuildDependsOn>
+			_CopyDescriptionTemplateIfItDoeNotExist;
+			_CopyReleaseNotesTemplateIfItDoeNotExist;
+			_CopyReadMeTemplateIfItDoeNotExist;
+			$(PrepareMSBuildForOpenStataBuildDependsOn)
+		</PrepareMSBuildForOpenStataBuildDependsOn>
+
+	</PropertyGroup>
+
+	<Target Name="GetPackageReleaseNotesFromTextFile" Condition="Exists('$(PackageReleaseNotesPath)')"
+			DependsOnTargets="$(GetPackageReleaseNotesFromTextFileDependsOn)">
+
+		<OpenStrataGetTextFileContents
+			TxtFilePath="$(PackageReleaseNotesPath)"
+			>
+			<Output
+			  TaskParameter="FileTxt"
+			  PropertyName="PackageReleaseNotes"/>
+		</OpenStrataGetTextFileContents>
+
+	</Target>
+
+	<Target Name="GetPackageDescriptionFromTextFile" Condition="Exists('$(PackageDescriptionPath)')"
+			DependsOnTargets="$(GetPackageDescriptionFromTextFileDependsOn)">
+
+		<OpenStrataGetTextFileContents
+			TxtFilePath="$(PackageDescriptionPath)"
+			>
+			<Output
+			  TaskParameter="FileTxt"
+			  PropertyName="PackageDescription"/>
+		</OpenStrataGetTextFileContents>
+
+	</Target>
+
+	<Target Name="PrepareMSBuildForOpenStataBuild"
+			DependsOnTargets="$(PrepareMSBuildForOpenStataBuildDependsOn)">
+
+	</Target>
+
+	<Target Name="_CopyDescriptionTemplateIfItDoeNotExist" Condition="!Exists('description.txt') and '$(IsPackable)' == 'true'">
+
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\templates\description.template.txt"
+			   DestinationFiles="description.txt"
+			   Condition="!Exists('description.txt')" />
+
+		<OpenStrataTokenReplace
+			Path="description.txt"
+			Token="$assemblyname$"
+			Replacement="$(AssemblyName)"
+			/>
+
+	</Target>
+
+	<Target Name="_CopyReleaseNotesTemplateIfItDoeNotExist" Condition="!Exists('releaseNotes.txt') and '$(IsPackable)' == 'true'">
+
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\templates\releaseNotes.template.txt"
+			   DestinationFiles="releaseNotes.txt"
+			   Condition="!Exists('releaseNotes.txt')" />
+
+		<OpenStrataTokenReplace
+			Path="releaseNotes.txt"
+			Token="$assemblyname$"
+			Replacement="$(AssemblyName)"
+			/>
+
+	</Target>
+
+	<Target Name="_CopyReadMeTemplateIfItDoeNotExist" Condition="!Exists('readme.md')">
+
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)..\templates\readme.template.md"
+			   DestinationFiles="readme.md"
+			   Condition="!Exists('readme.md')" />
+
+		<OpenStrataTokenReplace
+			Path="readme.md"
+			Token="$assemblyname$"
+			Replacement="$(AssemblyName)"
+			/>
+
+	</Target>
+
+
+
+	<!--<Target Name="Version" DependsOnTargets="$(CheckIfVersionControlProject)" >
+		<CallTarget Targets="$(VersionTargets)" Condition="'$(VersionControlProject)'=='true'" />
+	</Target>-->
+
+
+
+	<Target Name="Manifest" DependsOnTargets="$(ManifestTargets)" />
+
+
+	<Target Name="EnsureProjectOutput" DependsOnTargets="$(EnsureProjectOutputDependsOn)" />
+
+	<!--Power Platform CLI Targets-->
+
+	<Target Name="PushPackage" AfterTargets="_PackAsBuildAfterTarget" Condition="'$(PushAfterBuild)'=='true'"
+			 DependsOnTargets="$(MoveNugetPackageToLocalPackageFeedDependsOn)">
+		<Message Text="Attempting to push package" Importance="high" />
+		<PropertyGroup>
+			<PushPackagePath>$(ProjectDir)$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg</PushPackagePath>
+		</PropertyGroup>
+		<MakeDir Directories="$(LocalDebugPackageFeedPath)" Condition="!Exists('$(LocalDebugPackageFeedPath)')"  />
+		<Copy
+		SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg"
+		DestinationFolder="$(LocalDebugPackageFeedPath)" Condition="Exists('$(PushPackagePath)')"
+        />
+		<Exec Command='dotnet nuget push "$(PushPackagePath)" -k $(PushKey) -s "$(PushSource)" --skip-duplicate' Condition="Exists('$(PushPackagePath)')" IgnoreExitCode="true" >
+			<Output TaskParameter="ExitCode" ItemName="PushExitCode"/>
+		</Exec>
+		<Exec Command='echo "##vso[task.logissue type=warning;]Conflict - The feed already contains $(PackageId) $(PackageVersion)"' Condition="'$(PushExitCode)'=='409' and '$(IsPipeline)'=='true'" />
+		<Exec Command='echo "##vso[task.setvariable variable=PushConflict;]true"' Condition="'$(PushExitCode)'=='409' and '$(IsPipeline)'=='true'" />
+		<Exec Command='echo "##vso[task.complete result=SucceededWithIssues;]"' Condition="'$(PushExitCode)'=='409' and '$(IsPipeline)'=='true'" />
+		<Warning Text="Conflict - The feed already contains $(PackageId) $(PackageVersion)'"  Condition="'$(PushExitCode)'=='409' and '$(IsPipeline)'!='true'" />
+	</Target>
+
+
+    <Import Project="$(OpenStrataExtensionTargets)" Condition="'$(OpenStrataExtensionTargets)' != ''"/>
+	
+	
+</Project>

@@ -1,0 +1,1 @@
+OpenStrata.MSBuild.PCF will contain build definitions that are used in conjunction with Microsoft.PowerApps.MSBuild.Pcf package.

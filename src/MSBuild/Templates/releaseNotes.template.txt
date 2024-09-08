@@ -1,0 +1,4 @@
+
+1.0.0:
+- This is a format for summarizing changes.
+- The version is listed, then a list of a summar of changes is provided.

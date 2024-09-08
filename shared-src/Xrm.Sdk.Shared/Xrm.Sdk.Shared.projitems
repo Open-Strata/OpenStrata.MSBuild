@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>6bf9ac7e-65c0-47a7-9400-8deeaa20c4db</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>OpenStrata.Xrm.Sdk</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)EnvironmentSettingsHelperExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FetchXml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GeneralExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IOrganizatonServiceExtensions.cs" />
+  </ItemGroup>
+</Project>

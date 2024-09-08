@@ -1,0 +1,57 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.Package.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<PropertyGroup Label='OpenStrata Project Properties'>
+		<OpenStrataProjectType Condition="'$(OpenStrataProjectType)' == ''">package</OpenStrataProjectType>
+		<RestatifyDuplicateProjectTypes Condition="'$(RestatifyDuplicateProjectTypes)' != '' AND '$(OpenStrataProjectType)' != 'package' ">true</RestatifyDuplicateProjectTypes>
+		<IsPackable>false</IsPackable>
+
+		<ostrataNugetPackageFolder>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))</ostrataNugetPackageFolder>
+		<ostrataPackageVersion>$([System.IO.Path]::GetFileName($(ostrataNugetPackageFolder)))</ostrataPackageVersion>
+
+		<SignAssembly Condition="'$(SignAssembly)' == ''">true</SignAssembly>
+
+	</PropertyGroup>
+
+	<PropertyGroup Label="Set Default Package Properties">
+		<ImportPackageShortName Condition="'$(ImportPackageShortName)' == ''">$(MSBuildProjectName)</ImportPackageShortName>
+		<ImportPackageLongName Condition="'$(ImportPackageLongName)' == ''">$(MSBuildProjectName)</ImportPackageLongName>
+		<ImportPackageDescription Condition="'$(ImportPackageDescription)' == ''">$(MSBuildProjectName)</ImportPackageDescription>
+		<ImportPackageDataFolder Condition="'$(ImportPackageDataFolder)' == ''">$(PackageUniqueName)</ImportPackageDataFolder>
+	</PropertyGroup>
+
+	<ItemGroup>
+
+		<Content Include="PkgFolder\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+
+	</ItemGroup>
+
+	<PropertyGroup Label="DependsOn">
+		<PrepareForOpenStrataBuildDependsOn>
+			CreateEditableImportPackageClassFile;
+			GenerateImportPackagePartialClass;
+			CreatePkgFolderIfItDoesNotExist;
+			$(PrepareForOpenStrataBuildDependsOn)
+		</PrepareForOpenStrataBuildDependsOn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<OpenStrataProject Include="$(MSBuildProjectFullPath)">
+			<OpenStrataProjectType>package</OpenStrataProjectType>
+			<ProjectName>$(MSBuildProjectName)</ProjectName>
+		</OpenStrataProject>
+	</ItemGroup>
+
+</Project>

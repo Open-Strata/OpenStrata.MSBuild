@@ -1,0 +1,133 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.ConfigData.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<PropertyGroup Condition="'$(OpenStrataBuildConfigDataAssemblyFile)' == ''">
+		<OpenStrataBuildConfigDataAssemblyFile>$(MSBuildThisFileDirectory)..\tasks\OpenStrata.MSBuild.ConfigData.dll</OpenStrataBuildConfigDataAssemblyFile>
+		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+	</PropertyGroup>
+
+	<!-- Tasks -->
+	<UsingTask TaskName="OpenStrata.MSBuild.ConfigData.Tasks.PackConfigData" AssemblyFile="$(OpenStrataBuildConfigDataAssemblyFile)" TaskFactory="TaskHostFactory"/>
+
+	<!--PackConfigData-->
+
+
+	<Target Name="PackConfigData" AfterTargets="Build">
+
+		<PackConfigData
+			ConfigDataRootDir="$(MSBuildProjectDirectory)"
+			ProjectName="$(MSBuildProjectName)"
+			OutDir="$(MSBuildProjectDirectory)\$(BaseOutputPath)$(Configuration)"
+			CommonFieldsToRemove="@(CommonFieldsToRemove)"			
+			>
+			<Output TaskParameter="PackedConfigDataFiles"
+		   ItemName="PackedConfigDataFiles" />
+		</PackConfigData>
+
+	</Target>
+
+
+	<Target Name="SpecifyConfigDataImportFile"
+			DependsOnTargets="PackConfigData"
+			 Returns="@(_ConfigDataImportFile)" >
+
+		<!--<ItemGroup>
+			<_ConfigDataImportFile Include="$(ConfigDataZipOutPath)">
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</_ConfigDataImportFile>
+		</ItemGroup>-->
+		<ItemGroup>
+			<_ConfigDataImportFile Include="@(PackedConfigDataFiles)">
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</_ConfigDataImportFile>
+		</ItemGroup>
+
+
+	</Target>
+
+	<Target Name="SpecifyConfigDataStratiFiles"
+			DependsOnTargets="PackConfigData">
+
+		<!--<ItemGroup>
+			<StratiFiles Include="$(ConfigDataZipOutPath)">
+				<PackagePath>\strati\configdata\</PackagePath>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>				
+			</StratiFiles>
+		</ItemGroup>-->
+
+		<ItemGroup>
+			<StratiFiles Include="@(PackedConfigDataFiles)">
+				<PackagePath>\strati\configdata\</PackagePath>
+				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
+				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+			</StratiFiles>
+		</ItemGroup>
+
+	</Target>
+
+	<PropertyGroup>
+
+		<CoreBuildDependsOn>
+			$(CoreBuildDependsOn)
+		</CoreBuildDependsOn>
+
+		<!--<AssignTargetPathsDependsOn>
+			ResetConfigDataXmlFileName;
+			$(AssignTargetPathsDependsOn)
+		</AssignTargetPathsDependsOn>-->
+
+	</PropertyGroup>
+
+	<!--<Target Name="ResetConfigDataXmlFileName">
+	  -->
+	<!--TODO:  Rename the file using the uniquesolutionname-->
+	<!--
+		<PropertyGroup>
+			<ConfigDataZipOutPath>$(MSBuildProjectDirectory)\$(BaseOutputPath)$(Configuration)\$(MSBuildProjectName).zip</ConfigDataZipOutPath>
+		</PropertyGroup>
+	</Target>-->
+
+	<!--<Target Name="ZipOutputPath" 
+		DependsOnTargets="ResetConfigDataXmlFileName">
+		<ZipDirectory Overwrite="true" SourceDirectory="$(ConfigDataXmlDir)" DestinationFile="$(ConfigDataZipOutPath)" />
+	</Target>-->
+
+	<Target Name="EnsureDefaultDataXml" Condition="!Exists('$(ConfigDataXmlDir)')">
+
+		<ItemGroup>
+			<_ConfigDataXmlTemplates Include="$(MSBuildThisFileDirectory)..\Templates\data\**\*.*" />
+		</ItemGroup>
+
+		<Copy
+		SourceFiles="@(_ConfigDataXmlTemplates)"
+		DestinationFiles="@(_ConfigDataXmlTemplates->'$(ConfigDataXmlDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
+	</Target>
+
+	<PropertyGroup>
+		<InitEnvDevopsExportDependsOn>InitConfigDataEnvDevopsExport;$(InitEnvDevopsExportDependsOn)</InitEnvDevopsExportDependsOn>
+	</PropertyGroup>
+
+	<Target Name="InitConfigDataEnvDevopsExport">
+		<Warning Text="Running InitConfigDataEnvDevopsExport" />
+		<Warning Text="$(MSBuildProjectDirectory)\schema.xml does exist.  Setting export config data to true."  Condition="Exists('$(MSBuildProjectDirectory)\schema.xml')" />
+		<Exec Command='echo ##vso[task.setvariable variable=ExportConfigData]true' Condition="Exists('$(MSBuildProjectDirectory)\schema.xml')" />
+		<Warning Text="$(MSBuildProjectDirectory)\schema.xml does not exist.  Not setting export config data to true."  Condition="!Exists('$(MSBuildProjectDirectory)\schema.xml')" />
+	</Target>
+
+
+</Project>

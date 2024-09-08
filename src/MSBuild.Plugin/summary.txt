@@ -1,0 +1,1 @@
+OpenStrata.MSBuild.Plugin will contain build definitions that are used in conjunction with Microsoft.PowerApps.MSBuild.Plugin package.

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <entityImportOrder>
+    <entityName>Entity1</entityName>
+    <entityName>Entity2</entityName>
+  </entityImportOrder>
+</entities>

@@ -1,0 +1,42 @@
+﻿<!--
+***********************************************************************************************
+OpenStrata.MSBuild.Plugin.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<PropertyGroup Label='OpenStrata Project Properties'>
+		<OpenStrataProjectType Condition="'$(OpenStrataProjectType)' == ''">plugin</OpenStrataProjectType>
+		<RestatifyDuplicateProjectTypes Condition="'$(RestatifyDuplicateProjectTypes)' != '' AND '$(OpenStrataProjectType)' != 'plugin' ">true</RestatifyDuplicateProjectTypes>
+
+		<IsPackable>true</IsPackable>
+
+		<SignAssembly Condition="'$(SignAssembly)' == ''">true</SignAssembly>
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<OpenStrataProject Include="$(MSBuildProjectFullPath)">
+			<OpenStrataProjectType>plugin</OpenStrataProjectType>
+			<ProjectName>$(MSBuildProjectName)</ProjectName>
+		</OpenStrataProject>
+		<CommonMergeVersionDiffFiles Include="$(ProjectDir)pluginpackage.xml"/>		
+	</ItemGroup>
+
+	<PropertyGroup>
+		<!--Setting AfterMicrosoftNETSdkTargets to trigger the late importing fix for buggy microsoft code-->
+		<AfterMicrosoftNETSdkTargets>
+			$(AfterMicrosoftNETSdkTargets);
+			$(MSBuildThisFileDirectory)OpenStrata.Sdk.Override.targets;
+		</AfterMicrosoftNETSdkTargets>
+	</PropertyGroup>
+
+
+
+</Project>
