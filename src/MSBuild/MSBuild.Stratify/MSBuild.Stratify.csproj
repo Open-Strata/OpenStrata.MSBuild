@@ -1,16 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\Shared\Strati.Manifest\Strati.Manifest.Shared.projitems"  />
+
+	<Import Project="..\..\Shared\Xml.Shared\Xml.Shared.projitems"  />
+
+	<Import Project="..\..\Shared\Strata.Manifest\Strata.Manifest.projitems" />
 
 	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" />
 
 
-	<Import Project="..\..\shared-src\Xml.Shared\Xml.Shared.projitems" Label="Xml Shared" />
+	<ItemGroup>
+		<None Include="templates\buildTransitiveTemplate.props" Pack="true" PackagePath="\templates\" />
+		<None Include="templates\buildTransitiveTemplate.targets" Pack="true" PackagePath="\templates\" />
 
+	</ItemGroup>
 
-	<Import Project="..\..\shared-src\DocumentTemplates.Shared\DocumentTemplates.Shared.projitems" Label="DocumentTemplates Shared" />
 
 	<ItemGroup>
-		<PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
-	</ItemGroup>	
+	  <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
+	  <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="0.8.*" />			
+	</ItemGroup>
 
 	<PropertyGroup>
 
@@ -26,7 +35,6 @@
 	</PropertyGroup>
 
 
-
 	<!-- This is the target we defined above. It's purpose is to add all of our PackageReference and ProjectReference's runtime assets to our package output.  -->
 	<Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
 		<ItemGroup>
@@ -34,6 +42,24 @@
 			<BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
 		</ItemGroup>
 	</Target>
+
+	<PropertyGroup>
+		<GenerateNuspecDependsOn>StratiUpdatePackageReferenceRequiredForInstall; $(GenerateNuspecDependsOn)</GenerateNuspecDependsOn>
+	</PropertyGroup>
+
+
+	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" AfterTargets="SetVersionFromGitInfo">
+
+		<ItemGroup Condition="'$(SkipOpenStrataMSBuildReference)' != 'true'">
+
+			<PackageReferenceRequiredForInstall Remove="OpenStrata.MSBuild.Nuget" />
+
+			<PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(Version)" />			
+
+		</ItemGroup>
+
+	</Target>
+
 
 
 </Project>

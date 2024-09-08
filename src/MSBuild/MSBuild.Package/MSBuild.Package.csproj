@@ -1,24 +1,51 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\shared-src\Strati.Manifest\Strati.Manifest.Shared.projitems"  />
 
-	<Import Project="..\..\shared-src\Xml.Shared\Xml.Shared.projitems"  />
+	<Import Project="..\..\Shared\Xml.Shared\Xml.Shared.projitems"  />
 
-	<Import Project="..\..\shared-src\Strata.Manifest\Strata.Manifest.projitems" />
+
+	<Import Project="..\..\Shared\Package.Shared\Package.Shared.projitems"  />
+
+
+	<Import Project="..\..\Shared\Strati.Manifest\Strati.Manifest.Shared.projitems"  />
+
+
+	<Import Project="..\..\Shared\Strata.Manifest\Strata.Manifest.projitems"  />
+
 
 	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" />
 
 
-	<ItemGroup>
-		<None Include="templates\buildTransitiveTemplate.props" Pack="true" PackagePath="\templates\" />
-		<None Include="templates\buildTransitiveTemplate.targets" Pack="true" PackagePath="\templates\" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;NU1701</NoWarn>
+	</PropertyGroup>
 
+	<!--<ItemGroup>
+		<PackageReferenceRequiredForInstall Include="Microsoft.CrmSdk.XrmTooling.PackageDeployment" Version="9.1.0.74" />
+		<PackageReferenceRequiredForInstall Include="OpenStrata.Sdk.PackageDeployment" Version="0.2.0-beta" />		
+	</ItemGroup>-->
+
+	<ItemGroup>
+		<Compile Remove="templates\**\*" />		
+		<None Include="templates\**\*" Pack="true" PackagePath="\templates\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <!--<PackageReference Include="OpenStrata.Deployment.Sdk" Version="0.8.*">
+	    <PrivateAssets>none</PrivateAssets>
+	    <NoWarn>NU1701</NoWarn>
+	    <IncludeAssets>none</IncludeAssets>
+	    <ExcludeAssets>all</ExcludeAssets>
+	  </PackageReference>-->
+	  <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
-	  <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="0.8.*" />			
+	  <ProjectReference Include="..\..\Deployment\Deployment.Sdk\Deployment.Sdk.csproj">
+	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+	    <Private>false</Private>
+	    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+	  </ProjectReference>
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -43,22 +70,6 @@
 		</ItemGroup>
 	</Target>
 
-	<PropertyGroup>
-		<GenerateNuspecDependsOn>StratiUpdatePackageReferenceRequiredForInstall; $(GenerateNuspecDependsOn)</GenerateNuspecDependsOn>
-	</PropertyGroup>
-
-
-	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" AfterTargets="SetVersionFromGitInfo">
-
-		<ItemGroup Condition="'$(SkipOpenStrataMSBuildReference)' != 'true'">
-
-			<PackageReferenceRequiredForInstall Remove="OpenStrata.MSBuild.Nuget" />
-
-			<PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(Version)" />			
-
-		</ItemGroup>
-
-	</Target>
 
 
 

@@ -1,52 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-
-	<Import Project="..\..\shared-src\Xml.Shared\Xml.Shared.projitems"  />
-
-
-	<Import Project="..\..\shared-src\Package.Shared\Package.Shared.projitems"  />
-
-
-	<Import Project="..\..\shared-src\Strati.Manifest\Strati.Manifest.Shared.projitems"  />
-
-
-	<Import Project="..\..\shared-src\Strata.Manifest\Strata.Manifest.projitems"  />
-
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" />
 
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <NoWarn>1701;1702;NU1701</NoWarn>
-	</PropertyGroup>
+	<Import Project="..\..\Shared\Xml.Shared\Xml.Shared.projitems" Label="Xml Shared" />
 
-	<!--<ItemGroup>
-		<PackageReferenceRequiredForInstall Include="Microsoft.CrmSdk.XrmTooling.PackageDeployment" Version="9.1.0.74" />
-		<PackageReferenceRequiredForInstall Include="OpenStrata.Sdk.PackageDeployment" Version="0.2.0-beta" />		
-	</ItemGroup>-->
+
+	<Import Project="..\..\Shared\DocumentTemplates.Shared\DocumentTemplates.Shared.projitems" Label="DocumentTemplates Shared" />
 
 	<ItemGroup>
-		<Compile Remove="templates\**\*" />		
-		<None Include="templates\**\*" Pack="true" PackagePath="\templates\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <!--<PackageReference Include="OpenStrata.Deployment.Sdk" Version="0.8.*">
-	    <PrivateAssets>none</PrivateAssets>
-	    <NoWarn>NU1701</NoWarn>
-	    <IncludeAssets>none</IncludeAssets>
-	    <ExcludeAssets>all</ExcludeAssets>
-	  </PackageReference>-->
-	  <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\Deployment\Deployment.Sdk\Deployment.Sdk.csproj">
-	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-	    <Private>false</Private>
-	    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-	  </ProjectReference>
-	</ItemGroup>
+		<PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
+	</ItemGroup>	
 
 	<PropertyGroup>
 
@@ -62,6 +26,7 @@
 	</PropertyGroup>
 
 
+
 	<!-- This is the target we defined above. It's purpose is to add all of our PackageReference and ProjectReference's runtime assets to our package output.  -->
 	<Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
 		<ItemGroup>
@@ -69,8 +34,6 @@
 			<BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
 		</ItemGroup>
 	</Target>
-
-
 
 
 </Project>

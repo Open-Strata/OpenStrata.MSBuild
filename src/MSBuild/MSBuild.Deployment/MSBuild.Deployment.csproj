@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 
-	<Import Project="..\..\shared-src\Deployment.Shared\Deployment.Shared.projitems"  />
+	<Import Project="..\..\Shared\Deployment.Shared\Deployment.Shared.projitems"  />
 
 
 	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" />

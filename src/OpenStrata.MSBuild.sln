@@ -1,0 +1,157 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild", "MSBuild\msbuild\MSBuild.csproj", "{625A2F6A-10E7-4381-9C3E-FF2A3F4ECBD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Solution", "MSBuild\msbuild.solution\MSBuild.Solution.csproj", "{95A36EDC-740F-44FC-B08B-59D171D1580E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.ConfigData", "MSBuild\msbuild.configdata\MSBuild.ConfigData.csproj", "{58A4B52A-D986-48FB-91EA-E684C5A31DA2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Deployment", "MSBuild\msbuild.deployment\MSBuild.Deployment.csproj", "{CBBF6DD2-82FD-4CFD-AE6C-73D33EBFDAE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.DocumentTemplates", "MSBuild\msbuild.documenttemplates\MSBuild.DocumentTemplates.csproj", "{275A4150-5E6E-42FC-B749-8729B2E58653}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Package", "MSBuild\msbuild.package\MSBuild.Package.csproj", "{38221D33-247A-4535-886B-3CE13C382E90}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.PCF", "MSBuild\msbuild.pcf\MSBuild.PCF.csproj", "{BF764385-A58A-447D-BBD0-A1950CDA1264}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Plugin", "MSBuild\msbuild.plugin\MSBuild.Plugin.csproj", "{EC5DC16C-6DF7-4FC0-A1DA-44480BD0D83A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.PowerPages", "MSBuild\msbuild.powerpages\MSBuild.PowerPages.csproj", "{2C96001A-A007-485D-B025-D8180F9CB84B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Stratify", "MSBuild\msbuild.stratify\MSBuild.Stratify.csproj", "{882B38A9-1D7B-4D7E-9AE1-06D8546F8854}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ConfigData.Shared", "Shared\ConfigData.Shared\ConfigData.Shared.shproj", "{BC744645-2C8A-4F3D-8B1A-FFEFB95A7FCB}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Deployment.Shared", "Shared\Deployment.Shared\Deployment.Shared.shproj", "{9A7B7AAE-F00F-4737-8550-6B8EB7C4633A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DocumentTemplates.Shared", "Shared\DocumentTemplates.Shared\DocumentTemplates.Shared.shproj", "{265DF791-CE69-41C6-8073-68067E43379C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Json.Shared", "Shared\Json.Shared\Json.Shared.shproj", "{074066E0-FB23-4200-BFD4-AD9D0012EBE0}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Package.Shared", "Shared\Package.Shared\Package.Shared.shproj", "{58634C32-6A44-451C-9483-690BF42B4326}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Plugin.Shared", "Shared\Plugin.Shared\Plugin.Shared.shproj", "{A120A816-BC6F-4157-98C1-5A1214D6C412}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PublisherInfo.Shared", "Shared\PublisherInfo.Shared\PublisherInfo.Shared.shproj", "{61FE1993-5EE1-41C6-8EC5-C633953AA808}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Solution.Shared", "Shared\Solution.Shared\Solution.Shared.shproj", "{6E2B809A-685B-42F5-AAA8-328DD8557151}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Strati.Manifest.Shared", "Shared\Strati.Manifest\Strati.Manifest.Shared.shproj", "{8F22604F-FCD8-481B-9E24-007D70F117AC}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xml.Shared", "Shared\Xml.Shared\Xml.Shared.shproj", "{715DF31C-F44F-4193-B871-43BEE964B8B9}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xrm.Sdk.Shared", "Shared\Xrm.Sdk.Shared\Xrm.Sdk.Shared.shproj", "{6BF9AC7E-65C0-47A7-9400-8DEEAA20C4DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F318703-98D0-40CB-ACB0-856E29513EC7}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		MSBuild\Directory.Packages.props = MSBuild\Directory.Packages.props
+		MSBuild\Directory.Packages.targets = MSBuild\Directory.Packages.targets
+		ICON.png = ICON.png
+		LICENSE.txt = LICENSE.txt
+		NuGet.Config = NuGet.Config
+		MSBuild\OpenStrata.Dev.MSBuild.Common.props = MSBuild\OpenStrata.Dev.MSBuild.Common.props
+		MSBuild\OpenStrata.Dev.MSBuild.Common.targets = MSBuild\OpenStrata.Dev.MSBuild.Common.targets
+		MSBuild\OpenStrata.MSBuild.Template.props = MSBuild\OpenStrata.MSBuild.Template.props
+		MSBuild\OpenStrata.MSBuild.Template.targets = MSBuild\OpenStrata.MSBuild.Template.targets
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{C29FA54D-1550-49DF-9901-EDED29BBDE8E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{625A2F6A-10E7-4381-9C3E-FF2A3F4ECBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625A2F6A-10E7-4381-9C3E-FF2A3F4ECBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{625A2F6A-10E7-4381-9C3E-FF2A3F4ECBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{625A2F6A-10E7-4381-9C3E-FF2A3F4ECBD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95A36EDC-740F-44FC-B08B-59D171D1580E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A36EDC-740F-44FC-B08B-59D171D1580E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A36EDC-740F-44FC-B08B-59D171D1580E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A36EDC-740F-44FC-B08B-59D171D1580E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58A4B52A-D986-48FB-91EA-E684C5A31DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58A4B52A-D986-48FB-91EA-E684C5A31DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58A4B52A-D986-48FB-91EA-E684C5A31DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58A4B52A-D986-48FB-91EA-E684C5A31DA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBBF6DD2-82FD-4CFD-AE6C-73D33EBFDAE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBBF6DD2-82FD-4CFD-AE6C-73D33EBFDAE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBBF6DD2-82FD-4CFD-AE6C-73D33EBFDAE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBBF6DD2-82FD-4CFD-AE6C-73D33EBFDAE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{275A4150-5E6E-42FC-B749-8729B2E58653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{275A4150-5E6E-42FC-B749-8729B2E58653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{275A4150-5E6E-42FC-B749-8729B2E58653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{275A4150-5E6E-42FC-B749-8729B2E58653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38221D33-247A-4535-886B-3CE13C382E90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38221D33-247A-4535-886B-3CE13C382E90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38221D33-247A-4535-886B-3CE13C382E90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38221D33-247A-4535-886B-3CE13C382E90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF764385-A58A-447D-BBD0-A1950CDA1264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF764385-A58A-447D-BBD0-A1950CDA1264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF764385-A58A-447D-BBD0-A1950CDA1264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF764385-A58A-447D-BBD0-A1950CDA1264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC5DC16C-6DF7-4FC0-A1DA-44480BD0D83A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC5DC16C-6DF7-4FC0-A1DA-44480BD0D83A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC5DC16C-6DF7-4FC0-A1DA-44480BD0D83A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC5DC16C-6DF7-4FC0-A1DA-44480BD0D83A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C96001A-A007-485D-B025-D8180F9CB84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C96001A-A007-485D-B025-D8180F9CB84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C96001A-A007-485D-B025-D8180F9CB84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C96001A-A007-485D-B025-D8180F9CB84B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{882B38A9-1D7B-4D7E-9AE1-06D8546F8854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{882B38A9-1D7B-4D7E-9AE1-06D8546F8854}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{882B38A9-1D7B-4D7E-9AE1-06D8546F8854}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{882B38A9-1D7B-4D7E-9AE1-06D8546F8854}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{625A2F6A-10E7-4381-9C3E-FF2A3F4ECBD1} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{95A36EDC-740F-44FC-B08B-59D171D1580E} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{58A4B52A-D986-48FB-91EA-E684C5A31DA2} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{CBBF6DD2-82FD-4CFD-AE6C-73D33EBFDAE5} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{275A4150-5E6E-42FC-B749-8729B2E58653} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{38221D33-247A-4535-886B-3CE13C382E90} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{BF764385-A58A-447D-BBD0-A1950CDA1264} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{EC5DC16C-6DF7-4FC0-A1DA-44480BD0D83A} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{2C96001A-A007-485D-B025-D8180F9CB84B} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{882B38A9-1D7B-4D7E-9AE1-06D8546F8854} = {C29FA54D-1550-49DF-9901-EDED29BBDE8E}
+		{BC744645-2C8A-4F3D-8B1A-FFEFB95A7FCB} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{9A7B7AAE-F00F-4737-8550-6B8EB7C4633A} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{265DF791-CE69-41C6-8073-68067E43379C} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{074066E0-FB23-4200-BFD4-AD9D0012EBE0} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{58634C32-6A44-451C-9483-690BF42B4326} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{A120A816-BC6F-4157-98C1-5A1214D6C412} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{61FE1993-5EE1-41C6-8EC5-C633953AA808} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{6E2B809A-685B-42F5-AAA8-328DD8557151} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{8F22604F-FCD8-481B-9E24-007D70F117AC} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{715DF31C-F44F-4193-B871-43BEE964B8B9} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{6BF9AC7E-65C0-47A7-9400-8DEEAA20C4DB} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B86CD7A-ED5D-4144-87E1-748A8576C589}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Json.Shared\JSON.Shared.projitems*{074066e0-fb23-4200-bfd4-ad9d0012ebe0}*SharedItemsImports = 13
+		Shared\DocumentTemplates.Shared\DocumentTemplates.Shared.projitems*{265df791-ce69-41c6-8073-68067e43379c}*SharedItemsImports = 13
+		Shared\Package.Shared\Package.Shared.projitems*{58634c32-6a44-451c-9483-690bf42b4326}*SharedItemsImports = 13
+		Shared\PublisherInfo.Shared\PublisherInfo.Shared.projitems*{61fe1993-5ee1-41c6-8ec5-c633953aa808}*SharedItemsImports = 13
+		Shared\Xrm.Sdk.Shared\Xrm.Sdk.Shared.projitems*{6bf9ac7e-65c0-47a7-9400-8deeaa20c4db}*SharedItemsImports = 13
+		Shared\Solution.Shared\Solution.Shared.projitems*{6e2b809a-685b-42f5-aaa8-328dd8557151}*SharedItemsImports = 13
+		Shared\Xml.Shared\Xml.Shared.projitems*{715df31c-f44f-4193-b871-43bee964b8b9}*SharedItemsImports = 13
+		Shared\Strati.Manifest\Strati.Manifest.Shared.projitems*{8f22604f-fcd8-481b-9e24-007d70f117ac}*SharedItemsImports = 13
+		Shared\Deployment.Shared\Deployment.Shared.projitems*{9a7b7aae-f00f-4737-8550-6b8eb7c4633a}*SharedItemsImports = 13
+		Shared\Plugin.Shared\Plugin.Shared.projitems*{a120a816-bc6f-4157-98c1-5a1214d6c412}*SharedItemsImports = 13
+		Shared\ConfigData.Shared\ConfigData.Shared.projitems*{bc744645-2c8a-4f3d-8b1a-ffefb95a7fcb}*SharedItemsImports = 13
+	EndGlobalSection
+EndGlobal

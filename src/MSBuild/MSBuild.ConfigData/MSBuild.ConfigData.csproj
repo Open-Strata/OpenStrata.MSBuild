@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 
-	<Import Project="..\..\shared-src\ConfigData.Shared\ConfigData.Shared.projitems" Label="Config Data Shared" />
+	<Import Project="..\..\Shared\ConfigData.Shared\ConfigData.Shared.projitems" Label="Config Data Shared" />
 
 
-	<Import Project="..\..\shared-src\Xml.Shared\Xml.Shared.projitems" Label=" Xml Shared" />
+	<Import Project="..\..\Shared\Xml.Shared\Xml.Shared.projitems" Label=" Xml Shared" />
 
 	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" Label="OpenStrata.Dev.MSBuild.Common.props" />
 

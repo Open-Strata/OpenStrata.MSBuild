@@ -1,34 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="..\..\shared-src\Solution.Shared\Solution.Shared.projitems"  />
-
-	<Import Project="..\..\shared-src\Xml.Shared\Xml.Shared.projitems"  />
-
-	<Import Project="..\..\shared-src\Publisher.Shared\Publisher.Shared.projitems"  />
-
 	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" />
 
+	<Import Project="..\..\Shared\Plugin.Shared\Plugin.Shared.projitems" />
+	<Import Project="..\..\Shared\Xml.Shared\Xml.Shared.projitems" />
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<PropertyGroup>
-	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
-	  <PackageReferenceRequiredForInstall Include="Microsoft.PowerApps.MSBuild.Solution" Version="1.30.2" />
+		<PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
-	  <None Include="templates\**\*" Pack="true" PackagePath="\templates\" />
+		
+		<PackageReferenceRequiredForInstall Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.30.2" />
+		<PackageReferenceRequiredForInstall Include="System.Text.Json" Version="6.0.7" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="Build\**\*.*" Pack="true" PackagePath="\build\" />
 	</ItemGroup>
 
-
-	<ItemGroup>
-	  <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
-	</ItemGroup>
 
 	<PropertyGroup>
 
@@ -43,19 +41,13 @@
 
 	</PropertyGroup>
 
-
 	<!-- This is the target we defined above. It's purpose is to add all of our PackageReference and ProjectReference's runtime assets to our package output.  -->
-	<Target
-		Name="CopyProjectReferencesToPackage"
-		DependsOnTargets="ResolveReferences">
+	<Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
 		<ItemGroup>
 			<!-- The TargetPath is the path inside the package that the source file will be placed. This is already precomputed in the ReferenceCopyLocalPaths items' DestinationSubPath, so reuse it here. -->
-			<BuildOutputInPackage
-				Include="@(ReferenceCopyLocalPaths)"
-				TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
+			<BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
 		</ItemGroup>
 	</Target>
-	
 
 
 </Project>
