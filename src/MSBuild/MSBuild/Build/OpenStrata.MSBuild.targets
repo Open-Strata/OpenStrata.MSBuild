@@ -62,6 +62,12 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</UsingTask>
 
 
+	<Target Name="EnsureDotOstrata">
+		<MakeDir Directories="$(DotOstrataPath)" Condition="!Exists('$(DotOstrataPath)')"  />
+		<MakeDir Directories="$(DotOstrataLockPath)" Condition="!Exists('$(DotOstrataLockPath)')"  />
+		<MakeDir Directories="$(DotOstrataTmpPath)" Condition="!Exists('$(DotOstrataTmpPath)')"  />				
+	</Target>
+
 	<Target Name="FixMergeDiffVersionMarkup" >
 		<FixUpMergeDiffVersionMarkup CommonMergeVersionDiffFiles="@(CommonMergeVersionDiffFiles)" />
 	</Target>
@@ -80,6 +86,13 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			DependsOnTargets="$(GetPackageVersionDependsOn)">
 
 	</Target>
+
+	<PropertyGroup>
+		<CoreCleanDependsOn>$(CoreCleanDependsOn);CleanOpenStrata</CoreCleanDependsOn>
+		<CleanOpenStrataDependsOn>$(CleanOpenStrataDependsOn);RemoveTagetControlLocks</CleanOpenStrataDependsOn>
+	</PropertyGroup>
+
+	<Target Name="CleanOpenStrata" DependsOnTargets="$(CleanOpenStrataDependsOn)" />	
 
 	<Target Name="PackDocs" DependsOnTargets="$(PackDocsDependsOn)" />
 	<Target Name="UnpackDocs" DependsOnTargets="$(UnpackDocsDependsOn)" />
@@ -123,6 +136,63 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		</ItemGroup>
 
 	</Target>
+
+
+	<UsingTask TaskName="GetProjectTargetLock" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<TargetLockFilePath ParameterType="System.String"  Required="true"  />
+			<TargetControl ParameterType="System.Boolean" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System"/>
+			<Using Namespace="System.IO"/>
+			<Using Namespace="System.Threading"/>
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+
+					TargetControl = false;
+					var i = 0;
+					do{
+						if (!File.Exists(TargetLockFilePath))
+						{
+							using (new FileStream(TargetLockFilePath,FileMode.CreateNew))
+							{
+								TargetControl = true;	
+							}
+						}
+						else
+						{
+						    i++;
+							Thread.Sleep(1000);
+						}
+					} while (!TargetControl && i <= 10);
+				]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+	<UsingTask TaskName="ReleaseProjectTargetLock" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<TargetLockFilePath ParameterType="System.String"  Required="true"  />
+			<TargetControl ParameterType="System.Boolean" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System"/>
+			<Using Namespace="System.IO"/>
+			<Using Namespace="System.Threading"/>
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+
+						if (File.Exists(TargetLockFilePath))
+						{
+							File.Delete(TargetLockFilePath);
+
+						}
+						TargetControl = false;						
+				]]>
+			</Code>
+		</Task>
+	</UsingTask>	
 
 	<!--<Target Name="SpecifyStratiFiles" DependsOnTargets="$(SpecifyStratiFilesDependsOn); Build"
 		Returns="@(StratiFiles)" Condition="'$(ProducesStrati)' == 'true'">

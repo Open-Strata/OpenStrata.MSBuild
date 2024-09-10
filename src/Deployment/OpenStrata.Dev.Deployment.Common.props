@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+
+
+
+	<PropertyGroup>
+		<!--<TargetFramework>net471</TargetFramework>-->
+
+		<OpenStrata>OpenStrata</OpenStrata>
+		<AssemblyNamePrefix Condition="'$(DerivativeNamePrefix)'!=''">$(DerivativeNamePrefix).$(OpenStrata)</AssemblyNamePrefix>
+		<AssemblyNamePrefix Condition="'$(DerivativeNamePrefix)'==''">$(OpenStrata)</AssemblyNamePrefix>
+		<RootNamespacePrefix Condition="'$(DerivativeNamePrefix)'!=''">$(DerivativeNamePrefix).$(OpenStrata)</RootNamespacePrefix>
+		<RootNamespacePrefix  Condition="'$(DerivativeNamePrefix)'==''">$(OpenStrata)</RootNamespacePrefix>
+
+		<AssemblyName>$(AssemblyNamePrefix).$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(RootNamespacePrefix).$(MSBuildProjectName)</RootNamespace>
+
+		<OpenStrataProjectName>$(OpenStrata).$(MSBuildProjectName)</OpenStrataProjectName>
+		<OpenStrataPackageName>$(RootNamespacePrefix).$(MSBuildProjectName)</OpenStrataPackageName>	
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<!--<DelayCreationOfNugetPackage>true</DelayCreationOfNugetPackage>-->
+		<!--<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>-->
+		<DevelopmentDependency>true</DevelopmentDependency>
+		
+		<!--<IsTool>true</IsTool>-->		
+
+		
+		<!--Deprecating Strong Name Behavior
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>$(AssemblyName).snk</AssemblyOriginatorKeyFile>
+
+		<SNExe>$(MSBuildProjectDirectory)\..\..\..\tools\sn.exe</SNExe>-->
+
+		<!--<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>-->
+
+	</PropertyGroup>
+
+
+	<!--<Import Project="MSBuild.Shared\MSBuild.Shared.projitems"" Condition="'$(MSBuildProjectName)' != 'MSBuild'  " />-->
+	<Import Project="..\Shared\PublisherInfo.Shared\PublisherInfo.Shared.projitems"  />
+
+
+	<!--<PropertyGroup Label="Properties required for source linking" >
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	</PropertyGroup>-->
+
+
+	<PropertyGroup>
+		<PrepareForOpenStrataDevBuildDependsOn>$(PrepareForOpenStrataDevBuildDependsOn)</PrepareForOpenStrataDevBuildDependsOn>
+	</PropertyGroup>
+
+
+
+	<!--<ItemGroup Condition="'$(MSBuildProjectName)' != 'MSBuild.Nuget' AND '$(MSBuildProjectName)' != 'MSBuild'  ">
+		<ProjectReference Include="..\MSBuild\MSBuild.csproj" Version="0.2.*" />
+	</ItemGroup>-->
+
+	<!--<ItemGroup>
+		<None Include="Build\$(AssemblyName).props" Pack="true" PackagePath="\build" Condition="'$(IsTransitiveDevelopmentDependency)' != 'true'" />
+		<None Include="Build\$(AssemblyName).props" Pack="true" PackagePath="\build;buildTransitive" Condition="'$(IsTransitiveDevelopmentDependency)' == 'true'" />
+		<None Include="Build\$(AssemblyName).targets" Pack="true" PackagePath="\build" Condition="'$(IsTransitiveDevelopmentDependency)' != 'true'" />
+		<None Include="Build\$(AssemblyName).targets" Pack="true" PackagePath="\build;buildTransitive" Condition="'$(IsTransitiveDevelopmentDependency)' == 'true'" />
+	</ItemGroup>-->
+
+
+	<PropertyGroup>
+		<!--Setting AfterMicrosoftNETSdkTargets to trigger the importing of OpenStrata.Dev.MSBuild.Common.targets when appropriate.-->
+		<AfterMicrosoftNETSdkTargets>
+			$(AfterMicrosoftNETSdkTargets);
+			$(MSBuildThisFileDirectory)OpenStrata.Dev.Deployment.Common.targets
+		</AfterMicrosoftNETSdkTargets>
+	</PropertyGroup>
+
+</Project>

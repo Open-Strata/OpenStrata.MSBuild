@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+
+	<!--<Target Name="_EnsureMSBuildPropsAndTargets" >
+
+		<Copy
+				Condition="!Exists('Build\$(AssemblyName).props')"
+				SourceFiles="..\OpenStrata.MSBuild.Template.props"
+				DestinationFiles="Build\$(AssemblyName).props"
+				/>
+
+		<Copy
+				Condition="!Exists('Build\$(AssemblyName).targets')"
+				SourceFiles="..\OpenStrata.MSBuild.Template.targets"
+				DestinationFiles="Build\$(AssemblyName).targets"
+				/>
+
+	</Target>-->
+
+	
+	
+	
+</Project>

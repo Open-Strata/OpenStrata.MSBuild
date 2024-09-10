@@ -65,6 +65,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{C29F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deployment", "deployment", "{055BB523-8021-4E86-A9BC-6905EFBF7B95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deployment.Sdk", "deployment\deployment.sdk\Deployment.Sdk.csproj", "{227240ED-D0C1-47B7-91F1-EE8306203A89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +115,10 @@ Global
 		{882B38A9-1D7B-4D7E-9AE1-06D8546F8854}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{882B38A9-1D7B-4D7E-9AE1-06D8546F8854}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{882B38A9-1D7B-4D7E-9AE1-06D8546F8854}.Release|Any CPU.Build.0 = Release|Any CPU
+		{227240ED-D0C1-47B7-91F1-EE8306203A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{227240ED-D0C1-47B7-91F1-EE8306203A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{227240ED-D0C1-47B7-91F1-EE8306203A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{227240ED-D0C1-47B7-91F1-EE8306203A89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +145,7 @@ Global
 		{8F22604F-FCD8-481B-9E24-007D70F117AC} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
 		{715DF31C-F44F-4193-B871-43BEE964B8B9} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
 		{6BF9AC7E-65C0-47A7-9400-8DEEAA20C4DB} = {DD8E9D2E-D3F0-4772-A295-F33AD9FB8125}
+		{227240ED-D0C1-47B7-91F1-EE8306203A89} = {055BB523-8021-4E86-A9BC-6905EFBF7B95}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6B86CD7A-ED5D-4144-87E1-748A8576C589}

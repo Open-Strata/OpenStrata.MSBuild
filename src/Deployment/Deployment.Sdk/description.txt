@@ -1,0 +1,3 @@
+**OpenStrata.Deployment.Sdk** contains the OpenStrata.Deployment.Sdk.dll which is used by OpenStrata Deployment and Package project types.
+
+$disclaimer$

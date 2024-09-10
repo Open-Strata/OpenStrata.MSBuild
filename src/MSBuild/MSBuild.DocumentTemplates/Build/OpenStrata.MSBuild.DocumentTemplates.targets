@@ -101,9 +101,25 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	</Target>
 
-	<Target Name="AnalyzeDocTemplates" DependsOnTargets="UnpackDocumentTemplates">
+	<PropertyGroup>
+		<DocTemplateLockFile>$(DotOstrataLockPath)doctemplate.lck</DocTemplateLockFile>
+	</PropertyGroup>		
+
+	<Target Name="AnalyzeDocTemplates" DependsOnTargets="EnsureDotOstrata">
+
+		<GetProjectTargetLock TargetLockFilePath="$(DocTemplateLockFile)" >
+			<Output TaskParameter="TargetControl" PropertyName="HasAnalyzeDocTemplateLock" />
+		</GetProjectTargetLock>
+
+		<CallTarget Targets="UnpackDocumentTemplates">
+			<Output TaskParameter="TargetOutputs" ItemName="UnpackDocs" />
+		</CallTarget>
 
 		<AnalyzeDocumentTemplates UnpackDocs="@(UnpackDocs)" />
+
+		<ReleaseProjectTargetLock TargetLockFilePath="$(DocTemplateLockFile)" >
+			<Output TaskParameter="TargetControl" PropertyName="HasAnalyzeDocTemplateLock" />
+		</ReleaseProjectTargetLock>
 
 	</Target>
 
