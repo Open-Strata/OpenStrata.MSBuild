@@ -18,7 +18,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
-	  <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="0.8.*" />			
+	  <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(OstrataMSBuildNugetVersion)" />			
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -52,9 +52,9 @@
 
 		<ItemGroup Condition="'$(SkipOpenStrataMSBuildReference)' != 'true'">
 
-			<PackageReferenceRequiredForInstall Remove="OpenStrata.MSBuild.Nuget" />
+			<!-- <PackageReferenceRequiredForInstall Remove="OpenStrata.MSBuild.Nuget" /> -->
 
-			<PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(Version)" />			
+			<!-- <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(Version)" />			 -->
 
 		</ItemGroup>
 
