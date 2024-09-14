@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-	  <AssemblyVersion>0.2.0.0</AssemblyVersion>
+	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
 	  <!--<TargetFrameworks>net462;net471</TargetFrameworks>-->
       <TargetFramework>net472</TargetFramework>
 
@@ -36,7 +36,7 @@
 	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.PackageDeployment" Version="9.1.0.131" />
 	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.PackageDeployment.Wpf" Version="9.1.0.84">
 	    <PrivateAssets>all</PrivateAssets>
-	    <NoWarn>s</NoWarn>
+	    <!-- <NoWarn>$(NoWarn);NU1702</NoWarn> -->
 	  </PackageReference>
 	  
 	  <PackageReference Include="OpenStrata.MSBuild.Nuget" Version="0.8.*">

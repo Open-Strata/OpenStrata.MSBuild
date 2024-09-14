@@ -42,7 +42,6 @@
 
 		<SNExe>$(MSBuildProjectDirectory)\..\..\..\tools\sn.exe</SNExe>-->
 
-		<SkipOpenStrataMSBuildReference Condition="'$(MSBuildProjectName)' == 'MSBuild.Nuget'" >true</SkipOpenStrataMSBuildReference>
 		<SkipOpenStrataMSBuildReference Condition="'$(MSBuildProjectName)' == 'MSBuild'" >true</SkipOpenStrataMSBuildReference>
 		<SkipOpenStrataMSBuildReference Condition="'$(MSBuildProjectName)' == 'MSBuild.Publisher.New'" >true</SkipOpenStrataMSBuildReference>
 	</PropertyGroup>
@@ -76,7 +75,7 @@
 	</ItemGroup>
 		
 
-	<ItemGroup Condition="'$(MSBuildProjectName)' != 'MSBuild.Nuget'">
+	<ItemGroup>
 		<PackageReference Include="OpenStrata.MSBuild.Nuget" Version="1.*" >
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -91,7 +90,7 @@
 			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 		</ProjectReference>-->
 
-		<PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild" Version="0.8.*" />
+		<PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild" Version="1.*" />
 
 	</ItemGroup>
 

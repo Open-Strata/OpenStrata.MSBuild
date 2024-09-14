@@ -192,8 +192,13 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 				]]>
 			</Code>
 		</Task>
-	</UsingTask>	
+	</UsingTask>
 
+
+	<Target Name="RemoveTargetControlLocks" >
+		<Delete Files="$(DotOstrataPath)*.lck" />
+	</Target>
+	
 	<!--<Target Name="SpecifyStratiFiles" DependsOnTargets="$(SpecifyStratiFilesDependsOn); Build"
 		Returns="@(StratiFiles)" Condition="'$(ProducesStrati)' == 'true'">
 	</Target>-->

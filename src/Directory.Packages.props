@@ -66,6 +66,10 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 		<PackageTags>OpenStrata;PowerPlatform;PowerApps;Dataverse;CDS;CommonDataService;Dynamics365;D365;XRM;CRM;Dynamics;$(PackageTags)</PackageTags>
 
+       
+		<NoWarn>$(NoWarn);NU1702;MSB3270;CS0108;CS0162;CS0169;CS0067;CS0414;NU5100;CS0649</NoWarn>
+	    <NugetNoWarn>NU1702,NU5100</NugetNoWarn>
+
 	</PropertyGroup>
 
 	<ItemGroup>
