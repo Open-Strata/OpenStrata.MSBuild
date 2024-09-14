@@ -198,7 +198,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg"
 		DestinationFolder="$(LocalDebugPackageFeedPath)" Condition="Exists('$(PushPackagePath)')"
         />-->
-		<Warning Text='dotnet nuget push "$(PushPackagePath)" -k $(PushKey) -s "$(PushSource)" --skip-duplicate' />
 
 		<Exec Command='dotnet nuget push "$(PushPackagePath)" -k $(PushKey) -s "$(PushSource)" --skip-duplicate' Condition="Exists('$(PushPackagePath)')" IgnoreExitCode="true" >
 			<Output TaskParameter="ExitCode" ItemName="PushExitCode"/>

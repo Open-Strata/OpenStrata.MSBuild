@@ -253,8 +253,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<ItemGroup>
 			<CustomAPIToDelete Include="$(SolutionRootPath)\customapis\*\customapi.xml" />
 		</ItemGroup>
-		<Warning Text="Running CustomApiAfterExportFix.  Attempting to delete following files" />
-		<Warning Text="%(CustomAPIToDelete.identity)" />
 		<Delete Files="@(CustomAPIToDelete)" />
 	</Target>
 

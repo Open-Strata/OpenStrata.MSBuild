@@ -77,9 +77,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</PropertyGroup>
 
 	<Target Name="InitPowerPagesEnvDevopsExport" Condition="'$(WebSiteId)'!='' And '$(WebSiteFolder)'!=''">
-		<Warning Text="Running InitPowerPagesEnvDevopsExport" />
-		<Warning Text="Power Pages website id is $(WebSiteId)"   />
-		<Warning Text="Power Pages WebSiteFolder id is $(WebSiteFolder)"   />
+		<Message Text="Power Pages website id is $(WebSiteId)"   />
+		<Message Text="Power Pages WebSiteFolder id is $(WebSiteFolder)"   />
 		<Exec Command='echo ##vso[task.setvariable variable=DownloadPowerPageWebsite]true'  />
 		<Exec Command='echo ##vso[task.setvariable variable=PowerPageWebsiteId]$(WebSiteId)' />
 		<Exec Command='echo ##vso[task.setvariable variable=PowerPageWebsiteFolder]$(WebSiteFolder)' />

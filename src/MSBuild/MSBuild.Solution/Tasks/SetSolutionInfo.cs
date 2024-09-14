@@ -34,7 +34,7 @@ namespace OpenStrata.MSBuild.Solution.Tasks
 
             if (!solXDoc.SolutionManifest.ReplacePublisherNodeWithPublisherXmlFile(PublisherXmlPath, out string message, out Exception exception))
             {
-                Log.LogWarning(message);
+                Log.LogMessage(message);
             }
 
             solXDoc.SaveToRoot(RootPath);

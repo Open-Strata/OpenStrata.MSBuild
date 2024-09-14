@@ -88,7 +88,9 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
 
             if (packedFiles.Count == 0)
             {
-                return TaskFinishedWithWarning($"OpenStrata : Was not able to find valid config data in the directories of of {ConfigDataRootDir}");
+                Log.LogMessage($"OpenStrata : Was not able to find valid config data in the directories of of {ConfigDataRootDir}");
+                return true;
+               // return TaskFinishedWithWarning($"OpenStrata : Was not able to find valid config data in the directories of of {ConfigDataRootDir}");
             }
 
             PackedConfigDataFiles = new ITaskItem[packedFiles.Count];

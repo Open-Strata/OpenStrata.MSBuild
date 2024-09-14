@@ -123,10 +123,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</PropertyGroup>
 
 	<Target Name="InitConfigDataEnvDevopsExport">
-		<Warning Text="Running InitConfigDataEnvDevopsExport" />
-		<Warning Text="$(MSBuildProjectDirectory)\schema.xml does exist.  Setting export config data to true."  Condition="Exists('$(MSBuildProjectDirectory)\schema.xml')" />
+		<Message Text="$(MSBuildProjectDirectory)\schema.xml does exist.  Setting export config data to true."  Condition="Exists('$(MSBuildProjectDirectory)\schema.xml')" />
 		<Exec Command='echo ##vso[task.setvariable variable=ExportConfigData]true' Condition="Exists('$(MSBuildProjectDirectory)\schema.xml')" />
-		<Warning Text="$(MSBuildProjectDirectory)\schema.xml does not exist.  Not setting export config data to true."  Condition="!Exists('$(MSBuildProjectDirectory)\schema.xml')" />
+		<Message Text="$(MSBuildProjectDirectory)\schema.xml does not exist.  Not setting export config data to true."  Condition="!Exists('$(MSBuildProjectDirectory)\schema.xml')" />
 	</Target>
 
 

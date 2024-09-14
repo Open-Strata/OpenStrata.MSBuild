@@ -95,8 +95,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<Output TaskParameter="metaDirs" ItemName="MetaDirs" />
 		</EnumerateMetaDirs>
 
-		<Warning Text="%(MetaDirs.ZipFile)" />
-
 		<ZipDirectory DestinationFile="%(MetaDirs.ZipFile)" SourceDirectory="%(MetaDirs.Identity)" Overwrite="true" />
 
 	</Target>
