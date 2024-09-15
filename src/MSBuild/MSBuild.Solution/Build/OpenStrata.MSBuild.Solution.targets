@@ -45,7 +45,11 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	<Target Name="InitializeSolutionTemplate" BeforeTargets="CopyCdsSolutionContent"
 			DependsOnTargets="$(InitializeSolutionTemplateDependsOn)"
-			Condition="!Exists('$(ProjectDir)$(SolutionRootPath)')">
+			Condition="!Exists('$(ProjectDir)$(SolutionRootPath)\other\solution.xml')">
+
+
+		<Message Text="Initializing Solution Template" />
+
 
 		<MakeDir
 		   Directories="$(ProjectDir)$(SolutionRootPath)"/>

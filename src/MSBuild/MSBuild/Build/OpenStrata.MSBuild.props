@@ -76,7 +76,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<!--<PushAfterBuild Condition="'$(PushAfterBuild)'==''">false</PushAfterBuild>-->
 		<!--<PushAfterBuild Condition="'$(Configuration)'=='Release'">true</PushAfterBuild>-->
 
-		<DotOstrataPath>$(SolutionDir).ostrata\</DotOstrataPath>
+        <DotOstrataPath Condition="'$(DotOstrataPath)' == '' And '$(SolutionDir)' != ''">$(SolutionDir)\.openstrata\</DotOstrataPath>               
+        <DotOstrataPath Condition="'$(DotOstrataPath)' == ''">$(MSBuildProjectDirectory)..\.openstrata\</DotOstrataPath>
 		<DotOstrataLockPath>$(DotOstrataPath)locks\</DotOstrataLockPath>
 		<DotOstrataTmpPath>$(DotOstrataPath)tmp\</DotOstrataTmpPath>
 		<DotOstrataIgnorePath>$(DotOstrataPath)ignore\</DotOstrataIgnorePath>
