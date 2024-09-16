@@ -16,7 +16,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 		<!--<DerivativeNamePrefix></DerivativeNamePrefix>-->
 
-		<Version>0.8.1</Version>
+		<!-- <Version>0.8.1</Version> -->
 
 		
 		<LocalPackageFeed>C:\Packages</LocalPackageFeed>
@@ -39,7 +39,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<IncludeGitInfoInPackage>true</IncludeGitInfoInPackage>
 		<UseGitInfoForVersions>true</UseGitInfoForVersions>
 
-		<GitDefaultBranch>master</GitDefaultBranch>
+		<GitDefaultBranch>main</GitDefaultBranch>
 
 		<OstrataMSBuildNugetVersion>1.0.5</OstrataMSBuildNugetVersion>
 		

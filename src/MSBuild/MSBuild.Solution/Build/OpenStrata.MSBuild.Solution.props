@@ -24,7 +24,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<IsPackable>false</IsPackable>
 		<LocalImportSequence Condition="'$(LocalImportSequence)' == ''">99</LocalImportSequence>
 
-		<InitDependsOn>$(InitDependsOn);InitializeSolutionTemplate</InitDependsOn>
+		<AfterNewDependsOn>$(AfterNewDependsOn);InitializeSolutionTemplate</AfterNewDependsOn>
 	</PropertyGroup>
 
 	<PropertyGroup Label='Properties used by Microsoft.PowerApps.MSBuild.Solution '>

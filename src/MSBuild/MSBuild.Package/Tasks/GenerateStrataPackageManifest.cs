@@ -26,7 +26,7 @@ namespace OpenStrata.MSBuild.Package.Tasks
 
             var strataManifest = new StrataManifestXDocument();
 
-            var ManifestPath = Path.Combine(SolutionDir, "ostrata.package.manifest");
+            var ManifestPath = Path.Combine(SolutionDir, "openstrata.package.manifest");
 
             //TODO:  Process Strati Dependencies
 

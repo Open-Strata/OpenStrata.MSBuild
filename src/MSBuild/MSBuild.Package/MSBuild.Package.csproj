@@ -2,17 +2,9 @@
 
 
 	<Import Project="..\..\Shared\Xml.Shared\Xml.Shared.projitems"  />
-
-
 	<Import Project="..\..\Shared\Package.Shared\Package.Shared.projitems"  />
-
-
 	<Import Project="..\..\Shared\Strati.Manifest\Strati.Manifest.Shared.projitems"  />
-
-
 	<Import Project="..\..\Shared\Strata.Manifest\Strata.Manifest.projitems"  />
-
-
 	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" />
 
 
@@ -42,8 +34,8 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Deployment\Deployment.Sdk\Deployment.Sdk.csproj">
-	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
 	    <Private>false</Private>
+	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
 	    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 	  </ProjectReference>
 	</ItemGroup>

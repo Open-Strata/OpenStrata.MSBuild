@@ -26,7 +26,7 @@ namespace OpenStrata.MSBuild.Stratify.Tasks
 
             var strataManifest = new StrataManifestXDocument();
 
-            var ManifestPath = Path.Combine(SolutionDir, "ostrata.stratify.manifest");
+            var ManifestPath = Path.Combine(SolutionDir, "openstrata.stratify.manifest");
 
 
             this.LogMessage($"Attempting to create {ManifestPath}");

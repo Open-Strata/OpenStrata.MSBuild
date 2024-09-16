@@ -42,8 +42,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	<Target Name="OpenStrata_BeforePowerAppsPackage" BeforeTargets="PowerAppsPackage" DependsOnTargets="BeforeBuild" />
 
-
-	<Target Name="InitializeSolutionTemplate" BeforeTargets="CopyCdsSolutionContent"
+	<Target Name="InitializeSolutionTemplate" BeforeTargets="CopyCdsSolutionContent" 
 			DependsOnTargets="$(InitializeSolutionTemplateDependsOn)"
 			Condition="!Exists('$(ProjectDir)$(SolutionRootPath)\other\solution.xml')">
 

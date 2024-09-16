@@ -101,7 +101,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<Target Name="GetVersionInfo" DependsOnTargets="$(GetVersionInfoDependsOn)" />
 
 	<Target Name="Refresh" DependsOnTargets="$(RefreshDependsOn)" />
-	<Target Name="Init"  DependsOnTargets="$(InitDependsOn)" />
+	<Target Name="AfterNew"  DependsOnTargets="$(AfterNewDependsOn)" />
 	<Target Name="Update"  DependsOnTargets="$(UpdateDependsOn)" />
 
 	<Target Name="Push" DependsOnTargets="Build" >
