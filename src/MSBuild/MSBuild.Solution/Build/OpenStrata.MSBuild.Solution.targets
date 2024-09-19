@@ -151,6 +151,20 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<SolutionDependenciesToRemove Include="Active" Condition="'$(RemoveActiveDependencies)'=='true'" />
 	</ItemGroup>
 
+	<PropertyGroup Label="RemoveSolutionClutterProperties">
+		<RemoveSolutionClutter Condition="'$(RemoveSolutionClutter)'==''">true</RemoveSolutionClutter>
+		<!--<IncludeDVTableSearch Condition="'$(IncludeDVTableSearch)'!=''">false</IncludeDVTableSearch>-->
+		<dvtablesearchentitiespath>$(SolutionRootPath)\dvtablesearchentities</dvtablesearchentitiespath>
+		<dvtablesearchspath>$(SolutionRootPath)\dvtablesearchs</dvtablesearchspath>
+		<FixSolutionXmlDependsOn Condition="'$(RemoveSolutionClutter)'=='true'">$(FixSolutionXmlDependsOn);RemoveSolutionClutter</FixSolutionXmlDependsOn>
+	</PropertyGroup>
+
+	<ItemGroup Label ="DVTableSearchClutterItems" Condition="'$(IncludeDVTableSearch)'!='true'" >
+		<RequiredTypeDependenciesToRemove Include="DVTableSearch" Condition="'$(IncludeDVTableSearch)'!='true'" />
+		<DependentTypeDependenciesToRemove Include="DVTableSearchEntity" Condition="'$(IncludeDVTableSearch)'!='true'" />		
+		<SolutionClutterDirectory Include="$(dvtablesearchentitiespath)" Condition="'$(IncludeDVTableSearch)'!='true'" />
+		<SolutionClutterDirectory Include="$(dvtablesearchspath)" Condition="'$(IncludeDVTableSearch)'!='true'"/>
+	</ItemGroup>
 
 
 
@@ -166,19 +180,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			>
 		</FixSolutionXml>
 	</Target>
-
-	<PropertyGroup Label="RemoveSolutionClutterProperties">
-		<RemoveSolutionClutter Condition="'$(RemoveSolutionClutter)'==''">true</RemoveSolutionClutter>
-		<KeepDVTable Condition="'$(KeepDVTable)'==''">false</KeepDVTable>
-		<dvtablesearchentitiespath>$(SolutionRootPath)\dvtablesearchentities</dvtablesearchentitiespath>
-		<dvtablesearchspath>$(SolutionRootPath)\dvtablesearchs</dvtablesearchspath>
-		<FixSolutionXmlDependsOn Condition="'$(RemoveSolutionClutter)'=='true'">$(FixSolutionXmlDependsOn);RemoveSolutionClutter</FixSolutionXmlDependsOn>
-	</PropertyGroup>
-
-	<ItemGroup Label ="SolutionClutterItems">
-		<SolutionClutterDirectory Include="$(dvtablesearchentitiespath)" Condition="'$(KeepDVTable)'=='false'" />
-		<SolutionClutterDirectory Include="$(dvtablesearchspath)" Condition="'$(KeepDVTable)'=='false'" />
-	</ItemGroup>
 
 	<Target Name="RemoveSolutionClutter" Condition="'$(RemoveSolutionClutter)'=='true'" >
 		<RemoveDir Directories="%(SolutionClutterDirectory.Identity)" Condition="Exists('%(SolutionClutterDirectory.Identity)')" >
