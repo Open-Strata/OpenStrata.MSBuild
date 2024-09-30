@@ -50,7 +50,7 @@ namespace OpenStrata.MSBuild.Stratify.Tasks
 
             var fi = new FileInfo(TemplatePath);
             //TODO:  Add processing to props if required.
-            CreatedPropsPath = Path.Combine(NuspecOutPath, $"{PackageId}{fi.Extension}");
+            CreatedPropsPath = Path.Combine(NuspecOutPath, $"{fi.Name.Replace("packageid",PackageId)}");
 
             if (String.IsNullOrEmpty(UniqueName.Trim()))
                 UniqueName = ManifestTools.GenerateManifestUniqueName(PackageId);

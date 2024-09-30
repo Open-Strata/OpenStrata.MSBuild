@@ -10,8 +10,8 @@
 
 
 	<ItemGroup>
-		<None Include="templates\buildTransitiveTemplate.props" Pack="true" PackagePath="\templates\" />
-		<None Include="templates\buildTransitiveTemplate.targets" Pack="true" PackagePath="\templates\" />
+		<None Include="templates\**\*" Pack="true" PackagePath="\templates\" />
+		<None Include="templates\**\*" Pack="true" PackagePath="\templates\" />
 
 	</ItemGroup>
 

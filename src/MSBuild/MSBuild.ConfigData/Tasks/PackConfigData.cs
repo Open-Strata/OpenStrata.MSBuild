@@ -125,8 +125,8 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
                     xpath = "/entities/entity/records/record/field[@name = '{0}']";
                 }
 
-                if (!string.IsNullOrEmpty(xpath))
-                {
+
+                if (!string.IsNullOrEmpty(xpath)) { 
                     var xdoc = XDocument.Load(file.FullName);
                     foreach (ITaskItem i in CommonFieldsToRemove)
                     {
@@ -134,9 +134,18 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
                         foreach (var node in delList)
                         {
                             node.Remove();
-                            dirty = true;
+
                         }
                     }
+
+                    var timestamp = xdoc.XPathSelectElement("/entities")?.Attribute("timestamp");
+
+                    if (timestamp != null)
+                    {
+                        timestamp.Remove();
+                        dirty = true;
+                    }
+
                     if (dirty) xdoc.Save(file.FullName);
                 }
             }

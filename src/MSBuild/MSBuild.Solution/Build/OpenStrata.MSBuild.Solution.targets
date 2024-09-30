@@ -167,7 +167,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</ItemGroup>
 
 
-
 	<Target Name="FixSolutionXml" DependsOnTargets="FixMergeDiffVersionMarkup;OS_SetDataverseSolutionInfo;$(FixSolutionXmlDependsOn)" AfterTargets="Export" BeforeTargets="PowerAppsPackage">
 		<FixSolutionXml
              RootPath="$(SolutionRootPath)"
@@ -194,8 +193,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			DependsOnTargets="$(CopyCdsSolutionContentDependsOn)" >
 
 	</Target>
-
-
 
 	<Target Name="OS_GetDataverseSolutionInfo" DependsOnTargets="OS_SetDataverseSolutionInfo;$(GetDataverseSolutionInfo)">
 		<GetSolutionInfo
@@ -231,25 +228,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<Message Text="Ensuring a value for solution unique name" Importance="High" />
 
 	</Target>
-
-	<Target Name="EnsureExportIncludes" Returns="@(ExportSolIncludes)" >
-
-		<ItemGroup>
-			<ExportSolIncludes Include="autonumbering" Condition="'$(IncludeAutoNumbering)'=='true'" />
-			<ExportSolIncludes Include="calendar" Condition="'$(IncludeCalendar)'=='true'" />
-			<ExportSolIncludes Include="customization" Condition="'$(IncludeCustomization)'=='true'" />
-			<ExportSolIncludes Include="emailtracking" Condition="'$(IncludeEmailTracking)'=='true'" />
-			<ExportSolIncludes Include="externalapplications" Condition="'$(IncludeExternalApplications)'=='true'" />
-			<ExportSolIncludes Include="general" Condition="'$(IncludeGeneral)'=='true'" />
-			<ExportSolIncludes Include="isvconfig" Condition="'$(IncludeISVConfig)'=='true'" />
-			<ExportSolIncludes Include="marketing" Condition="'$(IncludeMarketing)'=='true'" />
-			<ExportSolIncludes Include="outlooksynchronization" Condition="'$(IncludeOutlookSynchronization)'=='true'" />
-			<ExportSolIncludes Include="relationshiproles" Condition="'$(IncludeRelationshipRoles)'=='true'" />
-			<ExportSolIncludes Include="sales" Condition="'$(IncludeSales)'=='true'" />
-		</ItemGroup>
-
-	</Target>
-
 
 	
 	<!--Need to update the targets-->

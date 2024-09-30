@@ -14,6 +14,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<PropertyGroup Label='OpenStrata Project Properties'>
 		<OpenStrataProjectType Condition="'$(OpenStrataProjectType)' == ''">pcf</OpenStrataProjectType>
 		<RestatifyDuplicateProjectTypes Condition="'$(RestatifyDuplicateProjectTypes)' != '' AND '$(OpenStrataProjectType)' != '$projecttype$' ">true</RestatifyDuplicateProjectTypes>
+
+        <IsPackable>false</IsPackable>
+
 	</PropertyGroup>
 
 	<ItemGroup>

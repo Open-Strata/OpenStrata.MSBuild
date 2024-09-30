@@ -25,8 +25,29 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<FXPATH Condition="'$(FXPATH)' == ''">$(MSBuildThisFileDirectory)..\tools</FXPATH>
 		<SNExe Condition="'$(SNExe)' == ''">"$(FXPATH)\sn.exe"</SNExe>
 
-		<SolutionDir Condition="'$(SolutionDir)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)', '**\*.sln'))</SolutionDir>
-		<SolutionName Condition="'$(SolutionDir)' != '' and '$(SolutionName)' == ''">$([System.IO.Path]::GetFileNameWithoutExtension($([System.IO.Directory]::GetFiles("$(SolutionDir)", "*.sln")[0])))</SolutionName>
+	</PropertyGroup>
+
+	<PropertyGroup  Condition="'$(SolutionDir)' == '*Undefined*' Or '$(SolutionDir)' == '' " >
+
+			<SolutionFilePath></SolutionFilePath>
+
+		    <_curSlnCount>$([System.IO.Directory]::GetFiles("$(MSBuildProjectDirectory)","*.sln").Length)</_curSlnCount>
+		    <_parentSlnCount>$([System.IO.Directory]::GetFiles("$(MSBuildProjectDirectory)\..","*.sln").Length)</_parentSlnCount>
+		    <_parentParentSlnCount>$([System.IO.Directory]::GetFiles("$(MSBuildProjectDirectory)\..","*.sln").Length)</_parentParentSlnCount>
+
+	   	   <SolutionFilePath Condition="'$(_curSlnCount)' > '0'" >$([System.IO.Directory]::GetFiles("$(MSBuildProjectDirectory)","*.sln")[0])</SolutionFilePath>
+	   	   <SolutionFilePath Condition="'$(SolutionFilePath)'=='' And '$(_parentSlnCount)' > '0'" >$([System.IO.Directory]::GetFiles("$(MSBuildProjectDirectory)\..","*.sln")[0])</SolutionFilePath>
+	   	   <SolutionFilePath Condition="'$(SolutionFilePath)'=='' And '$(_parentParentSlnCount)' > '0'" >$([System.IO.Directory]::GetFiles("$(MSBuildProjectDirectory)\..\..","*.sln")[0])</SolutionFilePath>
+
+		   <SolutionFilePath Condition="'$(SolutionFilePath)'!=''" >$([System.IO.Path]::GetFullPath("$(SolutionFilePath)"))</SolutionFilePath>
+
+		   <SolutionDir  Condition="'$(SolutionFilePath)'!=''" >$([System.IO.Path]::GetDirectoryName("$(SolutionFilePath)"))\</SolutionDir>
+		   <SolutionFileName  Condition="'$(SolutionFilePath)'!=''" >$([System.IO.Path]::GetFileName("$(SolutionFilePath)"))</SolutionFileName>		   
+		   <SolutionName  Condition="'$(SolutionFilePath)'!=''" >$([System.IO.Path]::GetFileNameWithoutExtension("$(SolutionFilePath)"))</SolutionName>
+		   <SolutionDirName  Condition="'$(SolutionFilePath)'!=''" >$([System.IO.Path]::GetFileName("$([System.IO.Path]::GetDirectoryName("$(SolutionFilePath)"))"))</SolutionDirName>		   
+	</PropertyGroup>
+
+	<PropertyGroup>
 		
 		<BuildModeSolutionExtensionsDir>$(SolutionDir).$(OstrataBuildMode)\</BuildModeSolutionExtensionsDir>
 		<BuildModeProjectExtensionsDir>.$(OstrataBuildMode)\</BuildModeProjectExtensionsDir>
@@ -76,11 +97,14 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<!--<PushAfterBuild Condition="'$(PushAfterBuild)'==''">false</PushAfterBuild>-->
 		<!--<PushAfterBuild Condition="'$(Configuration)'=='Release'">true</PushAfterBuild>-->
 
-        <DotOstrataPath Condition="'$(DotOstrataPath)' == '' And '$(SolutionDir)' != ''">$(SolutionDir)\.openstrata\</DotOstrataPath>               
-        <DotOstrataPath Condition="'$(DotOstrataPath)' == ''">$(MSBuildProjectDirectory)..\.openstrata\</DotOstrataPath>
-		<DotOstrataLockPath>$(DotOstrataPath)locks\</DotOstrataLockPath>
-		<DotOstrataTmpPath>$(DotOstrataPath)tmp\</DotOstrataTmpPath>
-		<DotOstrataIgnorePath>$(DotOstrataPath)ignore\</DotOstrataIgnorePath>
+      <OpenStrataPropsPath Condition="'$(OpenStrataPropsPath)' == ''">$([MSBuild]::GetPathOfFileAbove('openstrata.props', '$(MSBuildProjectDirectory)'))</OpenStrataPropsPath>
+      <DotOstrataPath Condition="'$(DotOstrataPath)' == '' And '$(OpenStrataPropsPath)' != ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(OpenStrataPropsPath)')).openstrata\</DotOstrataPath>
+      <DotOstrataPath Condition="'$(DotOstrataPath)' == '' And '$(SolutionDir)' != ''">$(SolutionDir)\.openstrata\</DotOstrataPath>               
+      <DotOstrataPath Condition="'$(DotOstrataPath)' == ''">$(MSBuildProjectDirectory)..\.openstrata\</DotOstrataPath>
+
+	  <DotOstrataTmpPath Condition="'$(DotOstrataTmpPath)' == ''">$(DotOstrataPath)tmp\</DotOstrataTmpPath>
+	  <DotOstrataLocksPath Condition="'$(DotOstrataLocksPath)' == ''">$(DotOstrataPath)locks\</DotOstrataLocksPath>	 
+	  <DotOstrataLocksPath Condition="'$(DotOstrataLocksPath)' == ''">$(DotOstrataPath)gitignore\</DotOstrataLocksPath>	 	
 
 	</PropertyGroup>
 

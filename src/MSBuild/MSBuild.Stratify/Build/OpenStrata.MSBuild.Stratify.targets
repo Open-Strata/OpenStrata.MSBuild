@@ -38,7 +38,29 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	<Target Name="GenerateBuildTransitiveProps" BeforeTargets="_GetPackageFiles" DependsOnTargets="SetVersionInfo;GenerateStratiManifest;_GetAbsoluteOutputPathsForPack">
 
+		<ItemGroup>
+			<StratiBuildFileTemplates Include="$(MSBuildThisFileDirectory)..\templates\*.props"   />
+			<StratiBuildFileTemplates Include="$(MSBuildThisFileDirectory)..\templates\*.targets"   />
+		</ItemGroup>
+
 		<GenerateBuildTransitiveProps
+			 PackageId="$(PackageId)"
+			 PackageVersion="$(PackageVersion)"
+			 UniqueName="$(StratiUniqueName)"
+			 GitRepositoryUrl="$(GitRepositoryUrl)"
+			 GitCommit="$(GitCommit)"
+			 GitCommitDate="$(GitCommitDate)"
+			 OverwriteUnmanaged="$(overwriteunmanagedcustomizations)"
+			 PublishAndActivate="$(publishworkflowsandactivateplugins)"
+		     NuspecOutPath="$(NuspecOutputAbsolutePath)"
+			 TemplatePath="%(StratiBuildFileTemplates.FullPath)">
+
+			<Output TaskParameter="CreatedPropsPath"
+                  PropertyName="GeneratedBuildTransitivePropsPath" />
+		</GenerateBuildTransitiveProps>
+
+
+		<!-- <GenerateBuildTransitiveProps
 			 PackageId="$(PackageId)"
 			 PackageVersion="$(PackageVersion)"
 			 UniqueName="$(StratiUniqueName)"
@@ -52,9 +74,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 			<Output TaskParameter="CreatedPropsPath"
                   PropertyName="GeneratedBuildTransitivePropsPath" />
-		</GenerateBuildTransitiveProps>
+		</GenerateBuildTransitiveProps> -->
 
-		<GenerateBuildTransitiveProps
+		<!-- <GenerateBuildTransitiveProps
 			 PackageId="$(PackageId)"
 			 PackageVersion="$(PackageVersion)"
 			 UniqueName="$(StratiUniqueName)"
@@ -67,12 +89,12 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			 TemplatePath="$(MSBuildThisFileDirectory)..\templates\buildTransitiveTemplate.targets">
 			<Output TaskParameter="CreatedPropsPath"
                   PropertyName="GeneratedBuildTransitiveTargetsPath" />
-		</GenerateBuildTransitiveProps>
+		</GenerateBuildTransitiveProps> -->
 
 		<ItemGroup>
-			<None Include="$(GeneratedBuildTransitivePropsPath)" Pack="true" PackagePath="\build;\buildTransitive" />
-			<None Include="$(GeneratedBuildTransitiveTargetsPath)" Pack="true" PackagePath="\build;\buildTransitive" />
-			
+            <None Include="@(StratiBuildFileTemplates -> '$(NuspecOutputAbsolutePath)')" Pack="true" PackagePath="\build;\buildTransitive" />
+			<!-- <None Include="$(GeneratedBuildTransitivePropsPath)" Pack="true" PackagePath="\build;\buildTransitive" /> -->
+			<!-- <None Include="$(GeneratedBuildTransitiveTargetsPath)" Pack="true" PackagePath="\build;\buildTransitive" /> -->
 		</ItemGroup>
 
 		<PropertyGroup>
