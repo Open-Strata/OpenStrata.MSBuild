@@ -15,6 +15,10 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<OpenStrataBuildAssemblyFile>$(MSBuildThisFileDirectory)..\Tasks\OpenStrata.MSBuild.dll</OpenStrataBuildAssemblyFile>
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
 		<SignAssembly Condition="'$(SignAssembly)' == ''">false</SignAssembly>
+
+		<StageDirective>STAGE_$(Stage.ToUpper())</StageDirective>
+		<DefineConstants >$(DefineConstants);$(StageDirective)</DefineConstants>
+
 	</PropertyGroup>
 
 	<!-- Tasks -->

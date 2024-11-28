@@ -1,6 +1,6 @@
-﻿//using Microsoft.Uii.Common.Entities;
-using Microsoft.Xrm.Sdk.Query;
+﻿// using Microsoft.Uii.Common.Entities;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase;
 using OpenStrata.Strati.Manifest.Xml;
 using System;
@@ -296,15 +296,21 @@ namespace OpenStrata.Deployment.Sdk
             {
                 return true;
             }
-            public override bool AfterPrimaryImport()
+
+            public override sealed bool AfterPrimaryImport()
             {
-                var result = true;
-                //TODO:  Add Async processing       
-                foreach (IImportPackageStrataExtension extension in Extensions)
+
+                if (PreAfterPrimaryImport())
                 {
-                    if (!extension.AfterPrimaryImport()) return false;
+                    //var result = true;
+                    //TODO:  Add Async processing       
+                    foreach (IImportPackageStrataExtension extension in Extensions)
+                    {
+                        if (!extension.AfterPrimaryImport()) return false;
+                    }
+                    return PostAfterPrimaryImport();
                 }
-                return result;
+                return false;
             }
 
             protected virtual bool PostAfterPrimaryImport()
@@ -313,7 +319,7 @@ namespace OpenStrata.Deployment.Sdk
             }
         #endregion
 
-        //#region BeforeApplicationRecordImport(ApplicationRecord app)
+        #region BeforeApplicationRecordImport(ApplicationRecord app) (Deprecated)
 
 
         //protected virtual ApplicationRecord PreBeforeApplicationRecordImport(ApplicationRecord app)
@@ -339,7 +345,7 @@ namespace OpenStrata.Deployment.Sdk
         //    return app;
         //}
 
-        //#endregion
+        #endregion
 
         #region BeforeImportStage()
 
@@ -638,14 +644,19 @@ namespace OpenStrata.Deployment.Sdk
 
         #endregion
 
+
         #region EnvironmentPrepMethods
-        protected void SetPreferredSolution(Guid solutionId)
+
+        protected void SetPreferredSolution (Guid solutionId)       
         {
             PackageLog.Log($"Attempting SetPreferredSolution request with solutionId {solutionId}");
+
             try
             {
+
                 var msg = new OrganizationRequest("SetPreferredSolution");
                 msg.Parameters.Add("SolutionId", solutionId);
+
             }
             catch (Exception ex)
             {
@@ -653,32 +664,39 @@ namespace OpenStrata.Deployment.Sdk
                 PackageLog.Log(ex.ToString(), TraceEventType.Warning);
             }
         }
+
         protected void SetPreferredSolution(string solutionUniqueName)
         {
+
             PackageLog.Log($"Attempting to set preferred solution to {solutionUniqueName}");
+
             try
             {
+
                 var qry = new QueryByAttribute("solution")
                 {
                     ColumnSet = new ColumnSet("solutionid")
                 };
                 qry.AddAttributeValue("uniquename", solutionUniqueName);
+
                 var result = CrmSvc.RetrieveMultiple(qry);
+
                 if (result != null & result.Entities.Count > 0)
                 {
                     SetPreferredSolution(result[0].Id);
                 }
                 else
                 {
-                    PackageLog.Log($"Unable to identify solution with unique name {solutionUniqueName}", TraceEventType.Warning);
+                    PackageLog.Log($"Unable to identify solution with unique name {solutionUniqueName}",TraceEventType.Warning);
                 }
             }
             catch (Exception ex)
             {
-                PackageLog.Log($"Non-Fatal Exception attempting to set preferred solution to {solutionUniqueName}", TraceEventType.Warning);
-                PackageLog.Log(ex.ToString(), TraceEventType.Warning);
+                PackageLog.Log($"Non-Fatal Exception attempting to set preferred solution to {solutionUniqueName}",TraceEventType.Warning);
+                PackageLog.Log(ex.ToString(),TraceEventType.Warning);
             }
         }
+
         #endregion
 
     }
