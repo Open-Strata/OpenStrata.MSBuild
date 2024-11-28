@@ -58,7 +58,7 @@ namespace OpenStrata.Deployment.Sdk.Common.DocumentTemplates
             return true;
         }
 
-        private Dictionary<string, List<DocumentTemplate>> GetApplicableTemplates()
+        private Dictionary <string,List<DocumentTemplate>> GetApplicableTemplates()
         {
             PackageLog.Log($"OpenStrata : DocumentTemplates : Attempting to identify document templates to import");
 
@@ -103,11 +103,11 @@ namespace OpenStrata.Deployment.Sdk.Common.DocumentTemplates
                 if (!template.IsValid)
                 {
                     PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : {template.InvalidMessage}");
-
+ 
                 }
                 else if (template.FileType == DocumentTemplateType.word)
                 {
-                    return ProcessWordTemplate(template, entityMetadata);
+                    return ProcessWordTemplate(template,entityMetadata);
                 }
                 else if (template.FileType == DocumentTemplateType.excel)
                 {
@@ -119,7 +119,7 @@ namespace OpenStrata.Deployment.Sdk.Common.DocumentTemplates
             {
                 PackageLog.Log($"OpenStrata : DocumentTemplates : Exception occurred processing {template.FileName} template.  The template will not been imported.");
                 PackageLog.Log(ex.Message);
-                return false;
+                return false;            
             }
             finally
             {
@@ -171,29 +171,44 @@ namespace OpenStrata.Deployment.Sdk.Common.DocumentTemplates
 
                                     var newSchema = manifest.Schema.Replace(manifest.EntityObjectTypeCode.ToString(), entityInfo.ObjectTypeCode.ToString());
 
-                                    // Process ItemXml
-                                    if (!string.IsNullOrEmpty(manifest.ItemXml))
+                                    foreach (var item in docPackage.GetParts())
                                     {
-                                        var itemUri = PackUriHelper.CreatePartUri(new Uri($"customXml\\{manifest.ItemXml}", UriKind.Relative));
+                                        var ext = Path.GetExtension(item.Uri.ToString());
 
-                                        if (docPackage.PartExists(itemUri))
-                                            docPackage.GetPart(itemUri).ReplaceText(manifest.Schema, newSchema, PackageLog);
-
-                                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Processed {itemUri} part");
-
-
+                                        if (ext == ".xml")
+                                        {
+                                            item.ReplaceText(manifest.Schema, newSchema, PackageLog);
+                                            PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Processed {item.Uri} part");
+                                        }
                                     }
+
+
+
+
+
+                                    // Process ItemXml
+                                    //if (!string.IsNullOrEmpty(manifest.ItemXml))
+                                    //{
+                                    //    var itemUri = PackUriHelper.CreatePartUri(new Uri($"customXml\\{manifest.ItemXml}", UriKind.Relative));
+
+                                    //    if (docPackage.PartExists(itemUri))
+                                    //        docPackage.GetPart(itemUri).ReplaceText(manifest.Schema, newSchema, PackageLog);
+
+                                    //    PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Processed {itemUri} part");
+
+
+                                    //}
 
                                     // Process ItemPropsXml
-                                    if (!string.IsNullOrEmpty(manifest.ItemPropsXml))
-                                    {
-                                        var itemPropsUri = PackUriHelper.CreatePartUri(new Uri($"customXml\\{manifest.ItemPropsXml}", UriKind.Relative));
-                                        if (docPackage.PartExists(itemPropsUri))
-                                            docPackage.GetPart(itemPropsUri).ReplaceText(manifest.Schema, newSchema, PackageLog);
+                                    //if (!string.IsNullOrEmpty(manifest.ItemPropsXml))
+                                    //{
+                                    //    var itemPropsUri = PackUriHelper.CreatePartUri(new Uri($"customXml\\{manifest.ItemPropsXml}", UriKind.Relative));
+                                    //    if (docPackage.PartExists(itemPropsUri))
+                                    //        docPackage.GetPart(itemPropsUri).ReplaceText(manifest.Schema, newSchema, PackageLog);
 
-                                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Processed {itemPropsUri} part");
+                                    //    PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Processed {itemPropsUri} part");
 
-                                    }
+                                    //}
 
                                 }
 
@@ -221,11 +236,15 @@ namespace OpenStrata.Deployment.Sdk.Common.DocumentTemplates
 
                             var response = CrmSvc.RetrieveMultiple(qry);
 
-                            if (response != null)
+                            if (response != null && response.Entities.Count > 0)
                             {
 
                                 PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Found {response.Entities.Count} pre-existing template records");
 
+                                foreach (var entity in response.Entities)
+                                {
+                                    CrmSvc.Delete(entity.LogicalName, entity.Id);
+                                }
                             }
                             else
                             {
@@ -294,82 +313,87 @@ namespace OpenStrata.Deployment.Sdk.Common.DocumentTemplates
             try
             {
 
-                var templateInfo = new FileInfo(Path.Combine(this.AbsoluteImportPackageDataFolderPath, templatesFolder, template.FileName));
-                if (templateInfo.Exists)
-                {
-
-                    PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Found template file.");
-
-                    var manifestInfo = new FileInfo(Path.Combine(this.AbsoluteImportPackageDataFolderPath, templatesFolder, template.Manfiest));
-                    if (manifestInfo.Exists)
+                    var templateInfo = new FileInfo(Path.Combine(this.AbsoluteImportPackageDataFolderPath, templatesFolder, template.FileName));
+                    if (templateInfo.Exists)
                     {
-                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Found template manifest file.");
 
-                        var manifest = DocumentTemplateManifestXDocument.Load(manifestInfo.FullName);
+                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Found template file.");
 
-                        string fileName = Path.GetFileNameWithoutExtension(template.FileName);
-
-                        var qry = new QueryByAttribute("documenttemplate");
-
-                        qry.Attributes.Add("name");
-                        qry.Values.Add(fileName);
-
-                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Attempting to locate pre-exsisting template to replace.");
-
-                        var response = CrmSvc.RetrieveMultiple(qry);
-
-                        if (response != null)
+                        var manifestInfo = new FileInfo(Path.Combine(this.AbsoluteImportPackageDataFolderPath, templatesFolder, template.Manfiest));
+                        if (manifestInfo.Exists)
                         {
+                            PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Found template manifest file.");
 
-                            PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Found {response.Entities.Count} pre-existing template records");
+                            var manifest = DocumentTemplateManifestXDocument.Load(manifestInfo.FullName);
+
+                            string fileName = Path.GetFileNameWithoutExtension(template.FileName);
+
+                            var qry = new QueryByAttribute("documenttemplate");
+
+                            qry.Attributes.Add("name");
+                            qry.Values.Add(fileName);
+
+                            PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Attempting to locate pre-exsisting template to replace.");
+
+                            var response = CrmSvc.RetrieveMultiple(qry);
+
+                            if (response != null && response.Entities.Count > 0)
+                            {
+
+                                PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Found {response.Entities.Count} pre-existing template records");
+
+                                foreach (var entity in response.Entities)
+                                {
+                                    CrmSvc.Delete(entity.LogicalName, entity.Id);
+                                }
+
+                        }
+                            else
+                            {
+                                PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : No pre-existing template records");
+
+                            }
+
+                            //var id = existingDoc != null ? existingDoc.Id : Guid.NewGuid();
+
+
+                            //Update the Document Template
+                            // Entity docTemplate = new Entity("documenttemplate", id);
+                            Entity docTemplate = new Entity("documenttemplate");
+
+                            docTemplate["name"] = fileName;
+                            docTemplate["content"] = Convert.ToBase64String(File.ReadAllBytes(templateInfo.FullName));
+                            docTemplate["documenttype"] = new OptionSetValue((int)template.FileType);
+                            //docTemplate["associatedentitytypecode"] = entityInfo.ObjectTypeCode;
+                            // docTemplate["languagecode"] = 1033;
+
+                            PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Attempting Import");
+
+                            var docTemplateId = CrmSvc.Create(docTemplate);
+
+                            //var req = new UpsertRequest()
+                            // {
+                            //     Target = docTemplate,
+                            // };
+
+                            //var resp = CrmSvc.Execute(req);
+
+
+                            PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Sucessfully Imported document template");
+
+                            return true;
 
                         }
                         else
                         {
-                            PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : No pre-existing template records");
-
+                            PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Manifest not found.  Cannot process");
                         }
-
-                        //var id = existingDoc != null ? existingDoc.Id : Guid.NewGuid();
-
-
-                        //Update the Document Template
-                        // Entity docTemplate = new Entity("documenttemplate", id);
-                        Entity docTemplate = new Entity("documenttemplate");
-
-                        docTemplate["name"] = fileName;
-                        docTemplate["content"] = Convert.ToBase64String(File.ReadAllBytes(templateInfo.FullName));
-                        docTemplate["documenttype"] = new OptionSetValue((int)template.FileType);
-                        //docTemplate["associatedentitytypecode"] = entityInfo.ObjectTypeCode;
-                        // docTemplate["languagecode"] = 1033;
-
-                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Attempting Import");
-
-                        var docTemplateId = CrmSvc.Create(docTemplate);
-
-                        //var req = new UpsertRequest()
-                        // {
-                        //     Target = docTemplate,
-                        // };
-
-                        //var resp = CrmSvc.Execute(req);
-
-
-                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Sucessfully Imported document template");
-
-                        return true;
-
                     }
                     else
                     {
-                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Manifest not found.  Cannot process");
+                        PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Not found in the package.");
                     }
-                }
-                else
-                {
-                    PackageLog.Log($"OpenStrata : DocumentTemplates : {template.FileName} : Not found in the package.");
-                }
-
+               
                 return false;
             }
             catch (Exception ex)
@@ -400,7 +424,7 @@ namespace OpenStrata.Deployment.Sdk.Common.DocumentTemplates
 
                 result = new DocumentTemplate(fileName);
 
-                if (result.IsValid) return true;
+                if (result.IsValid) return true ;
 
                 result = null;
                 return false;
@@ -429,7 +453,7 @@ namespace OpenStrata.Deployment.Sdk.Common.DocumentTemplates
                 {
                     FileType = DocumentTemplateType.word;
                 }
-                else if (Extension == ".xlsx")
+                else if(Extension == ".xlsx")
                 {
                     FileType = DocumentTemplateType.excel;
                 }

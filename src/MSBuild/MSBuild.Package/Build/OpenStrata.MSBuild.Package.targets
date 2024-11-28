@@ -16,7 +16,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<OpenStrataBuildPackageAssemblyFile>$(MSBuildThisFileDirectory)..\tasks\OpenStrata.MSBuild.Package.dll</OpenStrataBuildPackageAssemblyFile>
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
 
-		<overwriteunmanagedcustomizations Condition="'$(overwriteunmanagedcustomizations)'=='' And '$(Stage)'=='dev'">true</overwriteunmanagedcustomizations>
+		<overwriteunmanagedcustomizations Condition="'$(overwriteunmanagedcustomizations)'=='' And '$(Stage)'=='dev'">false</overwriteunmanagedcustomizations>
 		<overwriteunmanagedcustomizations Condition="'$(overwriteunmanagedcustomizations)'==''">false</overwriteunmanagedcustomizations>
 
 		<publishworkflowsandactivateplugins Condition="'$(publishworkflowsandactivateplugins)'==''">true</publishworkflowsandactivateplugins>

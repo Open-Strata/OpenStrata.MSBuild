@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase;
+using Microsoft.Xrm.Sdk.Messages;
 using OpenStrata.Strati.Manifest.Xml;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Workflow.Activities;
+using OpenStrata.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 
 namespace OpenStrata.Deployment.Sdk
 {
@@ -473,7 +476,7 @@ namespace OpenStrata.Deployment.Sdk
         //   guRoleId:
         protected bool IsRoleAssoicatedWithTeam(Guid guTeamId, Guid guRoleId)
         {
-            return _importExtension._IsRoleAssoicatedWithTeam(guTeamId, guRoleId);
+            return _importExtension._IsRoleAssociatedWithTeam(guTeamId, guRoleId);
         }
 
 
@@ -490,6 +493,386 @@ namespace OpenStrata.Deployment.Sdk
 
 
         #endregion
+
+#region PackageHelpers
+
+        protected void SetOrganizationSetting(string logicalName, object value)
+        {
+            SetOrganizationSetting(logicalName, value, false);
+        }
+
+        protected void SetOrganizationSetting(string logicalName, object value, bool stopOnError)
+        {
+            try
+            {
+
+                var orgEntity = new Entity("organization", CrmSvc.OrganizationDetail.OrganizationId);
+
+                PackageLog.Log($"UPDATING Organization:  Setting {logicalName} = {value}");
+
+                orgEntity.Attributes.Add(logicalName, value);
+
+                this.CrmSvc.Update(orgEntity);
+
+                PackageLog.Log($"UPDATED Organization:  Set {logicalName} = {value}");
+            }
+            catch (Exception ex)
+            {
+                {
+
+                    if (stopOnError)
+                    {
+                        PackageLog.Log($"ERROR: Critical Error Updating Organization:  Set {logicalName} = {value}", System.Diagnostics.TraceEventType.Error);
+                        PackageLog.Log($"{ex.GetType()} : {ex.Message}", System.Diagnostics.TraceEventType.Error);
+                        throw ex;
+                    }
+                    else
+                    {
+                        PackageLog.Log($"Warning: Non-Critical Error Updating Organization when attempting to Set {logicalName} = {value}", System.Diagnostics.TraceEventType.Warning);
+                        PackageLog.Log($"{ex.GetType()} : {ex.Message}", System.Diagnostics.TraceEventType.Warning);
+                    }
+                }
+            }
+
+        }
+
+
+        protected void EnsureUnamangedSolution() { }
+
+        protected Publisher EnsurePublisher(string uniqueName, string customizationPrefix, string friendlyName = null, string description = null, string emailAddress = null, string supportingWebsiteUrl = null)
+        {
+            return CrmSvc.EnsurePublisher(uniqueName, customizationPrefix, friendlyName, description, emailAddress, supportingWebsiteUrl);
+        }
+
+        protected Solution EnsureUnmanagedSolution(string uniqueName, string publisherUniqueName, string publisherCustomizationPrefix, string friendlyName = null, string description = null, string version = "1.0.0")
+        {
+            return CrmSvc.EnsureUnmanagedSolution(uniqueName, publisherUniqueName, publisherCustomizationPrefix, friendlyName, description, version);
+        }
+
+        protected virtual workflow_statecode SetWorkflowState(Solution solution, Workflow workflow)
+        {
+            return workflow_statecode.Activated;
+        }
+
+        private workflow_statecode TurnOnWorkflowInternalCheck (Solution solution, Workflow workflow)
+        {
+            var friendlyName = workflow.Name?.ToLower() ?? string.Empty;
+
+            return friendlyName.Contains("keep-off") ||
+                   friendlyName.StartsWith("†") ||
+                   friendlyName.StartsWith("obsolete") ||
+                   friendlyName.EndsWith("template") ? workflow_statecode.Draft : workflow_statecode.Activated;
+        }
+
+        protected void TurnOnSolutionWorkflows(string solutionUniqueName, int retryCount = 3)
+        {
+            if (CrmSvc.TryRetrieveSolution(solutionUniqueName, out Solution solution))
+            {
+                TurnOnSolutionWorkflows(solution,retryCount);
+            }
+        }
+
+        protected void TurnOnSolutionWorkflows(Solution solution, int retryCount = 3)
+        {
+
+            var fetchXml = String.Format(@"
+<fetch top=""50"">
+  <entity name=""workflow"">
+    <attribute name=""name"" />
+    <attribute name=""statecode"" />
+    <attribute name=""type"" />
+    <attribute name=""uniquename"" />
+    <attribute name=""workflowid"" />
+    <filter>
+      <link-entity name=""solutioncomponent"" from=""objectid"" to=""workflowid"" link-type=""any"">
+        <filter>
+          <condition attribute=""componenttype"" operator=""eq"" value=""29"" />
+          <condition attribute=""solutionid"" operator=""eq"" value=""{0}"" />
+        </filter>
+      </link-entity>
+    </filter>
+  </entity>
+</fetch>
+", solution.Id);
+
+            var workflows = CrmSvc.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToDictionary(entity => entity.Id);
+
+            var retry = 1;
+
+            PackageLog.Log($"Turning on solution {solution.FriendlyName} workflows.  {workflows.Count} will be considered.");
+
+
+
+            while (workflows.Count > 0 && retry <= retryCount)
+            {
+                var publishWorkflowList = new List<Workflow>();
+
+                if (retry > 1) 
+                {
+                    PackageLog.Log($"Turning on solution {solution.FriendlyName} workflows.  Attempt {retry}. {workflows.Count} remain to be considered.", System.Diagnostics.TraceEventType.Warning);
+                }
+
+                foreach (var entity in workflows.Values.ToArray())
+                {
+                    var workFlow = (Workflow)entity;
+                    var wfDisposition = TurnOnWorkflowInternalCheck(solution, workFlow);
+                    if (wfDisposition != workflow_statecode.Draft)
+                    {
+                        wfDisposition = SetWorkflowState(solution, workFlow);
+                    }
+
+                    if (wfDisposition != workFlow.StateCode
+                            && TrySetWorkflowStatus(workFlow, wfDisposition))
+                    {
+                        // remove from further processing...
+                        // this is intended to account for child flow dependencies.
+                            if (workFlow.StateCode == workflow_statecode.Activated)
+                                             publishWorkflowList.Add(workFlow);
+
+                            workflows.Remove(workFlow.Id);
+                    }
+                    else 
+                    {
+                        PackageLog.Log($"Ignoring workflow {workFlow.Name}");
+                        workflows.Remove(workFlow.Id);
+                    }
+
+                }
+
+                publishWorkflowList.ForEach(wf => CrmSvc.PublishWorkflow(wf));
+
+                retry++;
+            }
+        }
+
+        protected bool  TrySetWorkflowStatus(Workflow workflow, workflow_statecode statecode)
+        {
+            try
+            {
+                PackageLog.Log($"Attempting to set {workflow.Name} to {statecode}");
+                workflow.StateCode = statecode;
+                CrmSvc.Update(workflow);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                PackageLog.Log($"Unable to set {workflow.Name} to {statecode}", System.Diagnostics.TraceEventType.Warning);
+                PackageLog.Log($"{ex.GetType()} : {ex.Message}");
+                return false;
+            }
+        }
+
+        protected void AddConnectionReferenceToSolution(Solution solution, string uniqueName)
+        {
+            try
+            {
+                PackageLog.Log($"Adding {uniqueName} connection reference to config solution");
+
+                if (CrmSvc.TryRetrieveFirstOrNull("connectionreference",
+                                         new Microsoft.Xrm.Sdk.Query.ColumnSet(new string[] { "connectionreferenceid" }),
+                                         "connectionreferencelogicalname", uniqueName, out Entity connRef) &&
+                    CrmSvc.TryRetrieveFirstOrNull("solutioncomponent",
+                                                  new Microsoft.Xrm.Sdk.Query.ColumnSet(new string[] { "componenttype" }),
+                                                   "objectid",connRef.Id, out Entity conrefSolComp))
+                    {
+                        
+                        solution.EnsureExistingComponent(CrmSvc, ((OptionSetValue)conrefSolComp["componenttype"]).Value, connRef.Id);
+                    }
+                else
+                {
+                    PackageLog.Log($"Connection reference {uniqueName} does not exist in the environment", System.Diagnostics.TraceEventType.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                PackageLog.Log($"Unable to add {uniqueName} connection reference to {solution.FriendlyName}", System.Diagnostics.TraceEventType.Warning);
+                PackageLog.Log($"{ex.GetType()} : {ex.Message}", System.Diagnostics.TraceEventType.Warning);
+            }
+        }
+
+        protected object AddEnvironmentVariableToSolution(Solution solution, string uniqueName)
+        {
+            object value = null;
+
+            try
+            {
+                PackageLog.Log($"Adding {uniqueName} environment variable to {solution.FriendlyName}");
+
+                if (CrmSvc.TryRetrieveFirstOrNull("environmentvariabledefinition",
+                                         new Microsoft.Xrm.Sdk.Query.ColumnSet(true),
+                                         "schemaname", uniqueName, out Entity envVarRef))
+                {
+                    solution.EnsureExistingComponent(CrmSvc, componenttype.EnvironmentVariableDefinition, envVarRef.Id);
+
+                    if (CrmSvc.TryRetrieveFirstOrNull("environmentvariablevalue",
+                                              new Microsoft.Xrm.Sdk.Query.ColumnSet(true),
+                                              "environmentvariabledefinitionid", envVarRef.Id, out Entity envVarValueRef))
+                    {
+                        value = envVarValueRef.Contains("value") ? envVarValueRef["value"] : null;
+                        solution.EnsureExistingComponent(CrmSvc, componenttype.EnvironmentVariableValue, envVarValueRef.Id);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                PackageLog.Log($"Unable to add {uniqueName} environment variable to {solution.FriendlyName}", System.Diagnostics.TraceEventType.Warning);
+                PackageLog.Log($"{ex.GetType()} : {ex.Message}", System.Diagnostics.TraceEventType.Warning);
+            }
+
+            return value;
+        }
+
+        protected Workflow AddWorkflowToSolution(Solution solution, Guid workflowId, bool publish = true)
+        {
+            Workflow workflow = null;
+
+            try
+            {
+                PackageLog.Log($"Adding {workflowId} workflow to {solution.FriendlyName}");
+
+                if (CrmSvc.TryRetrieveFirstOrNull(Workflow.EntityLogicalName,
+                                         new Microsoft.Xrm.Sdk.Query.ColumnSet(true),
+                                         "workflowid", workflowId, out  workflow))
+                {
+                    solution.EnsureExistingComponent(CrmSvc, componenttype.Workflow, workflow.Id);
+                    if (publish)
+                    {
+                        CrmSvc.PublishWorkflow(workflow);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                PackageLog.Log($"Unable to add workflow {workflowId} environment variable to {solution.FriendlyName}", System.Diagnostics.TraceEventType.Warning);
+                PackageLog.Log($"{ex.GetType()} : {ex.Message}", System.Diagnostics.TraceEventType.Warning);
+            }
+
+            return workflow;
+        }
+
+        protected bool TryAddExistingWorkflowToSolution(Solution solution, Guid workflowId, out Workflow workflow)
+        {
+            workflow = null;
+            try
+            {
+                PackageLog.Log($"Attempting to add workflow {workflowId} to {solution.FriendlyName}");
+
+                if (CrmSvc.TryRetrieveFirstOrNull(Workflow.EntityLogicalName,
+                                         new Microsoft.Xrm.Sdk.Query.ColumnSet(true),
+                                         "workflowid", workflowId, out workflow))
+                {
+                    PackageLog.Log($"Adding  {workflow.Name} Flow to {solution.FriendlyName}");
+                    solution.EnsureExistingComponent(CrmSvc, componenttype.Workflow, workflow.Id);
+                    PackageLog.Log($"Successully  {workflow.Name} Flow to {solution.FriendlyName}");
+                    return true;
+                }
+                else
+                {
+                    PackageLog.Log($"Unalge to locate a workflow with the id {workflowId}", System.Diagnostics.TraceEventType.Warning);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                PackageLog.Log($"Unable to add workflow {workflowId} to {solution.FriendlyName}", System.Diagnostics.TraceEventType.Warning);
+                PackageLog.Log($"{ ex.GetType()} : { ex.Message}", System.Diagnostics.TraceEventType.Warning);
+                return false;
+            }
+        }
+
+        protected bool TryCopyWorkflow(Solution solution, Guid sourceWorkflowId, Guid destinationWorkflowId, string name, Dictionary<string, string> replaceText, out Workflow workflow, bool turnOnAfterCopy = true)
+        {
+
+            workflow = null;
+
+            try
+            {
+
+                if (CrmSvc.TryRetrieveFirstOrNull(Workflow.EntityLogicalName, new Microsoft.Xrm.Sdk.Query.ColumnSet(true), "workflowid", sourceWorkflowId, out Workflow sourceWf))
+                {
+
+                   // solution.EnsureExistingComponent(CrmSvc, componenttype.Workflow, sourceWf.Id);
+
+                    PackageLog.Log($"Attempting to copy workflow {sourceWorkflowId} to {name} , {destinationWorkflowId}");
+                    if (CrmSvc.TryRetrieveFirstOrNull(Workflow.EntityLogicalName, new Microsoft.Xrm.Sdk.Query.ColumnSet(true), "workflowid", destinationWorkflowId, out workflow))
+                    {
+                        PackageLog.Log($"Destination workflow with id {destinationWorkflowId} already exists.");
+                        solution.EnsureExistingComponent(CrmSvc, componenttype.Workflow, destinationWorkflowId);
+                        workflow.Name = name;
+                        workflow.Description = name;
+                        workflow.ClientData = sourceWf.ClientData;
+                    }
+                    else
+                    {
+                        PackageLog.Log($"Copying {sourceWf.Name} to {name}");
+
+                        workflow = new Workflow()
+                        {
+                            Id = destinationWorkflowId,
+                            Name = name,
+                            Description = name,
+                            Type = workflow_type.Definition,
+                            ClientData = sourceWf.ClientData,
+                            PrimaryEntity = "none",
+                            Category = workflow_category.ModernFlow,
+                        }.Create(CrmSvc);
+
+                        solution.EnsureExistingComponent(CrmSvc, componenttype.Workflow, workflow.Id);
+                    }
+
+                    PackageLog.Log($"Attempting to update workflow  {workflow.Name}");
+
+                    var updateWorkflow = new Workflow()
+                    {
+                        Id = workflow.Id,
+                        Name = name,
+                        Description = name,
+                        ClientData = workflow.ClientData,
+                    };
+
+
+                    PackageLog.Log($"Processing Workflow client data.  Changing {replaceText.Count} strings");
+                    foreach (var key in replaceText.Keys)
+                    {
+                        PackageLog.Log($"Replacing '{key}' with '{replaceText[key]}'");
+                        updateWorkflow.ClientData = updateWorkflow.ClientData.Replace(key, replaceText[key]);
+                    }
+
+                    PackageLog.Log($"XAML:\r\n{updateWorkflow.ClientData}");
+
+                    CrmSvc.Update(updateWorkflow);
+
+                    PackageLog.Log($"Attempting to publish workflow {updateWorkflow.Name}");
+                    CrmSvc.PublishWorkflow(updateWorkflow);
+
+                    if (turnOnAfterCopy)
+                    {
+                        TrySetWorkflowStatus(workflow, workflow_statecode.Activated);
+                    }
+
+                    return true;
+
+                }
+                else
+                {
+                    PackageLog.Log("Template workflow not found", System.Diagnostics.TraceEventType.Warning);
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                PackageLog.Log("Unable to process workflow copy operation. ", System.Diagnostics.TraceEventType.Warning);
+                PackageLog.Log($"{ex.GetType()} : {ex.Message}", System.Diagnostics.TraceEventType.Warning);
+                return false;
+            }
+
+        }
+
+
+#endregion
+
+
 
 
     }

@@ -46,7 +46,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<ItemGroup>
 			<UnpackDocs Remove="@(UnpackDocs)" />
 			<UnpackDocs Include="$(ProjectDir)%(Content.Identity)" Condition="'%(Content.Extension)' == '.docx' or '%(Content.Extension)' == '.xlsx'" >
-				<UnpackPath>$(ProjectDir)%(Content.Identity).Meta</UnpackPath>
+				<UnpackPath>$(ProjectDir)%(Content.Identity).TemplateMeta</UnpackPath>
 			</UnpackDocs>
 		</ItemGroup>
 
@@ -70,10 +70,10 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<Code Type="Fragment" Language="cs">
 				<![CDATA[        
 
-            var dotmeta = ".meta";
+            var dotmeta = ".templatemeta";
             var dotMetaLength = dotmeta.Length;
 
-            var dirArray = Directory.EnumerateDirectories(rootDir, "*.meta", System.IO.SearchOption.TopDirectoryOnly).ToArray();
+            var dirArray = Directory.EnumerateDirectories(rootDir, "*.templatemeta", System.IO.SearchOption.TopDirectoryOnly).ToArray();
 
          Console.WriteLine("enum restuls = " + dirArray.Length.ToString());
 

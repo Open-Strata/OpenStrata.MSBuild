@@ -9,9 +9,30 @@
     <Import_RootNamespace>OpenStrata.Xrm.Sdk</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\organization.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\publisher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\solution.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\solutioncomponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\workflow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EntityOptionSetEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnvironmentSettingsHelperExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FetchXml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GeneralExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IOrganizatonServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messages\UpsertEnvironmentVariable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionSets\componentstate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionSets\componenttype.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionSets\organization_applicationbasedaccesscontrolmode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionSets\organization_samesitemodeforsessioncookie.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionSets\templatedefaultview.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionSets\workflow_runas.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionSets\workflow_stage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OrgSvc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UtilityExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)builderSettings.json" />
+    <Content Include="$(MSBuildThisFileDirectory)json\environmentvariabledefinition-attributes.json" />
   </ItemGroup>
 </Project>

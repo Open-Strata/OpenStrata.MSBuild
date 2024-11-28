@@ -592,7 +592,7 @@ namespace OpenStrata.Deployment.Sdk
         //   guTeamId:
         //
         //   guRoleId:
-        internal bool _IsRoleAssoicatedWithTeam(Guid guTeamId, Guid guRoleId)
+        internal bool _IsRoleAssociatedWithTeam(Guid guTeamId, Guid guRoleId)
         {
             return IsRoleAssoicatedWithTeam(guTeamId, guRoleId);
         }

@@ -134,7 +134,7 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
                         foreach (var node in delList)
                         {
                             node.Remove();
-
+                            dirty = true;
                         }
                     }
 
