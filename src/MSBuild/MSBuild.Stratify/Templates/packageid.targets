@@ -54,19 +54,14 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<PackageId>$packageid$</PackageId>
 			<UniqueName>$uniquename$</UniqueName>
 		</StratiPackageFiles>
-        <PdSolution Include="$(MSBuildThisFileDirectory)..\strati\solution\*.zip">
-			<ImportOrder>@(IncludeStrati_ostratav1test_PackageReference -> '%(ImportOrder)')</ImportOrder>
-			<ImportMode>@(IncludeStrati_ostratav1test_PackageReference -> '%(ImportMode)')</ImportMode>	
-			<MissingDependencyBehavior>@(IncludeStrati_ostratav1test_PackageReference -> '%(MissingDependencyBehavior)')</MissingDependencyBehavior>	
-			<DependencyOverrides>@(IncludeStrati_ostratav1test_PackageReference -> '%(DependencyOverrides)')</DependencyOverrides>										
-		</PdSolution>
+
 
 		<!--<StratiPackageReferenceRuntime Include="%(StratiPackageReference.StratiDir)deployment\*.*" >
 			<NuGetPackageId>$packageid$</NuGetPackageId>
 		</StratiPackageReferenceRuntime>-->		
 	</ItemGroup>
 
-	<Import Project="$packageid$.package.targets" Condition="'$(IncludeStrati_uniquename)' == 'true' And $(OpenStrataProjectType)=='package'" />
-	<Import Project="$packageid$.strati.targets" Condition="'$(IncludeStrati_uniquename)' == 'true' And $(OpenStrataProjectType)=='strati'" />	
+	<Import Project="$packageid$.package.targets" Condition="'$(IncludeStrati_uniquename)' == 'true' And $(OpenStrataProjectType)=='package' And Exists('$packageid$.package.targets')" />
+	<Import Project="$packageid$.strati.targets" Condition="'$(IncludeStrati_uniquename)' == 'true' And $(OpenStrataProjectType)=='strati' And Exists('$packageid$.strati.targets')" />	
 
 </Project>
