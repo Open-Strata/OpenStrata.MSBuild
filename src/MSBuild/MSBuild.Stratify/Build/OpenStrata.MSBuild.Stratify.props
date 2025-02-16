@@ -97,15 +97,17 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<GenerateNuspecDependsOn>StratiUpdatePackageReferenceRequiredForInstall; $(GenerateNuspecDependsOn)</GenerateNuspecDependsOn>
 	</PropertyGroup>
 
-	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" />
 
-	<!--<Target Name="StratiUpdatePackageReferenceRequiredForInstall" AfterTargets="SetVersionFromGitInfo">
+	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" AfterTargets="SetVersionFromGitInfo">
 
 		<ItemGroup Condition="'$(SkipOpenStrataMSBuildReference)' != 'true'">
 
+			<!-- <PackageReferenceRequiredForInstall Remove="OpenStrata.MSBuild.Nuget" /> -->
+
+			<!-- <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(Version)" />			 -->
 
 		</ItemGroup>
 
-	</Target>-->	
+	</Target>
 
 </Project>
