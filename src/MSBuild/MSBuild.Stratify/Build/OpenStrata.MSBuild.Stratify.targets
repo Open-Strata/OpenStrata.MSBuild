@@ -94,7 +94,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<Warning Text="PreNoneFiles = %(None.Identity)" />
 
 		<ItemGroup>
-            <None Include="@(StratiBuildFileTemplates -> '@(NuspecOutputAbsolutePath)\%(Filename)%(Extension)')" Pack="true" PackagePath="\build;\buildTransitive" />
+            <None Include="@(StratiBuildFileTemplates -> '$(NuspecOutputAbsolutePath)\%(Filename)%(Extension)')" Pack="true" PackagePath="\build;\buildTransitive" />
 			<!-- <None Include="$(GeneratedBuildTransitivePropsPath)" Pack="true" PackagePath="\build;\buildTransitive" /> -->
 			<!-- <None Include="$(GeneratedBuildTransitiveTargetsPath)" Pack="true" PackagePath="\build;\buildTransitive" /> -->
 		</ItemGroup>
