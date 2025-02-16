@@ -98,16 +98,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</PropertyGroup>
 
 
-	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" AfterTargets="SetVersionInfo">
-
-		<ItemGroup Condition="'$(SkipOpenStrataMSBuildReference)' != 'true'">
-
-			<!-- <PackageReferenceRequiredForInstall Remove="OpenStrata.MSBuild.Nuget" /> -->
-
-			<!-- <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(Version)" />			 -->
-
-		</ItemGroup>
-
-	</Target>
+	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" DependsOnTargets="SetVersionInfo" />
 
 </Project>

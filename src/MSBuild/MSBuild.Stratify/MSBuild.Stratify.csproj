@@ -47,7 +47,19 @@
 	</PropertyGroup>
 
 
-	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" DependsOnTargets="GetVersionInfo" />
+	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" AfterTargets="SetVersionFromGitInfo">
+
+		<ItemGroup Condition="'$(SkipOpenStrataMSBuildReference)' != 'true'">
+
+			<!-- <PackageReferenceRequiredForInstall Remove="OpenStrata.MSBuild.Nuget" /> -->
+
+			<!-- <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(Version)" />			 -->
+
+		</ItemGroup>
+
+	</Target>
+
+
 
 
 </Project>
