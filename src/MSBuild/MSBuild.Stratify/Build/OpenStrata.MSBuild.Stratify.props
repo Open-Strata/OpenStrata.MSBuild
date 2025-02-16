@@ -24,9 +24,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="strati.props" Pack="true" PackagePath="\build;\buildTransitive" Condition="Exists('strati.props')" />
-		<None Include="strati.targets" Pack="true" PackagePath="\build;\buildTransitive" Condition="Exists('strati.targets')" />
-		<None Include="strati.*.targets" Pack="true" PackagePath="\build;\buildTransitive" />
+		<None Include="strati.props" Pack="true" PackagePath="\build;\buildTransitive;\buildMultiTargeting;" Condition="Exists('strati.props')" />
+		<None Include="strati.targets" Pack="true" PackagePath="\build;\buildTransitive;\buildMultiTargeting;" Condition="Exists('strati.targets')" />
+		<None Include="strati.*.targets" Pack="true" PackagePath="\build;\buildTransitive;\buildMultiTargeting;" />
 	</ItemGroup>
 
 	<PropertyGroup>
