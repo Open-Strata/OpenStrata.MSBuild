@@ -36,7 +36,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<publishworkflowsandactivateplugins Condition="'$(publishworkflowsandactivateplugins)'==''">true</publishworkflowsandactivateplugins>
 	</PropertyGroup>
 
-	<Target Name="GenerateBuildTransitiveProps" BeforeTargets="_GetPackageFiles" DependsOnTargets="SetVersionInfo;GenerateStratiManifest;_GetAbsoluteOutputPathsForPack">
+	<Target Name="GenerateBuildTransitiveProps" BeforeTargets="_GetPackageFiles" DependsOnTargets="GetVersionInfo;GenerateStratiManifest;_GetAbsoluteOutputPathsForPack">
 
 		<ItemGroup>
 			<StratiBuildFileTemplates Include="$(MSBuildThisFileDirectory)..\templates\*.props"   />
@@ -91,11 +91,15 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
                   PropertyName="GeneratedBuildTransitiveTargetsPath" />
 		</GenerateBuildTransitiveProps> -->
 
+		<Warning Text="PreNoneFiles = %(None.Identity)" />
+
 		<ItemGroup>
             <None Include="@(StratiBuildFileTemplates -> '$(NuspecOutputAbsolutePath)')" Pack="true" PackagePath="\build;\buildTransitive" />
 			<!-- <None Include="$(GeneratedBuildTransitivePropsPath)" Pack="true" PackagePath="\build;\buildTransitive" /> -->
 			<!-- <None Include="$(GeneratedBuildTransitiveTargetsPath)" Pack="true" PackagePath="\build;\buildTransitive" /> -->
 		</ItemGroup>
+
+		<Warning Text="PostNoneFiles = %(None.Identity)" />
 
 		<PropertyGroup>
 			<NoneConent>@(None)</NoneConent>
