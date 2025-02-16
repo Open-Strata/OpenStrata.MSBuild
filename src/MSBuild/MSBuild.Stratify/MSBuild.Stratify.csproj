@@ -17,7 +17,7 @@
 
 
 	<ItemGroup>
-	  <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
+	  <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" PrivateAssets="all" />
 	  <PackageReferenceRequiredForInstall Include="OpenStrata.MSBuild.Nuget" Version="$(OstrataMSBuildNugetVersion)" />			
 	</ItemGroup>
 
