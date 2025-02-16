@@ -41,7 +41,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 		<GitDefaultBranch>main</GitDefaultBranch>
 
-		<OstrataMSBuildNugetVersion>1.0.5</OstrataMSBuildNugetVersion>
+		<OstrataMSBuildNugetVersion>1.0.10</OstrataMSBuildNugetVersion>
 		
 	</PropertyGroup>
 	

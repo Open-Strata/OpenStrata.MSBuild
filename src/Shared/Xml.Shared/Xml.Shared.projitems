@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocument.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocument.Generic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocument.Generic.CustomRoot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocumentExtensions.cs" />    
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)OpenStrataXDocumentExtensions.cs" />

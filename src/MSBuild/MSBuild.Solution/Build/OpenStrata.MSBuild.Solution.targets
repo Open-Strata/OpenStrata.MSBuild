@@ -22,6 +22,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.GetSolutionInfo" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.SetSolutionInfo" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.FixSolutionXml" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.RemoveCanvasAppVersion" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.SetCanvasAppVersionToUTCNow" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />	
 
 
 	<!--OS_GetDataverseSolutionInfo-->
@@ -32,8 +34,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	<Target Name="ProcessPluginReferences" BeforeTargets="PowerAppsPackage" DependsOnTargets="FixMergeDiffVersionMarkup;OS_GetDataverseSolutionInfo;">
 		<MSBuild Projects="@(PluginReference)"
-				 Targets="Build;GetPluginPackageInfo"
-				 Properties="SolutionMetadataDir=$([System.IO.Path]::GetFullPath($(MSBuildProjectDirectory)/$(SolutionRootPath)));SolutionPublisherPrefix=$(DataverseSolutionCustomizationPrefix)"
+				 Targets="Build;GetPluginPackageInfo"		 
+				 Properties="Configuration=$(Configuration);SolutionMetadataDir=$([System.IO.Path]::GetFullPath($(MSBuildProjectDirectory)/$(SolutionRootPath)));SolutionPublisherPrefix=$(DataverseSolutionCustomizationPrefix);AutoUpdateVersion=$(AutoUpdateVersion)"
 			     RunEachTargetSeparately="true">
 			<!-- <Output TaskParameter="TargetOutputs" ItemName="ProjectReferenceCopyLocalPaths"/> -->
 		</MSBuild>
@@ -137,7 +139,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		</GetDataverseSolutionInfo>
 
 		<SetDataverseSolutionInfo>
-			$(SetDataverseSolutionInfo)
+			$(SetDataverseSolutionInfo);
+			RemoveCanvasAppVersion;
 		</SetDataverseSolutionInfo>
 
 		<DebuggingFixSolutionXml Condition="'$(DebuggingFixSolutionXml)'==''">false</DebuggingFixSolutionXml>
@@ -167,7 +170,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</ItemGroup>
 
 
-	<Target Name="FixSolutionXml" DependsOnTargets="FixMergeDiffVersionMarkup;OS_SetDataverseSolutionInfo;$(FixSolutionXmlDependsOn)" AfterTargets="Export" BeforeTargets="PowerAppsPackage">
+	<Target Name="FixSolutionXml" DependsOnTargets="FixMergeDiffVersionMarkup;OS_SetDataverseSolutionInfo;RemoveCanvasAppVersion;$(FixSolutionXmlDependsOn)" AfterTargets="Export" BeforeTargets="PowerAppsPackage">
 		<FixSolutionXml
              RootPath="$(SolutionRootPath)"
 			 AttributeDependenciesToRemove="@(AttributeDependenciesToRemove)"
@@ -215,9 +218,13 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<SetSolutionInfo
              RootPath="$(SolutionRootPath)"
              DataverseSolutionVersion="$(Version)"
+			 AutoUpdateVersion="$(AutoUpdateVersion)"			 
 			 PublisherXmlPath="$(PublisherSolutionXmlPath)"
 			>
 		</SetSolutionInfo>
+
+        <Warning Text="Version number set to $(Version)" Condition="'$(AutoUpdateVersion)' == 'true'" />
+
 		<PropertyGroup>
 			<SolutionVersion>$(Version)</SolutionVersion>
 		</PropertyGroup>
@@ -228,6 +235,24 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<Message Text="Ensuring a value for solution unique name" Importance="High" />
 
 	</Target>
+
+	<Target Name="RemoveCanvasAppVersion" >
+		<ItemGroup>
+			<CanvasAppMetaXmlFiles Include="$(ProjectDir)$(SolutionRootPath)\CanvasApps\*.meta.xml"/>
+		</ItemGroup>
+		<RemoveCanvasAppVersion
+		      CanvasAppMetaXmlFiles="@(CanvasAppMetaXmlFiles)"
+		/>		
+	</Target>
+
+	<Target Name="SetCanvasAppVersionToUTCNow" >
+		<ItemGroup>
+			<CanvasAppMetaXmlFiles Include="$(ProjectDir)$(SolutionRootPath)\CanvasApps\*.meta.xml"/>
+		</ItemGroup>		
+		<SetCanvasAppVersionToUTCNow
+		        CanvasAppMetaXmlFiles="@(CanvasAppMetaXmlFiles)"
+		/>
+	</Target>	
 
 	
 	<!--Need to update the targets-->

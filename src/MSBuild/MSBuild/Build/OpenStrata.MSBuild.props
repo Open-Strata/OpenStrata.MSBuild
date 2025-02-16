@@ -45,6 +45,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		   <SolutionFileName  Condition="'$(SolutionFilePath)'!=''" >$([System.IO.Path]::GetFileName("$(SolutionFilePath)"))</SolutionFileName>		   
 		   <SolutionName  Condition="'$(SolutionFilePath)'!=''" >$([System.IO.Path]::GetFileNameWithoutExtension("$(SolutionFilePath)"))</SolutionName>
 		   <SolutionDirName  Condition="'$(SolutionFilePath)'!=''" >$([System.IO.Path]::GetFileName("$([System.IO.Path]::GetDirectoryName("$(SolutionFilePath)"))"))</SolutionDirName>		   
+
+     	   <AutoUpdateVersion Condition="'$(AutoUpdateVersion)' == ''" >true"</AutoUpdateVersion>
+
 	</PropertyGroup>
 
 	<PropertyGroup>

@@ -34,6 +34,8 @@ namespace OpenStrata.MSBuild.Plugin.Tasks
         [Required]
         public string version { get; set; }
 
+        public string AutoUpdateVersion { get; set; } = "true";        
+
 
         public override bool ExecuteTask()
         {
@@ -45,7 +47,7 @@ namespace OpenStrata.MSBuild.Plugin.Tasks
             packageXdoc.name.Value = name;
             packageXdoc.package.Value = package;
             packageXdoc.version.Value = version;
-
+            if (AutoUpdateVersion.AsBoolean(true)) packageXdoc.version.Value = version;
 
             File.WriteAllText(XmlFilePath, packageXdoc.ToString());
 

@@ -88,6 +88,16 @@ namespace OpenStrata.MSBuild.Tasks
                 .AppendLine(ex.StackTrace);
         }
 
+        public static bool AsBoolean (this string value, bool defaultValue = false)
+        {
+            if (string.IsNullOrEmpty(value)) return defaultValue;
+
+            if (Boolean.TryParse(value, out bool result)) return result;
+
+            return defaultValue;
+
+        }        
+
         public static void Log(this TaskLoggingHelper logger, string msg)
         {
             logger.LogMessage(msg);

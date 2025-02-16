@@ -174,8 +174,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 
 	<Target Name="MoveNugetPackageToLocalPackageFeed" AfterTargets="Pack" 
-			 DependsOnTargets="_ProcessGenerateNuspecOutput; $(MoveNugetPackageToLocalPackageFeedDependsOn)"
-	   Condition="'$(MSBuildProjectName)' != 'MSBuild.Nuget'"   >
+			 DependsOnTargets="$(MoveNugetPackageToLocalPackageFeedDependsOn)" >
 
 		<Copy SourceFiles="$(NugetFileAbsolutePath)"
 			  DestinationFolder="$(LocalPackageFeed)"

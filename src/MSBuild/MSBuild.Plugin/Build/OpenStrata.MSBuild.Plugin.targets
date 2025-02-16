@@ -31,7 +31,13 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<targetMetaFile>$(metaPluginPackageFileDir)\$(PluginPackageUniqueName).nupkg</targetMetaFile>
 		</PropertyGroup>
 
-		<UpdatePluginPackageXml XmlFilePath="$(ProjectDir)pluginpackage.xml" uniquename="$(PluginPackageUniqueName)" pluginpackageid="$(PluginId)" name="$(PluginPackageUniqueName)" package="$(PluginPackageUniqueName).nupkg" version="$(Version)" />
+		<UpdatePluginPackageXml XmlFilePath="$(ProjectDir)pluginpackage.xml" 
+								uniquename="$(PluginPackageUniqueName)" 
+								pluginpackageid="$(PluginId)" 
+								name="$(PluginPackageUniqueName)" 
+								package="$(PluginPackageUniqueName).nupkg" 
+								version="$(Version)" 
+								AutoUpdateVersion="$(AutoUpdateVersion)"/>
 
 		<MakeDir Directories="$(metaPluginPackageDir)" Condition="!Exists('$(metaPluginPackageDir)')" />
 		<MakeDir Directories="$(metaPluginPackageFileDir)" Condition="!Exists('$(metaPluginPackageFileDir)')" />

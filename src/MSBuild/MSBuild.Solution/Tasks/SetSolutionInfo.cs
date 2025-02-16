@@ -21,6 +21,7 @@ namespace OpenStrata.MSBuild.Solution.Tasks
 
         //[Required]
         //public string DataverseSolutionManaged { get; set; }
+        public string AutoUpdateVersion { get; set; } = "true";        
 
         public string PublisherXmlPath { get; set; }
 
@@ -30,7 +31,7 @@ namespace OpenStrata.MSBuild.Solution.Tasks
             var solXDoc = SolutionXDocument.LoadFromRootPath(RootPath);
 
 
-            solXDoc.SolutionManifest.Version.Value = DataverseSolutionVersion;
+            if (AutoUpdateVersion.AsBoolean(true)) solXDoc.SolutionManifest.Version.Value = DataverseSolutionVersion;
 
             if (!solXDoc.SolutionManifest.ReplacePublisherNodeWithPublisherXmlFile(PublisherXmlPath, out string message, out Exception exception))
             {

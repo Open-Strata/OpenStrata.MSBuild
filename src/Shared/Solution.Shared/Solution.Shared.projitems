@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Publisher\Tools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xml\CanvasAppMetaXDocument.cs" />    
     <Compile Include="$(MSBuildThisFileDirectory)Xml\MetadataXmlBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Xml\SolutionXDocument.cs" />
   </ItemGroup>

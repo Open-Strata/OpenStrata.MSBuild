@@ -39,7 +39,7 @@
 	    <!-- <NoWarn>$(NoWarn);NU1702</NoWarn> -->
 	  </PackageReference>
 	  
-	  <PackageReference Include="OpenStrata.MSBuild.Nuget" Version="0.8.*">
+	  <PackageReference Include="OpenStrata.MSBuild.Nuget" Version="1.*">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
