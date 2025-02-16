@@ -53,10 +53,10 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			 OverwriteUnmanaged="$(overwriteunmanagedcustomizations)"
 			 PublishAndActivate="$(publishworkflowsandactivateplugins)"
 		     NuspecOutPath="$(NuspecOutputAbsolutePath)"
-			 TemplatePath="%(StratiBuildFileTemplates.FullPath)">
+			 TemplatePath="@(StratiBuildFileTemplates)">
 
 			<Output TaskParameter="CreatedPropsPath"
-                  PropertyName="GeneratedBuildTransitivePropsPath" />
+                  ItemName="GeneratedBuildTransitivePropsPath" />
 		</GenerateBuildTransitiveProps>
 
 
@@ -91,15 +91,13 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
                   PropertyName="GeneratedBuildTransitiveTargetsPath" />
 		</GenerateBuildTransitiveProps> -->
 
-		<Warning Text="PreNoneFiles = %(None.Identity)" />
+		<Warning Text="Added Template File: %(GeneratedBuildTransitivePropsPath.Identity)" />
 
 		<ItemGroup>
-            <None Include="@(StratiBuildFileTemplates -> '$(NuspecOutputAbsolutePath)\%(Filename)%(Extension)')" Pack="true" PackagePath="\build;\buildTransitive" />
-			<!-- <None Include="$(GeneratedBuildTransitivePropsPath)" Pack="true" PackagePath="\build;\buildTransitive" /> -->
+            <!--<None Include="@(StratiBuildFileTemplates -> '$(NuspecOutputAbsolutePath)\%(Filename)%(Extension)')" Pack="true" PackagePath="\build;\buildTransitive" />-->
+			<None Include="@(GeneratedBuildTransitivePropsPath)" Pack="true" PackagePath="\build;\buildTransitive" />
 			<!-- <None Include="$(GeneratedBuildTransitiveTargetsPath)" Pack="true" PackagePath="\build;\buildTransitive" /> -->
 		</ItemGroup>
-
-		<Warning Text="PostNoneFiles = %(None.Identity)" />
 
 		<PropertyGroup>
 			<NoneConent>@(None)</NoneConent>

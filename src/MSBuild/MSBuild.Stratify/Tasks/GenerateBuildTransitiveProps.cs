@@ -3,6 +3,7 @@
 
 
 using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 using OpenStrata.MSBuild.Tasks;
 using OpenStrata.Strati.Manifest;
 using System;
@@ -38,24 +39,34 @@ namespace OpenStrata.MSBuild.Stratify.Tasks
         public string NuspecOutPath { get; set; }
 
         [Required]
-        public string TemplatePath { get; set; }
+        public ITaskItem[] TemplatePaths { get; set; }
 
         [Output]
-        public string CreatedPropsPath { get; set; }
+        public ITaskItem[] CreatedPropsPaths { get; set; }
 
         public override bool ExecuteTask()
         {
+            var cppList = new List<ITaskItem>();
 
-            var propsText = File.ReadAllText(TemplatePath);
+            foreach (var item in TemplatePaths) {
 
-            var fi = new FileInfo(TemplatePath);
-            //TODO:  Add processing to props if required.
-            CreatedPropsPath = Path.Combine(NuspecOutPath, $"{fi.Name.Replace("packageid",PackageId)}");
+                var TemplatePath = item.ItemSpec;
 
-            if (String.IsNullOrEmpty(UniqueName.Trim()))
-                UniqueName = ManifestTools.GenerateManifestUniqueName(PackageId);
+                 var propsText = File.ReadAllText(TemplatePath);
 
-            File.WriteAllText(CreatedPropsPath, propsText
+                    var fi = new FileInfo(TemplatePath);
+                    //TODO:  Add processing to props if required.
+
+                var CreatedPropsPath = Path.Combine(NuspecOutPath, $"{fi.Name.Replace("packageid", PackageId)}");
+
+                item.SetMetadata("FileObjPath", CreatedPropsPath);
+
+                cppList.Add(new TaskItem(CreatedPropsPath));
+
+              if (String.IsNullOrEmpty(UniqueName.Trim()))
+                   UniqueName = ManifestTools.GenerateManifestUniqueName(PackageId);
+
+              File.WriteAllText(CreatedPropsPath, propsText
                    .Replace("$packageid$", PackageId)
                    .Replace("$uniquename$", UniqueName)
                    .Replace("$packageversion$", PackageVersion)
@@ -63,9 +74,13 @@ namespace OpenStrata.MSBuild.Stratify.Tasks
                    .Replace("$gitrepositoryurl$", GitRepositoryUrl)
                    .Replace("$gitcommit$", GitCommit)
                    .Replace("$gitcommitdate$", GitCommitDate)
-                   .ReplaceTrueOrEmpty("$overwriteunmanaged$",OverwriteUnmanaged)
+                   .ReplaceTrueOrEmpty("$overwriteunmanaged$", OverwriteUnmanaged)
                    .ReplaceTrueOrEmpty("$publishandactivate$", PublishAndActivate)
                    );
+
+            }
+
+            CreatedPropsPaths = cppList.ToArray();
 
             return true;
         }
