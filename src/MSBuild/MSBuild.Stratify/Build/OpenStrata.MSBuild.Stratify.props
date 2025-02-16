@@ -98,7 +98,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</PropertyGroup>
 
 
-	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" AfterTargets="SetVersionFromGitInfo">
+	<Target Name="StratiUpdatePackageReferenceRequiredForInstall" AfterTargets="SetVersionInfo">
 
 		<ItemGroup Condition="'$(SkipOpenStrataMSBuildReference)' != 'true'">
 
