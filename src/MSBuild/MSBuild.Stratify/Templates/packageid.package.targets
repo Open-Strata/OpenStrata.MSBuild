@@ -16,7 +16,7 @@
 			<UniqueName>$uniquename$</UniqueName>
 		</OpenStrataPackageAssemblies>
 
-		<Refrence Include="$(MSBuildThisFileDirectory)..\strati\deployment\*.dll" Private="True" >
+		<Reference Include="$(MSBuildThisFileDirectory)..\strati\deployment\*.dll" Private="True" >
 
 		<!-- <Reference Include="%(MyItem.RecursiveDir)">
               <HintPath>..\..\..\Users\RyanMillett\.nuget\packages\openstratacommonspcfcontrols.strati\1.1.26\strati\deployment\OpenstrataCommonsPCFControls.Deployment.dll</HintPath>
