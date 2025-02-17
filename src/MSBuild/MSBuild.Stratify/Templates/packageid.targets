@@ -38,21 +38,28 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<StratiType>configdata</StratiType>
 			<PackageId>$packageid$</PackageId>
 			<UniqueName>$uniquename$</UniqueName>
+			<PackageLocation>configdata</PackageLocation>	
+			<PackageLocation>configdata\%(Filename)%(Extension)</PackageLocation>							
 		</StratiPackageFiles>
 		<StratiPackageFiles Include="$(MSBuildThisFileDirectory)..\strati\document-templates\*.*" >
 			<StratiType>documenttemplates</StratiType>
 			<PackageId>$packageid$</PackageId>
 			<UniqueName>$uniquename$</UniqueName>
+			<PackageLocation>root</PackageLocation>				
+			<RelativePublishPath>$uniquename$\documenttemplates\%(Filename)%(Extension)</RelativePublishPath>
 		</StratiPackageFiles>
 		<StratiPackageFiles Include="$(MSBuildThisFileDirectory)..\strati\powerpages\*.*" >
-			<StratiType>powerpages</StratiType>			
+			<StratiType>powerpages</StratiType>
 			<PackageId>$packageid$</PackageId>
 			<UniqueName>$uniquename$</UniqueName>
+			<PackageLocation>root</PackageLocation>				
+			<RelativePublishPath>$uniquename$\powerpages\%(Filename)%(Extension)</RelativePublishPath>			
 		</StratiPackageFiles>
 		<StratiPackageFiles Include="$(MSBuildThisFileDirectory)..\strati\solution\*.zip">
 			<StratiType>solution</StratiType>
 			<PackageId>$packageid$</PackageId>
 			<UniqueName>$uniquename$</UniqueName>
+			<PackageLocation>PDSolution</PackageLocation>				
 		</StratiPackageFiles>
 
 

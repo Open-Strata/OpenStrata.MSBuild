@@ -18,13 +18,6 @@
 
 		<Reference Include="$(MSBuildThisFileDirectory)..\strati\deployment\*.dll" Private="True" />
 
-		<!-- <Reference Include="%(MyItem.RecursiveDir)">
-              <HintPath>..\..\..\Users\RyanMillett\.nuget\packages\openstratacommonspcfcontrols.strati\1.1.26\strati\deployment\OpenstrataCommonsPCFControls.Deployment.dll</HintPath>
-          <Private>True</Private>
-        </Reference> -->
-
-
 	</ItemGroup>
-
 
 </Project>
