@@ -61,7 +61,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		</StratiPackageReferenceRuntime>-->		
 	</ItemGroup>
 
-	<Import Project="$packageid$.package.targets" Condition="'$(IncludeStrati_uniquename)' == 'true' And $(OpenStrataProjectType)=='package' And Exists('$packageid$.package.targets')" />
-	<Import Project="$packageid$.strati.targets" Condition="'$(IncludeStrati_uniquename)' == 'true' And $(OpenStrataProjectType)=='strati' And Exists('$packageid$.strati.targets')" />	
+	<Import Project="$packageid$.$(OpenStrataProjectType).targets" Condition="'$(IncludeStrati_uniquename)' == 'true' And Exists('$packageid$.$(OpenStrataProjectType).targets')" />	
 
 </Project>

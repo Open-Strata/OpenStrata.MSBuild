@@ -12,6 +12,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 -->
 <Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
 
+	<Import Project="$packageid$.$(OpenStrataProjectType).props" Condition="'$(IncludeStrati_uniquename)' == 'true' And Exists('$packageid$.$(OpenStrataProjectType).props')" />	
+
 	<Import Project="$(MSBuildThisFileDirectory)strati.props" Condition="Exists('$(MSBuildThisFileDirectory)strati.props')"/>
 
 
