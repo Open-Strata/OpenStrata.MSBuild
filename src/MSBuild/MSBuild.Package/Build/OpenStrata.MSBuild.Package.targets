@@ -22,7 +22,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 		<MSPA_Build_PDPackageId>Microsoft.PowerApps.MSBuild.PDPackage</MSPA_Build_PDPackageId>
 		<USING_MSPA_Build_PDPackage>$(MSBuildAllProjects.Contains('Microsoft.PowerApps.MSBuild.PDPackage'))</USING_MSPA_Build_PDPackage>
-		<AssignTargetPathsDependsOn>$(AssignTargetPathsDependsOn);AssignStratiTargetPaths;</AssignTargetPathsDependsOn>		
 
 	</PropertyGroup>
 
