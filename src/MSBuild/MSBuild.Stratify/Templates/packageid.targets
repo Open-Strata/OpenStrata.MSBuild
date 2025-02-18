@@ -39,7 +39,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<PackageId>$packageid$</PackageId>
 			<UniqueName>$uniquename$</UniqueName>
 			<PackageLocation>configdata</PackageLocation>	
-			<PackageLocation>configdata\%(Filename)%(Extension)</PackageLocation>							
+			<RelativePublishPath>configdata\%(Filename)%(Extension)</RelativePublishPath>							
 		</StratiPackageFiles>
 		<StratiPackageFiles Include="$(MSBuildThisFileDirectory)..\strati\document-templates\*.*" >
 			<StratiType>documenttemplates</StratiType>
