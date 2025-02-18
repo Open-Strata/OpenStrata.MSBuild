@@ -32,7 +32,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.CreateImportStrataManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GenerateLocalStratiManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<!-- <UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.UpdateImportConfig" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" /> -->
-	<!-- <UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GeneratePackageUniqueName" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" /> -->
+	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GeneratePackageUniqueName" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<!-- <UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.CreatePackageZip" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" /> -->
 	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GenerateStrataPackageManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
 
@@ -106,6 +106,21 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<Output TaskParameter="OutputCodeFile"
                   PropertyName="ImportPackageEditableCodeFilePath" />
 		</CreateEditableImportPackageClassFile>
+
+	</Target>	
+
+	<Target Name="GeneratePackageUniqueName" Condition="'$(PackageUniqueName)' == ''">
+
+		<GeneratePackageUniqueName
+			ProjectName="$(MSBuildProjectName)"
+			>
+			<Output TaskParameter="PackageUniqueName"
+                  PropertyName="PackageUniqueName" />
+		</GeneratePackageUniqueName>
+
+		<PropertyGroup>
+			<ImportPackageDataFolder Condition="'$(ImportPackageDataFolder)' == ''">$(PackageUniqueName)</ImportPackageDataFolder>
+		</PropertyGroup>
 
 	</Target>	
 
