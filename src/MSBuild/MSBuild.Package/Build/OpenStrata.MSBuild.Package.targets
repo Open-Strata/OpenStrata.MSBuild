@@ -160,5 +160,17 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			PackageReferenceStrati="@(StratiPackageReference)" />
 	</Target>
 
+	<ItemGroup>
+		<PkgFolderTemplateFiles Include="$(MSBuildThisFileDirectory)..\templates\Src\PkgFolder\**\*.*" />
+	</ItemGroup>
+
+	<Target Name="CreatePkgFolderIfItDoesNotExist"
+			Condition="!Exists('$(MSBuildProjectDirectory)\$(PkgFolder)')">
+
+		<Copy SourceFiles="@(PkgFolderTemplateFiles)"
+			    DestinationFiles="@(PkgFolderTemplateFiles->'$(MSBuildProjectDirectory)\$(PkgFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+	</Target>	
+
 
 </Project>

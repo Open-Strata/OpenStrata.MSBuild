@@ -14,6 +14,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<PropertyGroup>
 		<GenerateLocalStratiManifestDependsOn>$(GenerateLocalStratiManifestDependsOn);</GenerateLocalStratiManifestDependsOn>
 
+
+		<PkgFolder Condition="'$(PkgFolder)'==''">PkgFolder</PkgFolder>
+
 	</PropertyGroup>
 
 
@@ -42,6 +45,14 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<!--<PackagesWithWellKnownRefAssemblies Include="OpenStrata.Deployment.Sdk" />-->
 		<PackagesWithWellKnownRefAssemblies Include="System.IO.Compression" />
 	</ItemGroup>
+
+	<ItemGroup>
+
+		<Content Include="$(PkgFolder)\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+
+	</ItemGroup>	
 
 
 
@@ -112,17 +123,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 
 
-	<ItemGroup>
-		<PkgFolderTemplateFiles Include="$(MSBuildThisFileDirectory)..\templates\Src\PkgFolder\**\*.*" />
-	</ItemGroup>
 
-	<Target Name="CreatePkgFolderIfItDoesNotExist"
-			Condition="!Exists('$(MSBuildProjectDirectory)\PkgFolder')">
-
-		<Copy SourceFiles="@(PkgFolderTemplateFiles)"
-			    DestinationFiles="@(PkgFolderTemplateFiles->'$(MSBuildProjectDirectory)\PkgFolder\%(RecursiveDir)%(Filename)%(Extension)')" />
-
-	</Target>
 
 	<!--Need to do homework on the purpose/utility of this.  Keeping it here to 
 	ensure the same behavior of the pac command line.  -->
