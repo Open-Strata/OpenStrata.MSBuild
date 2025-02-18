@@ -18,7 +18,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	   <PkgFolder Condition="'$(PkgFolder)'==''">PkgAssets</PkgFolder>
 
-		<!-- <AssignTargetPathsDependsOn>$(AssignTargetPathsDependsOn);AssignStratiTargetPaths;</AssignTargetPathsDependsOn> -->
+		<AssignStratiTargetPathsDependsOn>$(AssignStratiTargetPathsDependsOn);AssignStratiContentTargetPaths;AssignStratiConfigDataTargetPaths;</AssignStratiTargetPathsDependsOn> -->
 	</PropertyGroup>
 
 
@@ -30,10 +30,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</ItemGroup>
 
 
-	<Target Name="AssignStratiTargetPaths" BeforeTargets="AssignTargetPaths" >
+	<Target Name="AssignStratiTargetPaths" BeforeTargets="AssignTargetPaths" DependsOnTargets="$(AssignStratiTargetPathsDependsOn)" />
 
-		<Warning Text="MSPA_Build_PDPackage_Installed = $(MSPA_Build_PDPackage_Installed)" />
-		<Warning Text="PowerPlatformPDPackageReference.Identity = %(PowerPlatformPDPackageReference.Identity)" />
+	<Target Name="AssignStratiContentTargetPaths"  >
 
 		<ItemGroup>
 			<ContentWithTargetPath Include="@(StratiPackageFiles->WithMetadataValue('PackageLocation', 'root'))">
@@ -44,6 +43,11 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			</ContentWithTargetPath>
 		</ItemGroup>
 
+	</Target>
+
+	
+	<Target Name="AssignStratiConfigDataTargetPaths"  >
+
 		<ItemGroup>
 			<ContentWithTargetPath Include="@(StratiPackageFiles->WithMetadataValue('PackageLocation', 'configdata'))">
 				<TargetPath>$(PdAssetsTargetFolder)\%(StratiPackageFiles.RelativePublishPath)</TargetPath>
@@ -53,7 +57,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			</ContentWithTargetPath>
 		</ItemGroup>
 
-	</Target>
+	</Target>	
 
 
 
