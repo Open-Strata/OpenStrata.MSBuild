@@ -18,7 +18,18 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	   <PkgFolder Condition="'$(PkgFolder)'==''">PkgAssets</PkgFolder>
 
-		<AssignStratiTargetPathsDependsOn>$(AssignStratiTargetPathsDependsOn);AssignStratiContentTargetPaths;AssignStratiConfigDataTargetPaths;</AssignStratiTargetPathsDependsOn>
+		<AssignStratiTargetPathsDependsOn>
+		     $(AssignStratiTargetPathsDependsOn);
+		     AssignStratiContentTargetPaths;
+			 AssignStratiConfigDataTargetPaths;
+			 AssignStratiManifestTargetPath;
+		</AssignStratiTargetPathsDependsOn>
+
+		<CreateImportStrataManifestDependsOn>
+			GenerateLocalStratiManifest;
+			$(CreateImportStrataManifestDependsOn)
+		</CreateImportStrataManifestDependsOn>	
+
 	</PropertyGroup>
 
 
@@ -58,6 +69,19 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		</ItemGroup>
 
 	</Target>	
+
+	<Target Name="AssignStratiManifestTargetPath" DependsOnTargets="CreateImportStrataManifest"  >
+
+		<ItemGroup>
+			<ContentWithTargetPath Include="$(ImportStrataManifestPath)">
+				<TargetPath>$(PdAssetsTargetFolder)\importstrata.manifest</TargetPath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+				<OriginalItemSpec>$(ImportStrataManifestPath)</OriginalItemSpec>
+			</ContentWithTargetPath>
+		</ItemGroup>
+
+	</Target>		
 
 
 
