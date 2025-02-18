@@ -1,6 +1,8 @@
 
+$global:OSScriptDir = $PSScriptRoot
 
-function global:build
+
+function global:GetSolutions
 {
 
     $curDirName = (Get-Location | Get-Item).Name
@@ -8,25 +10,47 @@ function global:build
 
     $targetSolution = "$curDirPath\$curDirName.sln"
 
-
     Show-Shortcut-Note "looking for $targetSolution"
 
     if ([System.IO.File]::Exists($targetSolution ))
     {
         Show-Shortcut-Note "$targetSolution"
-        dotnet msbuild $targetSolution 
+        $targetSolution
     } 
     else
     {
 
-        Show-Shortcut-Note "Building all Solutions"
+        Show-Shortcut-Note "loading all Solutions"
 
-        $solutions = Get-ChildItem $PSScriptRoot\*.sln | % { $_.FullName }
-        foreach ($solution in $solutions){
-            Show-Shortcut-Note "dotnet msbuild $solution"            
-            dotnet msbuild $solution
-        }
+        Get-ChildItem $PSScriptRoot\*.sln | % { $_.FullName }
+
     }  
+
+}
+
+
+function global:build
+{
+
+ 
+        $solutions = GetSolutions
+
+             foreach ($solution in $solutions){
+             Show-Shortcut-Note "dotnet msbuild $solution"            
+             dotnet msbuild $solution
+         }
+
+}
+
+function global:restore
+{
+
+            $solutions = GetSolutions
+
+             foreach ($solution in $solutions){
+             Show-Shortcut-Note "dotnet restore $solution"            
+             dotnet restore $solution 
+             }   
 
 }
 

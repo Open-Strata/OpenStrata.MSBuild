@@ -20,6 +20,7 @@
 	<ItemGroup>
 		<Compile Remove="templates\**\*" />		
 		<None Include="templates\**\*" Pack="true" PackagePath="\templates\" />
+		<None Include="Build\**\*.*" Pack="true" PackagePath="\build\" />		
 	</ItemGroup>
 
 	<ItemGroup>
