@@ -11,15 +11,21 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 -->
 <Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
 
+	<PropertyGroup>
+		<GenerateLocalStratiManifestDependsOn>$(GenerateLocalStratiManifestDependsOn);</GenerateLocalStratiManifestDependsOn>
+
+	</PropertyGroup>
+
+
 	<!-- Tasks -->
-	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.CreateEditableImportPackageClassFile" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
-	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GenerateImportPackagePartialClass" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
-	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.CreateImportStrataManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
-	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GenerateLocalStratiManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<!-- <UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.CreateEditableImportPackageClassFile" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" /> -->
+	<!-- <UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GenerateImportPackagePartialClass" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" /> -->
+	<!-- <UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.CreateImportStrataManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" /> -->
+	<!-- <UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GenerateLocalStratiManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" /> -->
 	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.UpdateImportConfig" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GeneratePackageUniqueName" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.CreatePackageZip" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
-	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GenerateStrataPackageManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
+	<!-- <UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.GenerateStrataPackageManifest" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" /> -->
 
 
 	<ItemGroup>
@@ -93,39 +99,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		</ItemGroup>
 	</Target>
 
-	<Target Name="GenerateLocalStratiManifest"  DependsOnTargets="GeneratePackageUniqueName;GetLocalStratiFiles;$(GenerateLocalStratiManifestDependsOn)">
 
-		<GenerateLocalStratiManifest
-			 IntermediateOutputPath="$(IntermediateOutputPath)"
-			 ProjectName="$(MSBuildProjectName)"
-			 ProjectVersion="$(Version)"
-			 PackageUniqueName="$(PackageUniqueName)"
-			 ProjectReferenceStrati="@(SpecifiedStratiFiles)"
-			 PackageReferenceStrati="@(StratiPackageReference)"
-			 >
-			<Output TaskParameter="CreatedStratiManifestPath"
-                  PropertyName="LocalStratiManifestPath" />
-		</GenerateLocalStratiManifest>
-
-	</Target>
-
-	<Target Name="CreateImportStrataManifest" DependsOnTargets="$(CreateImportStrataManifestDependsOn)">
-
-		<CreateImportStrataManifest
-				OutputDir="$(OutDir)"
-			    PackageDataFolder="$(ImportPackageDataFolder)"
-			    PackageReferenceStrati="@(StratiPackageReference)"
-				LocalStratiManifestPath="$(LocalStratiManifestPath)"
-			    OverwriteUnmanaged="$(overwriteunmanagedcustomizations)"
-			    PublishAndActivate="$(publishworkflowsandactivateplugins)"
-			>
-			<Output TaskParameter="CreatedImportStrataManifestPath"
-                  PropertyName="ImportStrataManifestPath" />
-
-		</CreateImportStrataManifest>
-
-
-	</Target>
 
 	<Target Name="UpdateImportConfig" DependsOnTargets="CreateImportStrataManifest">
 
@@ -150,40 +124,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</Target>
 
 
-	<Target Name="GenerateImportPackagePartialClass" DependsOnTargets="GeneratePackageUniqueName"
-			BeforeTargets="CoreCompile" Outputs="$(ImportPackagePartialCodeFilePath)" >
-
-		<GenerateImportPackagePartialClass
-			DefaultNameSpace="$(RootNamespace)"
-			ImportPackageShortName="$(ImportPackageShortName)"
-			ImportPackageLongName="$(ImportPackageLongName)"
-			ImportPackageDescription="$(ImportPackageDescription)"
-			ImportPackageDataFolder="$(ImportPackageDataFolder)"
-			CodeTemplatePath="$(MSBuildThisFileDirectory)..\templates\Src\ImportPackageTemplate.msbuild.cs"
-			OutputDir="$(IntermediateOutputPath)">
-			<Output TaskParameter="OutputCodeFile"
-                  PropertyName="ImportPackagePartialCodeFilePath" />
-		</GenerateImportPackagePartialClass>
-
-		<ItemGroup>
-			<Compile Remove="$(ImportPackagePartialCodeFilePath)"></Compile>
-			<Compile Include="$(ImportPackagePartialCodeFilePath)"></Compile>
-		</ItemGroup>
-
-	</Target>
-
-	<Target Name="CreateEditableImportPackageClassFile"
-			Condition="!Exists('ImportPackage.cs')" BeforeTargets="CoreCompile">
-
-		<CreateEditableImportPackageClassFile
-			DefaultNameSpace="$(RootNamespace)"
-			CodeTemplatePath="$(MSBuildThisFileDirectory)..\templates\Src\ImportPackageTemplate.cs"
-			OutputDir="$(MSBuildProjectDirectory)">
-			<Output TaskParameter="OutputCodeFile"
-                  PropertyName="ImportPackageEditableCodeFilePath" />
-		</CreateEditableImportPackageClassFile>
-
-	</Target>
 
 	<ItemGroup>
 		<PkgFolderTemplateFiles Include="$(MSBuildThisFileDirectory)..\templates\Src\PkgFolder\**\*.*" />
@@ -204,28 +144,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</Target>
 
 
-	<Target Name="GetLocalStratiFiles"  >
-
-		<MSBuild
-		  Projects="@(ProjectReference)"
-		  Targets="SpecifyStratiFiles"
-		  SkipNonexistentTargets="true"
-		  SkipNonexistentProjects="true"
-		  Properties="Configuration=$(Configuration);LocalStrati=true;">
-			<Output
-			  TaskParameter="TargetOutputs"
-			  ItemName="SpecifiedStratiFiles"/>
-		</MSBuild>
-
-		<ItemGroup>
-			<!--Added to support flexible addition of new strati project types-->
-			<StratiPackageFiles Include="%(SpecifiedStratiFiles.Identity)" >
-				<StratiType>%(SpecifiedStratiFiles.ProjectType)</StratiType>
-				<UniqueName>$(PackageUniqueName)</UniqueName>
-			</StratiPackageFiles>
-		</ItemGroup>
-
-	</Target>
 
 
 	<Target Name="_GetPackageImportConfigDataFilesFromPackageReferences">
@@ -403,24 +321,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		</CreateImportStrataManifestDependsOn>
 
 	</PropertyGroup>
-
-
-
-
-	<PropertyGroup>
-		<ManifestTargets>GenerateOStrataPackageManifest;$(ManifestTargets)</ManifestTargets>
-	</PropertyGroup>
-
-	<Target Name="GenerateOStrataPackageManifest" >
-
-		<GenerateStrataPackageManifest
-			SolutionDir="$(SolutionDir)"
-			ostrataVersion="$(ostrataPackageVersion)"
-			PackageReferenceStrati="@(StratiPackageReference)" />
-	</Target>
-
-
-
 
 
 </Project>
