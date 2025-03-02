@@ -4,10 +4,10 @@
 
 	<ItemGroup >
         <PdSolution Include="$(MSBuildThisFileDirectory)..\strati\solution\*.zip">
-			<ImportOrder>@(IncludeStrati_ostratav1test_PackageReference -> '%(ImportOrder)')</ImportOrder>
-			<ImportMode>@(IncludeStrati_ostratav1test_PackageReference -> '%(ImportMode)')</ImportMode>	
-			<MissingDependencyBehavior>@(IncludeStrati_ostratav1test_PackageReference -> '%(MissingDependencyBehavior)')</MissingDependencyBehavior>	
-			<DependencyOverrides>@(IncludeStrati_ostratav1test_PackageReference -> '%(DependencyOverrides)')</DependencyOverrides>										
+			<ImportOrder>@(IncludeStrati_uniquename_PackageReference -> '%(ImportOrder)')</ImportOrder>
+			<ImportMode>@(IncludeStrati_uniquename_PackageReference -> '%(ImportMode)')</ImportMode>	
+			<MissingDependencyBehavior>@(IncludeStrati_uniquename_PackageReference -> '%(MissingDependencyBehavior)')</MissingDependencyBehavior>	
+			<DependencyOverrides>@(IncludeStrati_uniquename_PackageReference -> '%(DependencyOverrides)')</DependencyOverrides>										
 		</PdSolution>
 
 		<OpenStrataPackageAssemblies Include="$(MSBuildThisFileDirectory)..\strati\deployment\*.*">
