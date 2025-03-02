@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace OpenStrata.Strati.Manifest.Xml
 {
-    class DataverseSolutionXElement : CustomXElement
+    public class DataverseSolutionXElement : CustomXElement
     {
         public DataverseSolutionXElement(XElement copyFrom) : base(copyFrom)
         {

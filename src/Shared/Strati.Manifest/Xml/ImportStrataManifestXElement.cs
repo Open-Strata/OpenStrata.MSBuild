@@ -1,8 +1,10 @@
 ﻿using OpenStrata.Xml;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace OpenStrata.Strati.Manifest.Xml
 {
@@ -21,6 +23,7 @@ namespace OpenStrata.Strati.Manifest.Xml
 
         private XElement _stratisequence;
         public XElement StratiSequence => this.LazyLoadRetypeChildren<StratiSequenceXElement>("StratiSequence", XName.Get("Strati", ""), _stratisequence, out _stratisequence);
+
 
     }
 }

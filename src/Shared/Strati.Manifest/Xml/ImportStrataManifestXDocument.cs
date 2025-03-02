@@ -1,8 +1,10 @@
 ﻿using OpenStrata.Xml;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace OpenStrata.Strati.Manifest.Xml
 {
@@ -34,6 +36,22 @@ namespace OpenStrata.Strati.Manifest.Xml
         public XElement ImportStrata => Root.ImportStrata;
 
         public XElement StratiSequence => Root.StratiSequence;
+
+
+
+        public List<StratiSequenceXElement> GetStratiSeqence()
+        {
+            return StratiSequence.Elements(XName.Get("Strati"))
+                .Select(e => (StratiSequenceXElement)e)
+                .ToList();
+        }
+
+        public List<DataverseSolutionXElement> GetDataverseSolutionFileByUniqueName(string uniqueName)
+        {
+            return ImportStrata.XPathSelectElements($"StratiManifest/DataverseSolutions/DataverseSolutionFile[@UniqueName='{uniqueName}']")
+                .Select(e => (DataverseSolutionXElement)e)
+                .ToList();
+        }
 
 
     }

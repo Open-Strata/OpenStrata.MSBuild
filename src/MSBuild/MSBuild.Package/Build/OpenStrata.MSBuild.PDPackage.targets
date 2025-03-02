@@ -11,6 +11,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 -->
 <Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
 
+	<UsingTask TaskName="OpenStrata.MSBuild.Package.Tasks.AssignPDSolutionStratiImportOrder" AssemblyFile="$(OpenStrataBuildPackageAssemblyFile)"     TaskFactory="TaskHostFactory" />
 
 	<PropertyGroup>
 
@@ -30,6 +31,17 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			GenerateLocalStratiManifest;
 			$(CreateImportStrataManifestDependsOn)
 		</CreateImportStrataManifestDependsOn>	
+
+		<!-- 
+		Metadata:
+		  importorder
+		  LayerOrderBehavior:  above, base, below 
+		  
+		-->
+
+		<StratiImportOrderStartWith Condition="'$(StratiImportOrderStartWith)' == ''">1</StratiImportOrderStartWith>
+
+		<SetStratiSolutionImportOrderDependsOn></SetStratiSolutionImportOrderDependsOn>
 
 	</PropertyGroup>
 
@@ -90,9 +102,16 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			</ContentWithTargetPath>
 		</ItemGroup>
 
-	</Target>		
+	</Target>	
 
+	<Target Name="SetStratiSolutionImportOrder" BeforeTargets="GeneratePdImportConfig" DependsOnTargets="CreateImportStrataManifest;$(SetStratiSolutionImportOrderDependsOn)" >
 
+		<AssignPDSolutionStratiImportOrder
+		    ImportStrataManifestPath="$(ImportStrataManifestPath)"
+			ImportOrderStartsWith="$(StratiImportOrderStartWith)"
+			StratiSolutions="@(PdSolution)" >
+		</AssignPDSolutionStratiImportOrder>
+	</Target>	
 
 
 </Project>
