@@ -17,6 +17,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	   <PDPublishOnBuild Condition="'$(PDPublishOnBuild)'==''">true</PDPublishOnBuild>
 
 	   <PkgFolder Condition="'$(PkgFolder)'==''">PkgAssets</PkgFolder>
+       <AssetsSrcDirectory>$(PkgFolder)</AssetsSrcDirectory>	   
+       <PdAssetsTargetFolder>$(ImportPackageDataFolder)</PdAssetsTargetFolder>
 
 		<AssignStratiTargetPathsDependsOn>
 		     $(AssignStratiTargetPathsDependsOn);
