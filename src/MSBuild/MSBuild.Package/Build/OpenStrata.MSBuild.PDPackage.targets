@@ -115,11 +115,11 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		</AssignPDSolutionStratiImportOrder>
 
 		<ItemGroup>
-			<PdSolution Remove="%(_solutionsImportOrder.id)" />
+			<PdSolution Remove="%(_solutionsImportOrder.Identity)" />
 			<PdSolution Include="@(_solutionsImportOrder)" />
 		</ItemGroup>
 
-		<Warning Text="%(PdSolution.importorder): %(PdSolution.id)" />
+		<Warning Text="%(PdSolution.importorder): %(PdSolution.Identity)" />
 		
 		
 	</Target>	

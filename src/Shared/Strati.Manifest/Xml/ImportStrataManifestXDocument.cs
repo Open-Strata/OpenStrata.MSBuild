@@ -41,7 +41,7 @@ namespace OpenStrata.Strati.Manifest.Xml
 
         public List<StratiSequenceXElement> GetStratiSeqence()
         {
-            return StratiSequence.Elements(XName.Get("Strati"))
+            return StratiSequence.XPathSelectElements("Strati")
                 .Select(e => new StratiSequenceXElement(e))
                 .ToList();
         }
