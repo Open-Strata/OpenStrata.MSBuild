@@ -40,8 +40,8 @@ namespace OpenStrata.MSBuild.Package.Tasks
                     Log.LogMessage($"Processing strati solution {solution.SolutionPackageFileName.Value} as sequence {ordernumber}");
 
                     var pdSolutionItems = StratiSolutions
-                                            .Where(i => $"{i.GetMetadata("")}.{i.GetMetadata("")}".ToLower() == solution.SolutionPackageFileName.Value.ToLower());
-                                            
+                                            .Where(i => (new FileInfo(i.ItemSpec)).Name.ToLower() == solution.SolutionPackageFileName.Value.ToLower());
+
                     foreach (ITaskItem item in pdSolutionItems)
                     {
                         Log.LogMessage($"Processing itaskitem  {item.ItemSpec} as sequence {ordernumber}");
