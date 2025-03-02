@@ -36,6 +36,12 @@ namespace OpenStrata.MSBuild.Package.Tasks
 
             var solImportOrderList = new List<ITaskItem>();
 
+            Log.LogMessage(strataManifest.StratiSequence.ToString());
+
+            var stratiSequence = strataManifest.GetStratiSeqence();
+
+            Log.LogMessage($"Total strati sequence count is {stratiSequence.Count}");
+
             foreach (StratiSequenceXElement strati in strataManifest.GetStratiSeqence())
             {
                 Log.LogMessage($"Processing strati {strati.UniqueName.Value} as sequence {ordernumber}");
