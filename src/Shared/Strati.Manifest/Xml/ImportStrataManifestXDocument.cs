@@ -42,14 +42,14 @@ namespace OpenStrata.Strati.Manifest.Xml
         public List<StratiSequenceXElement> GetStratiSeqence()
         {
             return StratiSequence.Elements(XName.Get("Strati"))
-                .Select(e => (StratiSequenceXElement)e)
+                .Select(e => new StratiSequenceXElement(e))
                 .ToList();
         }
 
         public List<DataverseSolutionXElement> GetDataverseSolutionFileByUniqueName(string uniqueName)
         {
             return ImportStrata.XPathSelectElements($"StratiManifest/DataverseSolutions/DataverseSolutionFile[@UniqueName='{uniqueName}']")
-                .Select(e => (DataverseSolutionXElement)e)
+                .Select(e => new DataverseSolutionXElement(e))
                 .ToList();
         }
 
