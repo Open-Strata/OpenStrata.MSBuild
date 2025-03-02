@@ -30,28 +30,56 @@ namespace OpenStrata.MSBuild.Package.Tasks
 
             Log.LogMessage($"Running AssignPDSolutionStratiImportOrder");
 
-            var ordernumber = ImportOrderStartsWith;
-
-            var strataManifest = ImportStrataManifestXDocument.Load(ImportStrataManifestPath);
-
             var solImportOrderList = new List<ITaskItem>();
 
-            Log.LogMessage(strataManifest.StratiSequence.ToString());
+            var ordernumber = ImportOrderStartsWith;
 
-            var stratiSequence = strataManifest.GetStratiSeqence();
+            var importStratiManifest = ImportStrataManifestXDocument.Load(ImportStrataManifestPath);
 
-            Log.LogMessage($"Total strati sequence count is {stratiSequence.Count}");
+            Log.LogMessage($"Loaded Import Strata Manfifest at {ImportStrataManifestPath}");
 
-            foreach (StratiSequenceXElement strati in strataManifest.GetStratiSeqence())
+            Log.LogMessage(importStratiManifest.Root.ToString());
+
+            var stratiSequence = importStratiManifest.StratiSequence.Elements("Strati");
+
+            Log.LogMessage($"Import Strata Manfifest contains {stratiSequence.Count()} Strati Sequence items.");
+
+            foreach (XElement stratiSeq in stratiSequence.ToArray())
             {
-                Log.LogMessage($"Processing strati {strati.UniqueName.Value} as sequence {ordernumber}");
+                Log.LogMessage($"Processing strati {stratiSeq.ToString()} as sequence {ordernumber}");
 
-                foreach (DataverseSolutionXElement solution in strataManifest.GetDataverseSolutionFileByUniqueName(strati.UniqueName.Value))
+                var stratiUN = stratiSeq.Attribute("UniqueName").Value;
+
+                Log.LogMessage($"Processing strati {stratiUN}");
+
+                var stratiManifest = importStratiManifest.ImportStrata
+                       .Elements("StratiManifest")
+                       .Where(sm => sm.Attribute("UniqueName").Value == stratiUN)
+                       .FirstOrDefault();
+
+                if (stratiManifest == null)
                 {
-                    Log.LogMessage($"Processing strati solution {solution.SolutionPackageFileName.Value} as sequence {ordernumber}");
+                    return TaskFailed($"Did not find a strati manifest with the unique name \"{stratiUN}\"");
+                }
+
+                Log.LogMessage($"Processing strati {stratiUN}: Located strati manifest with unique name  \"{stratiUN}\"");
+
+                XElement[] solutionFiles = stratiManifest
+                                              .Element("DataverseSolutions")
+                                              .Elements("DataverseSolutionFile")
+                                              ?.OrderBy(dsf => int.Parse(dsf.Attribute("LocalImportSequence").Value))
+                                              ?.ToArray();
+
+                Log.LogMessage($"Processing strati {stratiUN}: Found {solutionFiles.Length} solutions");
+
+                foreach (XElement solutionFile in solutionFiles)
+                {
+                    var solutionPackageFileName = solutionFile.Attribute("SolutionPackageFilename")?.Value;
+
+                    Log.LogMessage($"Processing strati solution {solutionPackageFileName} as sequence {ordernumber}");
 
                     var pdSolutionItems = StratiSolutions
-                                            .Where(i => (new FileInfo(i.ItemSpec)).Name.ToLower() == solution.SolutionPackageFileName.Value.ToLower());
+                                            .Where(i => (new FileInfo(i.ItemSpec)).Name.ToLower() == solutionPackageFileName.ToLower());
 
                     foreach (ITaskItem item in pdSolutionItems)
                     {
