@@ -102,15 +102,26 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			</ContentWithTargetPath>
 		</ItemGroup>
 
-	</Target>	
+	</Target>
 
-	<Target Name="SetStratiSolutionImportOrder" BeforeTargets="GeneratePdImportConfig" DependsOnTargets="CreateImportStrataManifest;$(SetStratiSolutionImportOrderDependsOn)" >
+	<Target Name="SetStratiSolutionImportOrder" BeforeTargets="_AnnotateSolutions" DependsOnTargets="CreateImportStrataManifest;GetPdPackageItemsFromReferences;$(SetStratiSolutionImportOrderDependsOn)" >
 
 		<AssignPDSolutionStratiImportOrder
 		    ImportStrataManifestPath="$(ImportStrataManifestPath)"
 			ImportOrderStartsWith="$(StratiImportOrderStartWith)"
 			StratiSolutions="@(PdSolution)" >
+			<Output TaskParameter="SolutionsImportOrder"
+				 ItemName="_solutionsImportOrder" />
 		</AssignPDSolutionStratiImportOrder>
+
+		<ItemGroup>
+			<PdSolution Remove="%(_solutionsImportOrder.id)" />
+			<PdSolution Include="@(_solutionsImportOrder)" />
+		</ItemGroup>
+
+		<Warning Text="%(PdSolution.importorder): %(PdSolution.id)" />
+		
+		
 	</Target>	
 
 

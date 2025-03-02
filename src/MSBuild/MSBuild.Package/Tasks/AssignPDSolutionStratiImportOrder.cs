@@ -22,6 +22,9 @@ namespace OpenStrata.MSBuild.Package.Tasks
 
         public ITaskItem[] StratiSolutions { get; set; } = Array.Empty<ITaskItem>();
 
+        [Output]
+        public ITaskItem[] SolutionsImportOrder { get; set; } 
+
         public override bool ExecuteTask()
         {
 
@@ -30,6 +33,8 @@ namespace OpenStrata.MSBuild.Package.Tasks
             var ordernumber = ImportOrderStartsWith;
 
             var strataManifest = ImportStrataManifestXDocument.Load(ImportStrataManifestPath);
+
+            var solImportOrderList = new List<ITaskItem>();
 
             foreach (StratiSequenceXElement strati in strataManifest.GetStratiSeqence())
             {
@@ -45,11 +50,16 @@ namespace OpenStrata.MSBuild.Package.Tasks
                     foreach (ITaskItem item in pdSolutionItems)
                     {
                         Log.LogMessage($"Processing itaskitem  {item.ItemSpec} as sequence {ordernumber}");
-                        item.SetMetadata("importorder", $"{ordernumber}");
+                        item.SetMetadata("ImportOrder", $"{ordernumber}");
+
+                        solImportOrderList.Add(item);
+
                         ordernumber++;
                     }
                 }
             }
+
+            SolutionsImportOrder = solImportOrderList.ToArray();
 
             return true;
 
