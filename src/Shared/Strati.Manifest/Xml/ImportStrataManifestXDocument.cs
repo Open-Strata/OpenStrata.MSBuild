@@ -41,16 +41,32 @@ namespace OpenStrata.Strati.Manifest.Xml
 
         public List<StratiSequenceXElement> GetStratiSeqence()
         {
-            return StratiSequence.XPathSelectElements("Strati")
-                .Select(e => new StratiSequenceXElement(e))
-                .ToList();
+
+            var stratiSequence = StratiSequence.Elements("Strati");
+
+            var result = new List<StratiSequenceXElement>();
+
+            foreach (var element in stratiSequence)
+            {
+                result.Add(new StratiSequenceXElement(element));
+            }
+
+            return result;
+
         }
 
         public List<DataverseSolutionXElement> GetDataverseSolutionFileByUniqueName(string uniqueName)
         {
-            return ImportStrata.XPathSelectElements($"StratiManifest/DataverseSolutions/DataverseSolutionFile[@UniqueName='{uniqueName}']")
-                .Select(e => new DataverseSolutionXElement(e))
-                .ToList();
+            var solutionfiles = ImportStrata.XPathSelectElements($"StratiManifest/DataverseSolutions/DataverseSolutionFile[@UniqueName='{uniqueName}']");
+
+            var result = new List<DataverseSolutionXElement>();
+
+            foreach (var element in solutionfiles)
+            {
+                result.Add(new DataverseSolutionXElement(element));
+            }
+
+            return result;
         }
 
 
