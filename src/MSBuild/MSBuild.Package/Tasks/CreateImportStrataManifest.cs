@@ -44,6 +44,8 @@ namespace OpenStrata.MSBuild.Package.Tasks
 
             CreatedImportStrataManifestPath = Path.Combine(OutputDir, PackageDataFolder, "importstrata.manifest");
 
+            var CISMPFileInfo = new FileInfo(CreatedImportStrataManifestPath);
+
             foreach (ITaskItem item in PackageReferenceStrati)
             {
 
@@ -79,8 +81,7 @@ namespace OpenStrata.MSBuild.Package.Tasks
 
             StratiSequenceFactory.Generate(strataManifest, LogMessage);
 
-
-            strataManifest.Save(CreatedImportStrataManifestPath);
+            strataManifest.Save(CreatedImportStrataManifestPath, true);
 
             return true;
 

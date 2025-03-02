@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -84,10 +85,19 @@ namespace OpenStrata.Xml
         }
 
 
-        public new void Save (string fileName)
+        public void Save (string fileName, bool ensureDirExists = false)
         {
             //Ensuring the root node has been created....
             _ = this.Root;
+
+            if (ensureDirExists)
+            {
+                 var fileinfo = new FileInfo(fileName);
+                 if (!fileinfo.Directory.Exists){
+                    fileinfo.Directory.Create();
+                 }
+            } 
+
             base.Save(fileName);
         }
 
