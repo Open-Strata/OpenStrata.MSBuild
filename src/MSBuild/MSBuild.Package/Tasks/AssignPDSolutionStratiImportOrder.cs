@@ -83,12 +83,22 @@ namespace OpenStrata.MSBuild.Package.Tasks
 
                     foreach (ITaskItem item in pdSolutionItems)
                     {
-                        Log.LogMessage($"Processing itaskitem  {item.ItemSpec} as sequence {ordernumber}");
-                        item.SetMetadata("ImportOrder", $"{ordernumber}");
+                        var currentImportOrder = item.GetMetadata("ImportOrder");
 
-                        solImportOrderList.Add(item);
+                        if (!String.IsNullOrEmpty(currentImportOrder) && int.TryParse(currentImportOrder, out var cio))
+                        {
+                            Log.LogMessage($"Skipping itaskitem  {item.ItemSpec}.  Import order already set to {currentImportOrder}");
+                        }
+                        else
+                        {
+                            Log.LogMessage($"Processing itaskitem  {item.ItemSpec} as sequence {ordernumber}");
+                            item.SetMetadata("ImportOrder", $"{ordernumber}");
 
-                        ordernumber++;
+                            solImportOrderList.Add(item);
+
+                            ordernumber++;
+
+                        }
                     }
                 }
             }

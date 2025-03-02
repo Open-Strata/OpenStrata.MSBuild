@@ -119,7 +119,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<PdSolution Include="@(_solutionsImportOrder)" />
 		</ItemGroup>
 
-		<Warning Text="%(PdSolution.importorder): %(PdSolution.Identity)" />
+		<Message Text="%(PdSolution.importorder): %(PdSolution.Identity)" />
 		
 		
 	</Target>	
