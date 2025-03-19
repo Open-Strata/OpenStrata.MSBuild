@@ -75,6 +75,11 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="WindowsBase" />
+	
+	
+		<None Include="Build\*.props" Pack="true" PackagePath="\build\"  />
+		<None Include="Build\*.props" Pack="true" PackagePath="\buildTransitive\"  />	
+
   </ItemGroup>	
 
 </Project>
