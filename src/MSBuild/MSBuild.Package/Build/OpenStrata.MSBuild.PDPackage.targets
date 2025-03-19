@@ -80,7 +80,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<Target Name="CapturePDPackageAbsolutePath" AfterTargets="ComputePdPackageOutput" BeforeTargets="GeneratePdPackage" >
 
 		<PropertyGroup>
-			<PackageZipPath>$(PackageOutputAbsolutePath)</PackageZipPath>
+			<PackageZipPath>$(PdPackageOutputAbsolutePath)</PackageZipPath>
 		</PropertyGroup>
 
 	</Target>
