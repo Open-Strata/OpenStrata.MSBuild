@@ -77,6 +77,14 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	</Target>
 
+	<Target Name="CapturePDPackageAbsolutePath" AferTargets="ComputePdPackageOutput" BeforeTargets="GeneratePdPackage" >
+
+		<PropertyGroup>
+			<PackageZipPath>$(PackageOutputAbsolutePath)</PackageZipPath>
+		</PropertyGroup>
+
+	</Target>
+
 	
 	<Target Name="AssignStratiConfigDataTargetPaths"  DependsOnTargets="AssignPDPackageTargetProperties"   >
 
