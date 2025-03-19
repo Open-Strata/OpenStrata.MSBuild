@@ -77,8 +77,8 @@
     <Reference Include="WindowsBase" />
 	
 	
-		<None Include="Build\*.props" Pack="true" PackagePath="\build\"  />
-		<None Include="Build\*.props" Pack="true" PackagePath="\buildTransitive\"  />	
+		<None Include="Build\*.*" Pack="true" PackagePath="\build\"  />
+		<None Include="Build\*.*" Pack="true" PackagePath="\buildTransitive\"  />	
 
   </ItemGroup>	
 

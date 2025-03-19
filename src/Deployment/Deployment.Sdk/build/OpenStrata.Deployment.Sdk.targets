@@ -1,0 +1,9 @@
+<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+	<ItemGroup>
+
+		<Reference Include="@(OpenStrataDeploymentRunTimes)" Condition="'$(OpenStrataProjectType)' == 'package'" Private="True"  />
+
+	</ItemGroup>
+	
+</Project>
