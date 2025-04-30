@@ -3,10 +3,15 @@ using OpenStrata.ConfigData;
 using OpenStrata.MSBuild.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Security.Cryptography;
+using System.Collections;
 
 namespace OpenStrata.MSBuild.ConfigData.Tasks
 {
@@ -23,6 +28,8 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
         public string OutDir { get; set; }
 
         public ITaskItem[] CommonFieldsToRemove { get; set; }
+
+        public string PublisherPrefix { get; set; } = "ostrata";
 
 
         [Output]
@@ -61,6 +68,8 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
                     default:
 
                         CleanupConfigDataFiles(subDir);
+
+                        GenerateConfigDataHashJson(PublisherPrefix, subDir);
 
                         var subDirPart = dirName.ToLower() == "data" ? string.Empty : $".{dirName}";
 
@@ -150,6 +159,46 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
                 }
             }
         }
+
+        private void GenerateConfigDataHashJson(string outPath, DirectoryInfo dir)
+        {
+            FileInfo dataXml = new FileInfo(Path.Combine(dir.FullName, "data.xml"));
+
+            FileInfo hashFile = new FileInfo(Path.Combine(dir.FullName, "data.xml.hash.json"));
+            if (!dataXml.Exists)
+            {
+                Trace.TraceWarning( $"OpenStrata : GenerateConfigDataHashJson : Specified config data directory does not contain a data.xml file: {dir.FullName}");
+                return;
+            }
+
+
+            byte[] result;
+            SHA1 sha = new SHA1CryptoServiceProvider();
+            using (FileStream fs = File.OpenRead(dataXml.FullName))
+            {
+                result = sha.ComputeHash(fs);
+            }
+
+            var hash = System.Text.Encoding.UTF8.GetString(result);
+
+
+            var hashJsonDictionary = new Dictionary<string, string>
+            {
+                { "publisherPrefix", PublisherPrefix  },
+                { "versionHash", hash  },
+            };
+
+            var options = new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+            };
+
+
+            string json = JsonSerializer.Serialize(hashJsonDictionary,options);
+            File.WriteAllText(hashFile.FullName, json);            
+
+        }
+
 
 
     }
