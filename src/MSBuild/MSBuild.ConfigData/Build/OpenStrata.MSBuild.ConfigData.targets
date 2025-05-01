@@ -22,13 +22,15 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<!--PackConfigData-->
 
 
-	<Target Name="PackConfigData" AfterTargets="Build">
+	<Target Name="PackConfigData" AfterTargets="Build" DependsOnTargets="GetVersionInfo">
 
 		<PackConfigData
 			ConfigDataRootDir="$(MSBuildProjectDirectory)"
 			ProjectName="$(MSBuildProjectName)"
 			OutDir="$(MSBuildProjectDirectory)\$(BaseOutputPath)$(Configuration)"
-			CommonFieldsToRemove="@(CommonFieldsToRemove)"			
+			CommonFieldsToRemove="@(CommonFieldsToRemove)"
+			PublisherPrefix="$(PublisherPrefix)"
+			Version="$(Version)"
 			>
 			<Output TaskParameter="PackedConfigDataFiles"
 		   ItemName="PackedConfigDataFiles" />

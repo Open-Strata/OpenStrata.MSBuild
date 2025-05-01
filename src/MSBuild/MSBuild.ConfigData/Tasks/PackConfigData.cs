@@ -31,6 +31,8 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
 
         public string PublisherPrefix { get; set; } = "ostrata";
 
+        public string Version { get; set; } = "1.0.0";
+
 
         [Output]
         public ITaskItem[] PackedConfigDataFiles { get; set; }
@@ -69,11 +71,12 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
 
                         CleanupConfigDataFiles(subDir);
 
-                        GenerateConfigDataHashJson(PublisherPrefix, subDir);
+
 
                         var subDirPart = dirName.ToLower() == "data" ? string.Empty : $".{dirName}";
 
                         var OutZipPath = Path.Combine(OutDir, $"{ProjectName}{subDirPart}.zip");
+
 
                         Log.LogMessage($"OpenStrata : Attempting to Pack Config Data Located at subdir {subDir.Name} into {OutZipPath}");
 
@@ -88,7 +91,9 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
                         else
                         {
                             Log.LogMessage($"OpenStrata : Finished packing subdir {subDir.Name} into {OutZipPath}");
+
                             packedFiles.Add(OutZipPath);
+                            packedFiles.Add(GenerateConfigDataHashJson(subDir, OutZipPath));
                         }
                         break;
                 }
@@ -160,32 +165,41 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
             }
         }
 
-        private void GenerateConfigDataHashJson(string outPath, DirectoryInfo dir)
+        private string GenerateConfigDataHashJson(DirectoryInfo dir, string OutZipPath)
         {
             FileInfo dataXml = new FileInfo(Path.Combine(dir.FullName, "data.xml"));
 
             FileInfo hashFile = new FileInfo(Path.Combine(dir.FullName, "data.xml.hash.json"));
-            if (!dataXml.Exists)
-            {
-                Trace.TraceWarning( $"OpenStrata : GenerateConfigDataHashJson : Specified config data directory does not contain a data.xml file: {dir.FullName}");
-                return;
-            }
+
+            var hashOutPath = $"{OutZipPath}.hash.json";
+            //if (!dataXml.Exists)
+            // {
+            //     Trace.TraceWarning( $"OpenStrata : GenerateConfigDataHashJson : Specified config data directory does not contain a data.xml file: {dir.FullName}");
+            //     return;
+            // }
 
 
             byte[] result;
-            SHA1 sha = new SHA1CryptoServiceProvider();
+            SHA256 sha = new SHA256CryptoServiceProvider();
             using (FileStream fs = File.OpenRead(dataXml.FullName))
             {
                 result = sha.ComputeHash(fs);
             }
 
-            var hash = System.Text.Encoding.UTF8.GetString(result);
+            var hashSB = new StringBuilder();
 
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                hashSB.Append($"{result[i]:X2}");
+                if ((i % 4) == 3) hashSB.Append(" ");
+            }
 
             var hashJsonDictionary = new Dictionary<string, string>
             {
                 { "publisherPrefix", PublisherPrefix  },
-                { "versionHash", hash  },
+                { "version", Version  },
+                { "versionHash", hashSB.ToString().Trim()  },
             };
 
             var options = new JsonSerializerOptions()
@@ -195,7 +209,11 @@ namespace OpenStrata.MSBuild.ConfigData.Tasks
 
 
             string json = JsonSerializer.Serialize(hashJsonDictionary,options);
-            File.WriteAllText(hashFile.FullName, json);            
+            File.WriteAllText(hashFile.FullName, json);
+
+            hashFile.CopyTo(hashOutPath,true);
+
+            return hashOutPath;
 
         }
 
