@@ -24,6 +24,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	<Target Name="PackConfigData" AfterTargets="Build" DependsOnTargets="GetVersionInfo">
 
+		<Warning Text="Running PackConfigData" />
+
 		<PackConfigData
 			ConfigDataRootDir="$(MSBuildProjectDirectory)"
 			ProjectName="$(MSBuildProjectName)"
@@ -43,6 +45,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			DependsOnTargets="PackConfigData"
 			 Returns="@(_ConfigDataImportFile)" >
 
+		<Warning Text="SpecifyConfigDataImportFile : PackedConfigDataFiles : %(PackedConfigDataFiles.Identity)" />
+
 		<!--<ItemGroup>
 			<_ConfigDataImportFile Include="$(ConfigDataZipOutPath)">
 				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
@@ -61,6 +65,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	<Target Name="SpecifyConfigDataStratiFiles"
 			DependsOnTargets="PackConfigData">
+
+		<Warning Text="SpecifyConfigDataStratiFiles : PackedConfigDataFiles : %(PackedConfigDataFiles.Identity)" />
 
 		<!--<ItemGroup>
 			<StratiFiles Include="$(ConfigDataZipOutPath)">
