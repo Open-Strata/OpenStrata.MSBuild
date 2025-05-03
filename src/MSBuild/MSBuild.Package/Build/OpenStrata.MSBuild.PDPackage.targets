@@ -55,7 +55,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	<Target Name="AssignStratiTargetPaths" BeforeTargets="AssignTargetPaths" DependsOnTargets="$(AssignStratiTargetPathsDependsOn)" />
 
-	<Target Name="AssignPDPackageTargetProperties">
+	<Target Name="AssignPDPackageTargetProperties" DependsOnTargets="CreateImportStrataManifest">
 
 		<PropertyGroup>
 			<AssetsSrcDirectory>$(PkgFolder)</AssetsSrcDirectory>	   
@@ -64,7 +64,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	</Target>
 
 
-	<Target Name="AssignStratiContentTargetPaths" DependsOnTargets="AssignPDPackageTargetProperties"  >
+	<Target Name="AssignStratiContentTargetPaths" DependsOnTargets="CreateImportStrataManifest;AssignPDPackageTargetProperties"  >
 
 		<ItemGroup>
 			<ContentWithTargetPath Include="@(StratiPackageFiles->WithMetadataValue('PackageLocation', 'root'))">

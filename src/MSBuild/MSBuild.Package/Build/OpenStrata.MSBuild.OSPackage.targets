@@ -143,20 +143,6 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	</Target>
 
-	<Target Name="_GetPackageConfigDataFileFromProjectReferences">
-
-		<MSBuild
-		  Projects="@(ProjectReference)"
-		  Targets="SpecifyConfigDataImportFile"
-		  SkipNonexistentTargets="true"
-		  SkipNonexistentProjects="true"
-		  Properties="Configuration=$(Configuration);">
-			<Output
-			  TaskParameter="TargetOutputs"
-			  ItemName="ImportPackageConfigDataFiles"/>
-		</MSBuild>
-
-	</Target>
 
 	<Target Name="GetImportPackageConfigDataFiles"
 		DependsOnTargets="GeneratePackageUniqueName;_GetPackageConfigDataFileFromProjectReferences; _GetPackageImportConfigDataFilesFromPackageReferences">

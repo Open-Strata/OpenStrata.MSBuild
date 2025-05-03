@@ -22,5 +22,9 @@ namespace OpenStrata.Strati.Manifest.Xml
         private XAttribute _localImportSequence;
         public XAttribute LocalImportSequence => this.LazyLoad("LocalImportSequence", _localImportSequence, out _localImportSequence);
 
+        private XAttribute _configDataHashFile;
+        public XAttribute ConfigDataHashFile => this.LazyLoad("ConfigDataHashFile", _configDataHashFile, out _configDataHashFile);
+
+
     }
 }
