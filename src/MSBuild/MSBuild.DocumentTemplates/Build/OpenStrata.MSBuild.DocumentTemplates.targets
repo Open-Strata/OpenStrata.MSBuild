@@ -29,12 +29,14 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 				<PackagePath>\strati\document-templates\</PackagePath>
 				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
 				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+				<PackageLocation>root</PackageLocation>
 			</StratiFiles>
 
 			<StratiFiles Include="$(ProjectDir)%(Content.Identity).xml" Condition="'%(Content.Extension)' == '.docx' or '%(Content.Extension)' == '.xlsx'" >
 				<PackagePath>\strati\document-templates\</PackagePath>
 				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
 				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+				<PackageLocation>root</PackageLocation>				
 			</StratiFiles>
 
 		</ItemGroup>

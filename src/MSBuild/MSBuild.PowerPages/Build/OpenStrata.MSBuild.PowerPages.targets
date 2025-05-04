@@ -36,6 +36,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 				<DeploymentYml>$(DeploymentYml)</DeploymentYml>
 				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
 				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+				<PackageLocation>root</PackageLocation>
 			</StratiFiles>
 		</ItemGroup>
 	</Target>
@@ -47,6 +48,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 				<PackagePath>\strati\powerpages\</PackagePath>
 				<LocalImportSequence>$(LocalImportSequence)</LocalImportSequence>
 				<ProjectType>$(OpenStrataProjectType)</ProjectType>
+				<PackageLocation>root</PackageLocation>				
 			</StratiFiles>
 		</ItemGroup>
 

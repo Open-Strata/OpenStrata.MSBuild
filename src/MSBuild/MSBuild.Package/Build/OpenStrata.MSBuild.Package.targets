@@ -157,7 +157,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			<StratiPackageFiles Include="%(SpecifiedStratiFiles.Identity)" >
 				<StratiType>%(SpecifiedStratiFiles.ProjectType)</StratiType>
 				<UniqueName>$(PackageUniqueName)</UniqueName>
+				<PackageLocation>%(SpecifiedStratiFiles.PackageLocation)</PackageLocation>
 			</StratiPackageFiles>
+		
 		</ItemGroup>
 
 	</Target>	
