@@ -14,6 +14,16 @@
 	</Target>
 
 
+	<!-- Overriding this target to not return anything.  Known issue.  -->
+	<Target Name="GetProjectOutputPath" Returns="@(ProjectOutputPath)" DependsOnTargets="GetPluginPackageInfo">
+		<ItemGroup>
+			<ProjectOutputPath Include="pluginfile">
+				<PowerAppsComponentType>$(PowerAppsComponentType)</PowerAppsComponentType>
+			</ProjectOutputPath>
+		</ItemGroup>
+	</Target>
+
+
 	<!--<Target Name="_PowerAppsPlugin_PublishAfterBuild" />-->
 
 	<!--<Target Name="Publish"
