@@ -15,11 +15,11 @@
 
 
 	<!-- Overriding this target to not return anything.  Known issue.  -->
+	<!-- Overriding this target to not return anything.  Known issue.  -->
 	<Target Name="GetProjectOutputPath" Returns="@(ProjectOutputPath)" DependsOnTargets="GetPluginPackageInfo">
+		<!-- Return Nothing.  -->
 		<ItemGroup>
-			<ProjectOutputPath Include="pluginfile">
-				<PowerAppsComponentType>$(PowerAppsComponentType)</PowerAppsComponentType>
-			</ProjectOutputPath>
+			<ProjectOutputPath Remove="*" />
 		</ItemGroup>
 	</Target>
 
