@@ -23,10 +23,17 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.SetSolutionInfo" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.FixSolutionXml" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
 	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.RemoveCanvasAppVersion" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
-	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.SetCanvasAppVersionToUTCNow" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />	
+	<UsingTask TaskName="OpenStrata.MSBuild.Solution.Tasks.SetCanvasAppVersionToUTCNow" AssemblyFile="$(OpenStrataBuildSolutionAssemblyFile)"     TaskFactory="TaskHostFactory" />
 
+
+	<!-- Add Plugin References as Project References -->
+	<ItemGroup>
+		<ProjectReference Include="@(PluginReference)" Exclude="@(ProjectReference)" />
+	</ItemGroup>
 
 	<!--OS_GetDataverseSolutionInfo-->
+
+
 
 	<PropertyGroup>
 		<PushTargets>PowerAppsPackage;$(PushTargets)</PushTargets>
