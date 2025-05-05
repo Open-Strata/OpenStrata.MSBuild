@@ -154,12 +154,27 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 		<ItemGroup>
 			<!--Added to support flexible addition of new strati project types-->
-			<StratiPackageFiles Include="%(SpecifiedStratiFiles.Identity)" >
+			<StratiPackageFiles Include="@(SpecifiedStratiFiles->WithMetadataValue('ProjectType', 'documenttemplates'))">
 				<StratiType>%(SpecifiedStratiFiles.ProjectType)</StratiType>
 				<UniqueName>$(PackageUniqueName)</UniqueName>
 				<PackageLocation>%(SpecifiedStratiFiles.PackageLocation)</PackageLocation>
+				<RelativePublishPath>documenttemplates\%(SpecifiedStratiFiles.Filename)%(SpecifiedStratiFiles.Extension)</RelativePublishPath>
 			</StratiPackageFiles>
-		
+
+			<StratiPackageFiles Include="@(SpecifiedStratiFiles->WithMetadataValue('ProjectType', 'configdata'))">
+				<StratiType>%(SpecifiedStratiFiles.ProjectType)</StratiType>
+				<UniqueName>$(PackageUniqueName)</UniqueName>
+				<PackageLocation>%(SpecifiedStratiFiles.PackageLocation)</PackageLocation>
+				<RelativePublishPath>configdata\%(SpecifiedStratiFiles.Filename)%(SpecifiedStratiFiles.Extension)</RelativePublishPath>
+			</StratiPackageFiles>
+
+			<StratiPackageFiles Include="@(SpecifiedStratiFiles->WithMetadataValue('ProjectType', 'powerpages'))">
+				<StratiType>%(SpecifiedStratiFiles.ProjectType)</StratiType>
+				<UniqueName>$(PackageUniqueName)</UniqueName>
+				<PackageLocation>%(SpecifiedStratiFiles.PackageLocation)</PackageLocation>
+				<RelativePublishPath>powerpages\%(SpecifiedStratiFiles.Filename)%(SpecifiedStratiFiles.Extension)</RelativePublishPath>
+			</StratiPackageFiles>
+
 		</ItemGroup>
 
 	</Target>	
