@@ -43,6 +43,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 		<SetStratiSolutionImportOrderDependsOn></SetStratiSolutionImportOrderDependsOn>
 
+		<OpenStrataDeploymentSdkPath>$(MSBuildThisFileDirectory)..\lib\OpenStrata.Deployment.Sdk.dll</OpenStrataDeploymentSdkPath>
+
 	</PropertyGroup>
 
 	<Target Name="PDPublishOnBuild" AfterTargets="Build" DependsOnTargets="Publish" Condition="'$(PDPublishOnBuild)'=='true'" />
@@ -50,6 +52,9 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 	<ItemGroup>
 		<PowerPlatformPDPackageReference Include="@(PackageReference->WithMetadataValue('Identity', 'Microsoft.PowerApps.MSBuild.PDPackage'))" />
+
+		<Reference Include="$(OpenStrataDeploymentSdkPath)" Private="True" Condition="Exists('$(OpenStrataDeploymentSdkPath)')" />		
+		
 	</ItemGroup>
 
 
@@ -73,6 +78,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 				<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 				<OriginalItemSpec>%(StratiPackageFiles.Identity)</OriginalItemSpec>
 			</ContentWithTargetPath>
+			
 		</ItemGroup>
 
 	</Target>

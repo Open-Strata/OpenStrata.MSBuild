@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 
-	<Import Project="..\..\Shared\Xml.Shared\Xml.Shared.projitems"  />
-	<Import Project="..\..\Shared\Package.Shared\Package.Shared.projitems"  />
-	<Import Project="..\..\Shared\Strati.Manifest\Strati.Manifest.Shared.projitems"  />
-	<Import Project="..\..\Shared\Strata.Manifest\Strata.Manifest.projitems"  />
+	<Import Project="..\..\Shared\Xml.Shared\Xml.Shared.projitems" />
+	<Import Project="..\..\Shared\Package.Shared\Package.Shared.projitems" />
+	<Import Project="..\..\Shared\Strati.Manifest\Strati.Manifest.Shared.projitems" />
+	<Import Project="..\..\Shared\Strata.Manifest\Strata.Manifest.projitems" />
 	<Import Project="..\OpenStrata.Dev.MSBuild.Common.props" />
 
 
@@ -20,7 +20,8 @@
 	<ItemGroup>
 		<Compile Remove="templates\**\*" />		
 		<None Include="templates\**\*" Pack="true" PackagePath="\templates\" />
-		<None Include="Build\**\*.*" Pack="true" PackagePath="\build\" />		
+		<None Include="Build\**\*.*" Pack="true" PackagePath="\build\" />
+		<None Include="lib\OpenStrata.Deployment.Sdk.dll" Pack="true" PackagePath="\lib\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,10 +36,14 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Deployment\Deployment.Sdk\Deployment.Sdk.csproj">
-	    <Private>false</Private>
+	    <Private>True</Private>
 	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
 	    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 	  </ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="lib\" />
 	</ItemGroup>
 
 	<PropertyGroup>

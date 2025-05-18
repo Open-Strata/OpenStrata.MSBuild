@@ -80,6 +80,15 @@
 		<None Include="Build\*.*" Pack="true" PackagePath="\build\"  />
 		<None Include="Build\*.*" Pack="true" PackagePath="\buildTransitive\"  />	
 
-  </ItemGroup>	
+  </ItemGroup>
+
+
+
+	<Target Name="CopyToMSBuildPackageLib" AfterTargets="Build" >
+
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="..\..\MSBuild\MSBuild.Package\lib" />
+		
+		
+	</Target>
 
 </Project>

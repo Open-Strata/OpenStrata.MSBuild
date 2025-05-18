@@ -2,7 +2,7 @@
 
 	<ItemGroup>
 
-		<Reference Include="@(OpenStrataDeploymentRunTimes)" Condition="'$(OpenStrataProjectType)' == 'package'" Private="True"  />
+		<!--<Reference Include="@(OpenStrataDeploymentRunTimes)" Condition="'$(OpenStrataProjectType)' == 'package'" Private="True"  />-->
 
 	</ItemGroup>
 	
