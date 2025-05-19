@@ -86,7 +86,7 @@
 
 	<Target Name="CopyToMSBuildPackageLib" AfterTargets="Build" >
 
-		<Copy SourceFiles="$(TargetPath)" DestinationFolder="..\..\MSBuild\MSBuild.Package\lib" />
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="..\..\MSBuild\MSBuild.Package\lib\net472" />
 		
 		
 	</Target>
