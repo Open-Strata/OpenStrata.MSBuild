@@ -43,7 +43,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 		<SetStratiSolutionImportOrderDependsOn></SetStratiSolutionImportOrderDependsOn>
 
-		<OpenStrataDeploymentSdkPath>$(MSBuildThisFileDirectory)..\lib\OpenStrata.Deployment.Sdk.dll</OpenStrataDeploymentSdkPath>
+		<OpenStrataDeploymentSdkPath>$(MSBuildThisFileDirectory)..\lib\net472\OpenStrata.Deployment.Sdk.dll</OpenStrataDeploymentSdkPath>
 
 	</PropertyGroup>
 

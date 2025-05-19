@@ -21,7 +21,7 @@
 		<Compile Remove="templates\**\*" />		
 		<None Include="templates\**\*" Pack="true" PackagePath="\templates\" />
 		<None Include="Build\**\*.*" Pack="true" PackagePath="\build\" />
-		<None Include="lib\OpenStrata.Deployment.Sdk.dll" Pack="true" PackagePath="\lib\" />
+		<None Include="lib\net472\*.*" Pack="true" PackagePath="\lib\net472" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -43,7 +43,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="lib\" />
+
 	</ItemGroup>
 
 	<PropertyGroup>
