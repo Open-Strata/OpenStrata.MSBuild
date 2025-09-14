@@ -55,7 +55,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 
 		<ResolvedFileToPublish Include="$(OpenStrataDeploymentSdkPath)" Private="true" Condition="Exists('$(OpenStrataDeploymentSdkPath)')" >
 			<CopyLocal>true</CopyLocal>
-			<CopyToPublishDiretory>PreserveNewest</CopyToPublishDiretory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 			<DestinationSubPath>OpenStrata.Deployment.Sdk.dll</DestinationSubPath>
 			<OriginalItemSpec>$(OpenStrataDeploymentSdkPath)</OriginalItemSpec>
 			<RelativePath>OpenStrata.Deployment.Sdk.dll</RelativePath>
