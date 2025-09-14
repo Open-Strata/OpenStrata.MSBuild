@@ -53,7 +53,14 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 	<ItemGroup>
 		<PowerPlatformPDPackageReference Include="@(PackageReference->WithMetadataValue('Identity', 'Microsoft.PowerApps.MSBuild.PDPackage'))" />
 
-		<Reference Include="$(OpenStrataDeploymentSdkPath)" Private="True" Condition="Exists('$(OpenStrataDeploymentSdkPath)')" />		
+		<ResolvedFileToPublish Include="$(OpenStrataDeploymentSdkPath)" Private="true" Condition="Exists('$(OpenStrataDeploymentSdkPath)')" >
+			<CopyLocal>true</CopyLocal>
+			<CopyToPublishDiretory>PreserveNewest</CopyToPublishDiretory>
+			<DestinationSubPath>OpenStrata.Deployment.Sdk.dll</DestinationSubPath>
+			<OriginalItemSpec>$(OpenStrataDeploymentSdkPath)</OriginalItemSpec>
+			<RelativePath>OpenStrata.Deployment.Sdk.dll</RelativePath>
+			<TargetPath>OpenStrata.Deployment.Sdk.dll</TargetPath>
+		</ResolvedFileToPublish>	
 		
 	</ItemGroup>
 

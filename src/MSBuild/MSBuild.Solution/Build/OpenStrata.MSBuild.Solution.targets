@@ -270,6 +270,8 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 		<Delete Files="@(CustomAPIToDelete)" />
 	</Target>
 
+	<Target Name="BeforeGetOutputsForPdPackage" BeforeTargets="GetOutputsForPdPackage" DependsOn="OS_GetDataverseSolutionInfo" />
+
 
 
 </Project>
