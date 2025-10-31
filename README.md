@@ -10,12 +10,15 @@ OpenStrata.MSBuild provides a comprehensive suite of MSBuild SDKs that standardi
 
 ## 🎯 **Project Vision**
 
-The OpenStrata Initiative is an open-source project with the explicit objective to facilitate a standardized framework for Publishers and Consumers within the Microsoft Power Platform ecosystem to **Distribute**, **Discover**, **Consume**, and **Integrate** (DDCI) production-ready Power Platform capabilities.
+The OpenStrata Initiative revolutionizes Power Platform development by bringing **NuGet-style package management** to the Power Platform ecosystem. At its core is the **Strati project type** - the foundational innovation that bundles Power Platform solution components, configuration data, deployment tasks, and dependencies into referenceable NuGet packages.
+
+**The Strati Innovation**: Just as NuGet transformed .NET development by enabling code reuse through package dependencies, OpenStrata enables Power Platform teams to create, share, and depend on packaged Power Platform capabilities. Each Strati package can reference other Strati packages, creating a rich ecosystem of reusable Power Platform components.
 
 ## ✨ **Key Features**
 
+- **� Strati Package System** - Bundle complete Power Platform capabilities into referenceable NuGet packages
+- **� Package Dependencies** - Reference other Strati packages, enabling true component reuse
 - **🔧 Automated Build Processes** - Standardized MSBuild targets for Power Platform projects
-- **📦 Package Management** - NuGet-based distribution of Power Platform components
 - **🚀 Deployment Automation** - Streamlined deployment workflows for Dataverse solutions
 - **🔐 Security & Signing** - Automated assembly signing and security best practices
 - **🏗️ Project Templates** - Scaffolding for common Power Platform development patterns
@@ -35,7 +38,7 @@ When you create an OpenStrata solution using `dotnet new os-dotnet`, you get the
 
 - **`OpenStrata.MSBuild.Solution`** - For Dataverse solution management
 - **`OpenStrata.MSBuild.Package`** - For package creation and distribution  
-- **`OpenStrata.MSBuild.Stratify`** - For solution layering and stratification
+- **`OpenStrata.MSBuild.Stratify`** - **THE CORE INNOVATION** - Bundles Power Platform capabilities into referenceable NuGet packages with dependency support
 - **`OpenStrata.MSBuild.ConfigData`** - For configuration data management
 - **`OpenStrata.MSBuild.Deployment`** - For deployment automation
 
@@ -116,16 +119,26 @@ If you need to manually add OpenStrata MSBuild to an existing project:
 
 ### **Project Types**
 
-When you create an OpenStrata solution, you get **multiple coordinated projects**:
+When you create an OpenStrata solution, you get **multiple coordinated projects** working together to create **reusable Strati packages**:
 
-#### **Default Projects** (included automatically):
+#### **🎯 Core Innovation: Strati Projects**
+
+**Strati** is the foundational project type that makes OpenStrata revolutionary. Each Strati project:
+- **Bundles complete Power Platform capabilities** (solution components, configuration data, deployment tasks)
+- **Creates referenceable NuGet packages** that other projects can depend on
+- **Enables dependency chains** - your Strati package can reference other Strati packages
+- **Brings package management benefits** to Power Platform development
+
+#### **Default Projects** (included automatically)
+
 - **Solution** - Dataverse solution management
 - **Package** - Package creation and distribution
-- **Stratify** - Solution layering and stratification  
+- **Stratify** - **THE CORE** - Bundles everything into referenceable NuGet packages
 - **ConfigData** - Configuration data management
 - **Deployment** - Deployment automation
 
-#### **Additional Projects** (add as needed):
+#### **Additional Projects** (add as needed)
+
 - **Plugin** - `dotnet new os-plugin` - Dynamics 365 plugins
 - **PCF** - `dotnet new os-pcf` - Power Apps Component Framework controls
 - **PowerPages** - `dotnet new os-powerpages` - Power Pages websites
@@ -147,7 +160,7 @@ OpenStrata.MSBuild/
 │   │   ├── MSBuild.PowerPages/     # Power Pages sites
 │   │   ├── MSBuild.Package/        # Package management
 │   │   ├── MSBuild.Deployment/     # Deployment tools
-│   │   └── MSBuild.Stratify/       # Solution layering
+│   │   └── MSBuild.Stratify/       # Core Innovation - Strati packages
 │   ├── Deployment/
 │   │   └── Deployment.Sdk/         # Deployment SDK
 │   ├── Shared/                     # Shared libraries

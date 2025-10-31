@@ -199,13 +199,23 @@ src/
 
 ### **Understanding OpenStrata Solution Structure**
 
-When contributing to OpenStrata.MSBuild, it's important to understand that an **OpenStrata solution contains multiple coordinated projects**:
+When contributing to OpenStrata.MSBuild, it's essential to understand that the **Strati project type is the foundational innovation** of the entire OpenStrata Initiative.
+
+#### **🎯 The Strati Revolution**
+
+**Strati projects are the crux of OpenStrata** - they bundle Power Platform solution components, configuration data, deployment tasks, and more into single, referenceable NuGet packages. Each Strati package can have dependencies on other Strati packages, bringing the proven benefits of component libraries and package registries (like NuGet) to the Power Platform ecosystem.
+
+**Why This Matters**: Just as NuGet revolutionized .NET development by enabling code reuse and dependency management, Strati packages revolutionize Power Platform development by enabling **reusable Power Platform capabilities**.
+
+#### **How OpenStrata Solutions Work**
+
+An **OpenStrata solution contains multiple coordinated projects** that work together to create and support Strati packages:
 
 #### **Default Projects** (created automatically)
 
 - **Solution projects** - Use `OpenStrata.MSBuild.Solution` for Dataverse solution management
 - **Package projects** - Use `OpenStrata.MSBuild.Package` for distribution and packaging
-- **Stratify projects** - Use `OpenStrata.MSBuild.Stratify` for solution layering and stratification
+- **Stratify projects** - Use `OpenStrata.MSBuild.Stratify` for **THE CORE INNOVATION** - bundling everything into referenceable NuGet packages with dependency support
 - **ConfigData projects** - Use `OpenStrata.MSBuild.ConfigData` for configuration data management
 - **Deployment projects** - Use `OpenStrata.MSBuild.Deployment` for deployment automation
 
@@ -216,7 +226,7 @@ When contributing to OpenStrata.MSBuild, it's important to understand that an **
 - **PowerPages projects** - Use `OpenStrata.MSBuild.PowerPages` for Power Pages website development
 - **DocumentTemplate projects** - Use `OpenStrata.MSBuild.DocumentTemplates` for document template management
 
-**For Contributors**: When working on a specific MSBuild SDK (e.g., MSBuild.Solution), understand how it fits within the overall solution structure. Each SDK should focus on its specific capability while supporting coordination with other project types in the same solution.
+**For Contributors**: When working on any MSBuild SDK, always consider how it supports the **Strati package ecosystem**. The ultimate goal is enabling teams to create, share, and depend on packaged Power Platform capabilities. Every SDK should facilitate this vision of bringing NuGet-style package management to Power Platform development.
 
 ### **Coding Standards**
 
