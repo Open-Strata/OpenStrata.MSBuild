@@ -23,26 +23,34 @@ The OpenStrata Initiative is an open-source project with the explicit objective 
 
 ## 🏛️ **Architecture Overview**
 
-The solution is organized into several specialized MSBuild SDKs:
+The OpenStrata.MSBuild solution provides specialized MSBuild SDKs for different types of Power Platform projects. **Each project typically uses one specific SDK** based on its purpose:
 
 ### **Core MSBuild SDK**
+
 - **`OpenStrata.MSBuild`** - Core MSBuild tasks and shared functionality
 
-### **Power Platform Components**
-- **`OpenStrata.MSBuild.Solution`** - Dataverse solution management and packaging
-- **`OpenStrata.MSBuild.Plugin`** - Dynamics 365 plugin development and deployment
-- **`OpenStrata.MSBuild.ConfigData`** - Configuration data management
-- **`OpenStrata.MSBuild.PCF`** - Power Apps Component Framework (PCF) controls
-- **`OpenStrata.MSBuild.PowerPages`** - Power Pages website development
-- **`OpenStrata.MSBuild.DocumentTemplates`** - Document template handling
+### **Power Platform Project Types**
+
+Each project type has its own dedicated SDK with specialized tooling:
+
+- **`OpenStrata.MSBuild.Solution`** - For Dataverse solution projects
+- **`OpenStrata.MSBuild.Plugin`** - For Dynamics 365 plugin projects
+- **`OpenStrata.MSBuild.ConfigData`** - For configuration data projects
+- **`OpenStrata.MSBuild.PCF`** - For Power Apps Component Framework projects
+- **`OpenStrata.MSBuild.PowerPages`** - For Power Pages website projects
+- **`OpenStrata.MSBuild.DocumentTemplates`** - For document template projects
 
 ### **Packaging & Deployment**
-- **`OpenStrata.MSBuild.Package`** - Package creation and distribution
-- **`OpenStrata.MSBuild.Deployment`** - Deployment automation and workflows
-- **`OpenStrata.MSBuild.Stratify`** - Solution layering and stratification
+
+- **`OpenStrata.MSBuild.Package`** - For package distribution projects
+- **`OpenStrata.MSBuild.Deployment`** - For deployment automation projects
+- **`OpenStrata.MSBuild.Stratify`** - For solution layering projects
 
 ### **Development Tools**
-- **`OpenStrata.Deployment.Sdk`** - Deployment SDK for Power Platform solutions
+
+- **`OpenStrata.Deployment.Sdk`** - Deployment SDK for advanced scenarios
+
+> **💡 Important**: OpenStrata projects are designed to be **single-purpose**. For example, a solution project focuses on Dataverse solutions and would not also be a plugin project. Use the [OpenStrata .NET templates](https://github.com/Open-Strata/OpenStrata.NET.New) to create the right project type for your needs.
 
 ## 🚀 **Quick Start**
 
@@ -53,7 +61,31 @@ The solution is organized into several specialized MSBuild SDKs:
 - **PowerShell 5.1+** (for development shortcuts)
 - **Power Platform CLI** (for solution management)
 
-### **Installation**
+### **Recommended: Using OpenStrata Templates**
+
+The easiest way to get started is using the OpenStrata .NET templates from [OpenStrata.NET.New](https://github.com/Open-Strata/OpenStrata.NET.New):
+
+1. **Install the OpenStrata templates:**
+   ```bash
+   dotnet new install OpenStrata.NET.Templates
+   ```
+
+2. **Create a new OpenStrata solution:**
+   ```bash
+   dotnet new os-dotnet -pn "YourPublisherName" -pp "yourprefix"
+   ```
+
+3. **Navigate to your solution and build:**
+   ```bash
+   cd YourPublisherName
+   dotnet build
+   ```
+
+This creates a complete OpenStrata solution with the appropriate project structure for your chosen project type (Solution, Plugin, PCF, etc.).
+
+### **Manual Installation (Advanced)**
+
+If you need to manually add OpenStrata MSBuild to an existing project:
 
 1. **Clone the repository:**
    ```bash
@@ -80,22 +112,17 @@ The solution is organized into several specialized MSBuild SDKs:
    build
    ```
 
-### **Using in Your Project**
+### **Project Types**
 
-Add OpenStrata MSBuild packages to your Power Platform projects:
+OpenStrata projects are typically of **one specific type**. Choose the appropriate template for your needs:
 
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="OpenStrata.MSBuild.Solution" Version="1.*" />
-    <PackageReference Include="OpenStrata.MSBuild.Plugin" Version="1.*" />
-  </ItemGroup>
-</Project>
-```
+- **`os-solution`** - Dataverse solution projects
+- **`os-plugin`** - Dynamics 365 plugin projects  
+- **`os-pcf`** - Power Apps Component Framework projects
+- **`os-package`** - Package distribution projects
+- **`os-powerpages`** - Power Pages website projects
+
+Each project type includes the appropriate OpenStrata MSBuild SDK automatically.
 
 ## 📁 **Project Structure**
 
