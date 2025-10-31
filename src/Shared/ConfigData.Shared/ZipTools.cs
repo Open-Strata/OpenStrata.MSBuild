@@ -1,4 +1,4 @@
-﻿using OpenStrata.ConfigData.Xml;
+using OpenStrata.ConfigData.Xml;
 using OpenStrata.Xml;
 using System;
 using System.Collections.Generic;

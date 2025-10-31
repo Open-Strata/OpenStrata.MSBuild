@@ -1,4 +1,4 @@
-﻿using OpenStrata.Deployment.Sdk;
+using OpenStrata.Deployment.Sdk;
 using System.ComponentModel.Composition;
 
 using System;

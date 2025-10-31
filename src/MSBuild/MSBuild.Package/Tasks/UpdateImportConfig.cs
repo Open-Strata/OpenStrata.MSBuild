@@ -1,4 +1,4 @@
-﻿using Deployment.Shared.Xml;
+using Deployment.Shared.Xml;
 using Microsoft.Build.Framework;
 using OpenStrata.MSBuild.Tasks;
 using OpenStrata.Strati.Manifest.Xml;

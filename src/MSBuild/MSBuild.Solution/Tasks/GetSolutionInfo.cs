@@ -1,4 +1,4 @@
-﻿using Microsoft.Build.Framework;
+using Microsoft.Build.Framework;
 using OpenStrata.MSBuild.Tasks;
 using OpenStrata.Solution.Publisher;
 using OpenStrata.Solution.Xml;

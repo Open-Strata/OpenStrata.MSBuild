@@ -1,4 +1,4 @@
-﻿//using Microsoft.Uii.Common.Entities;
+//using Microsoft.Uii.Common.Entities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using Microsoft.Xrm.Tooling.Dmt.DataMigCommon.DataModel.Schema;

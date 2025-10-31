@@ -1,4 +1,4 @@
-﻿using Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase;
+using Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;

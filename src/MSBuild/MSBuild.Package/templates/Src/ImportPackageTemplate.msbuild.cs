@@ -1,4 +1,4 @@
-﻿using Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase;
+using Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase;
 using System.ComponentModel.Composition;
 using OpenStrata.Deployment.Sdk;
 

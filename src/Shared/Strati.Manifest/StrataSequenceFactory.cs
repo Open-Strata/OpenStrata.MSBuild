@@ -1,4 +1,4 @@
-﻿using OpenStrata.Strati.Manifest.Xml;
+using OpenStrata.Strati.Manifest.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;

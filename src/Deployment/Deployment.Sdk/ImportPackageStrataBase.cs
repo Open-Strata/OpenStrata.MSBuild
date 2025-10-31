@@ -1,4 +1,4 @@
-﻿// using Microsoft.Uii.Common.Entities;
+// using Microsoft.Uii.Common.Entities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase;

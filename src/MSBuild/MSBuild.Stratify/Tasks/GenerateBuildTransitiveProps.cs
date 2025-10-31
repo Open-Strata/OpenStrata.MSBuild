@@ -1,4 +1,4 @@
-﻿// Copyright (c) 74Bravo LLC and Contributors. All rights reserved.
+// Copyright (c) Open-Strata contributors. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project or repository root for license information.
 
 

@@ -1,6 +1,15 @@
 
 $global:OSScriptDir = $PSScriptRoot
 
+# =============================================================================
+# OpenStrata MSBuild Development Shortcuts
+# 
+# SECURITY NOTE: 
+# - Never commit API keys or secrets to source control
+# - Use environment variables for sensitive configuration
+# - The NUGET_API_KEY environment variable is used by default for publishing
+# =============================================================================
+
 
 function global:GetSolutions
 {
@@ -31,19 +40,25 @@ function global:GetSolutions
 function global:push2nuget
 {
     param(
-        [Parameter(Mandatory=$true)]        
-        [string]$key
-
-
+        [Parameter(Mandatory=$false)]        
+        [string]$key = $env:NUGET_API_KEY,
+        
+        [Parameter(Mandatory=$false)]        
+        [string]$source = "https://api.nuget.org/v3/index.json"
     )
 
-        $solutions = GetSolutions
+    if ([string]::IsNullOrEmpty($key)) {
+        Write-Warning "NuGet API key not provided. Set NUGET_API_KEY environment variable or pass -key parameter."
+        Write-Host "Usage: push2nuget -key <your-api-key>" -ForegroundColor Yellow
+        return
+    }
 
-             foreach ($solution in $solutions){
-             Show-Shortcut-Note "dotnet msbuild $solution -verbosity:normal"            
-             dotnet msbuild $solution -verbosity:normal -p:NugetPushKey=$key -p:NugetPushSource=https://www.nuget.org -p:Configuration=Release
-         }
+    $solutions = GetSolutions
 
+    foreach ($solution in $solutions){
+        Show-Shortcut-Note "dotnet msbuild $solution -verbosity:normal"            
+        dotnet msbuild $solution -verbosity:normal -p:NugetPushKey=$key -p:NugetPushSource=$source -p:Configuration=Release
+    }
 }
 
 

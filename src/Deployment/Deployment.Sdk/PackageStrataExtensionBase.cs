@@ -1,4 +1,4 @@
-﻿//using Microsoft.Uii.Common.Entities;
+//using Microsoft.Uii.Common.Entities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using Microsoft.Xrm.Tooling.PackageDeployment.CrmPackageExtentionBase;
@@ -559,7 +559,7 @@ namespace OpenStrata.Deployment.Sdk
             var friendlyName = workflow.Name?.ToLower() ?? string.Empty;
 
             return friendlyName.Contains("keep-off") ||
-                   friendlyName.StartsWith("†") ||
+                   friendlyName.StartsWith("�") ||
                    friendlyName.StartsWith("obsolete") ||
                    friendlyName.EndsWith("template") ? workflow_statecode.Draft : workflow_statecode.Activated;
         }

@@ -242,7 +242,20 @@ orleans.codegen.cs
 
 # Including strong name files can present a security risk
 # (https://github.com/github/gitignore/pull/2483#issue-259490424)
-#*.snk
+*.snk
+
+# OpenStrata Security: Additional sensitive files
+*.pfx
+*.p12
+**/appsettings.local.json
+**/appsettings.*.local.json
+**/*secrets*.json
+**/*local*.config
+
+# OpenStrata Security: Local development paths and keys
+C:\Packages/
+/C/Packages/
+LocalPackageFeed/
 
 # Since there are multiple workflows, uncomment next line to ignore bower_components
 # (https://github.com/github/gitignore/pull/1529#issuecomment-104372622)
