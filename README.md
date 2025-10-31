@@ -9,15 +9,18 @@ OpenStrata revolutionizes Power Platform development by bringing **package manag
 
 ## 🎯 What is OpenStrata?
 
-**The Power Platform Package Revolution**: OpenStrata enables you to bundle complete Power Platform capabilities (solution components, configuration data, deployment tasks) into **referenceable NuGet packages**. Each Strati package can depend on other Strati packages, creating a rich ecosystem of reusable Power Platform components.
+**The Power Platform Package Revolution**: OpenStrata enables you to bundle complete Power Platform capabilities (solution components, configuration data, deployment tasks) into **referenceable NuGet packages**. Each Strati package can depend on other Strati packages, creating a rich ecosystem of reusable Power Platform components with **automatic dependency sequencing**.
 
-**Before OpenStrata**: Copy-paste solutions, manual deployments, no dependency management  
-**With OpenStrata**: Package-based development, automated deployments, dependency resolution
+**Before OpenStrata**: Copy-paste solutions, manual deployments, dependency coordination nightmares  
+**With OpenStrata**: Package-based development, automated deployments, **zero-effort dependency management**
+
+> **💡 New to OpenStrata?** Start with the [Quick Start](#-quick-start) below, then dive into [How It Works](HOW-IT-WORKS.md) to understand the technical innovation.
 
 ## ✨ Key Benefits
 
 - **📦 Strati Packages** - Bundle complete Power Platform capabilities into NuGet packages
 - **🔗 Dependency Management** - Reference other Strati packages, enabling true component reuse
+- **⚡ Automatic Dependency Sequencing** - Solutions and components deploy in the correct order automatically
 - **🚀 Automated Deployments** - Streamlined deployment workflows for Dataverse solutions
 - **🏗️ Template-Based Development** - Start projects with proven patterns and structures
 - **🔄 CI/CD Ready** - Works with GitHub Actions, Azure DevOps, and other platforms
@@ -93,7 +96,9 @@ Your OpenStrata solution automatically creates Strati packages during build. The
 
 - **Published to NuGet feeds** for team consumption
 - **Referenced by other OpenStrata solutions** as dependencies
-- **Deployed to Power Platform environments** with full dependency resolution
+- **Deployed to Power Platform environments** with **automatic dependency sequencing**
+
+**🎯 Automatic Dependency Sequencing**: OpenStrata analyzes your package dependencies and **automatically determines the correct installation order**. No more manual coordination - dependencies are deployed first, ensuring solutions install successfully every time.
 
 ##  Package Ecosystem
 
@@ -116,6 +121,30 @@ Share your Strati packages with your organization:
 dotnet nuget push YourPackage.Strati.1.0.0.nupkg --source https://your-internal-feed
 ```
 
+### 🎯 Automatic Dependency Sequencing Example
+
+When you deploy a package with dependencies, OpenStrata automatically determines the correct order:
+
+```
+Your Package Dependencies:
+MyApp.Strati v1.0 
+├── Security.Strati v2.1 
+│   └── Core.Strati v1.5
+└── Utilities.Strati v3.0
+    └── Core.Strati v1.5
+
+Automatic Deployment Order:
+1. Core.Strati v1.5      ← Deployed first (foundation)
+2. Security.Strati v2.1  ← Deployed second  
+3. Utilities.Strati v3.0 ← Deployed third
+4. MyApp.Strati v1.0     ← Deployed last (depends on all)
+```
+
+**No manual coordination needed** - OpenStrata ensures solutions install in the correct order every time!
+
+> **🔍 Want to understand how this works under the hood?**  
+> **See [How It Works](HOW-IT-WORKS.md)** for a detailed technical deep-dive into OpenStrata's architecture, MEF composition, and automatic dependency sequencing implementation.
+
 ## 📚 Documentation & Resources
 
 ### For Power Platform Developers
@@ -126,7 +155,7 @@ dotnet nuget push YourPackage.Strati.1.0.0.nupkg --source https://your-internal-
 
 ### Technical Deep Dive
 
-- **[How It Works](HOW-IT-WORKS.md)** - Technical architecture and implementation details under the hood
+- **📋 [How It Works](HOW-IT-WORKS.md)** - **★ MUST READ** - Technical architecture, MEF composition, and dependency sequencing implementation
 
 ### For Contributors & Builders
 
@@ -155,4 +184,6 @@ Licensed under the Apache 2.0 License - see [LICENSE.txt](LICENSE.txt) for detai
 
 ---
 
-** Join the Power Platform Package Revolution with OpenStrata**
+**🌟 Join the Power Platform Package Revolution with OpenStrata**
+
+**Ready to transform your Power Platform development?** Explore the [technical architecture](HOW-IT-WORKS.md) that makes it all possible.
