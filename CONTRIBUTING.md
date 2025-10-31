@@ -357,5 +357,6 @@ By contributing to OpenStrata.MSBuild, you agree that your contributions will be
 
 ---
 
-Thank you for contributing to OpenStrata.MSBuild! Your efforts help make Power Platform development better for everyone. 🚀 
+Thank you for contributing to OpenStrata.MSBuild! Your efforts help make Power Platform development better for everyone. 🚀
+ 
  
