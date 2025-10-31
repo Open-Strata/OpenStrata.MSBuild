@@ -45,30 +45,42 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) to ensure a wel
 
 ### **Testing Your Changes**
 
-To test your MSBuild SDK changes, you can create test projects using the OpenStrata templates:
+When contributing to OpenStrata.MSBuild, you'll need to test your MSBuild SDK changes:
 
-1. **Install the OpenStrata templates:**
+1. **Build the MSBuild packages locally:**
 
-   ```bash
-   dotnet new install OpenStrata.NET.Templates
-   ```
-
-2. **Create a test project:**
-
-   ```bash
-   # Create a solution project to test MSBuild.Solution changes
-   dotnet new os-solution -pn "TestPublisher" -pp "test"
+   ```powershell
+   # Build all packages
+   build
    
-   # Or create other project types as needed
-   dotnet new os-plugin -pn "TestPublisher" -pp "test"
-   dotnet new os-pcf -pn "TestPublisher" -pp "test"
+   # Packages will be available in your local package feed
+   # Default: $(TEMP)\OpenStrata\Packages or $env:OPENSTRATA_LOCAL_PACKAGE_FEED
    ```
 
-3. **Reference your local MSBuild changes:**
+2. **Create test projects to validate your changes:**
 
    ```xml
-   <!-- In your test project, reference local packages -->
-   <PackageReference Include="OpenStrata.MSBuild.Solution" Version="1.*" />
+   <!-- Create a test project that references your local MSBuild packages -->
+   <Project Sdk="Microsoft.NET.Sdk">
+     <PropertyGroup>
+       <TargetFramework>net472</TargetFramework>
+     </PropertyGroup>
+     
+     <ItemGroup>
+       <!-- Reference your locally built packages -->
+       <PackageReference Include="OpenStrata.MSBuild.Solution" Version="1.*" />
+     </ItemGroup>
+   </Project>
+   ```
+
+3. **Test your MSBuild targets and tasks:**
+
+   ```powershell
+   # Test specific MSBuild targets
+   dotnet msbuild YourTestProject.csproj -t:YourNewTarget -v:detailed
+   
+   # Verify your changes work as expected
+   dotnet build YourTestProject.csproj
    ```
 
 ## 📋 **How to Contribute**
@@ -187,15 +199,15 @@ src/
 
 ### **Understanding OpenStrata Project Types**
 
-OpenStrata projects are designed to be **single-purpose**:
+When contributing to OpenStrata.MSBuild, it's important to understand that the MSBuild SDKs are designed to support **single-purpose** Power Platform projects:
 
-- **Solution projects** - Focus on Dataverse solution management
-- **Plugin projects** - Focus on Dynamics 365 plugin development
-- **PCF projects** - Focus on Power Apps Component Framework controls
-- **Package projects** - Focus on distribution and packaging
-- **PowerPages projects** - Focus on Power Pages website development
+- **Solution projects** - Use `OpenStrata.MSBuild.Solution` for Dataverse solution management
+- **Plugin projects** - Use `OpenStrata.MSBuild.Plugin` for Dynamics 365 plugin development
+- **PCF projects** - Use `OpenStrata.MSBuild.PCF` for Power Apps Component Framework controls
+- **Package projects** - Use `OpenStrata.MSBuild.Package` for distribution and packaging
+- **PowerPages projects** - Use `OpenStrata.MSBuild.PowerPages` for Power Pages website development
 
-Each project type uses its specific MSBuild SDK and follows its own conventions. When contributing, understand which project type you're working with and ensure your changes align with that type's purpose.
+**For Contributors**: When working on a specific MSBuild SDK (e.g., MSBuild.Solution), focus your changes on that project type's specific needs. Avoid adding functionality that would blur the lines between project types. Each SDK should remain focused on its specific Power Platform capability.
 
 ### **Coding Standards**
 
