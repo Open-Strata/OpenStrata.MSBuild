@@ -197,17 +197,26 @@ src/
 └── shortcuts.ps1              # Development utilities
 ```
 
-### **Understanding OpenStrata Project Types**
+### **Understanding OpenStrata Solution Structure**
 
-When contributing to OpenStrata.MSBuild, it's important to understand that the MSBuild SDKs are designed to support **single-purpose** Power Platform projects:
+When contributing to OpenStrata.MSBuild, it's important to understand that an **OpenStrata solution contains multiple coordinated projects**:
+
+#### **Default Projects** (created automatically)
 
 - **Solution projects** - Use `OpenStrata.MSBuild.Solution` for Dataverse solution management
+- **Package projects** - Use `OpenStrata.MSBuild.Package` for distribution and packaging
+- **Stratify projects** - Use `OpenStrata.MSBuild.Stratify` for solution layering and stratification
+- **ConfigData projects** - Use `OpenStrata.MSBuild.ConfigData` for configuration data management
+- **Deployment projects** - Use `OpenStrata.MSBuild.Deployment` for deployment automation
+
+#### **Additional Projects** (added as needed)
+
 - **Plugin projects** - Use `OpenStrata.MSBuild.Plugin` for Dynamics 365 plugin development
 - **PCF projects** - Use `OpenStrata.MSBuild.PCF` for Power Apps Component Framework controls
-- **Package projects** - Use `OpenStrata.MSBuild.Package` for distribution and packaging
 - **PowerPages projects** - Use `OpenStrata.MSBuild.PowerPages` for Power Pages website development
+- **DocumentTemplate projects** - Use `OpenStrata.MSBuild.DocumentTemplates` for document template management
 
-**For Contributors**: When working on a specific MSBuild SDK (e.g., MSBuild.Solution), focus your changes on that project type's specific needs. Avoid adding functionality that would blur the lines between project types. Each SDK should remain focused on its specific Power Platform capability.
+**For Contributors**: When working on a specific MSBuild SDK (e.g., MSBuild.Solution), understand how it fits within the overall solution structure. Each SDK should focus on its specific capability while supporting coordination with other project types in the same solution.
 
 ### **Coding Standards**
 
@@ -348,4 +357,5 @@ By contributing to OpenStrata.MSBuild, you agree that your contributions will be
 
 ---
 
-Thank you for contributing to OpenStrata.MSBuild! Your efforts help make Power Platform development better for everyone. 🚀
+Thank you for contributing to OpenStrata.MSBuild! Your efforts help make Power Platform development better for everyone. 🚀 
+ 
