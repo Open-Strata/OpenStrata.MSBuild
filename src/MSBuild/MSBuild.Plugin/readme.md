@@ -1,7 +1,30 @@
-**OpenStrata.MSBuild.Plugin** will contain build definitions that are used in conjunction with Microsoft.PowerApps.MSBuild.Plugin package.
+# OpenStrata.MSBuild.Plugin
 
-Future functionality may include the automatic generation of plugin metadata, ensuring publishers are able to manage and tighlty couple in version control UID and the corresponding source code.  
-***
+MSBuild SDK for Microsoft Dynamics 365 plugin development, testing, and deployment automation.
+
+## Overview
+
+**OpenStrata.MSBuild.Plugin** provides specialized tooling for Dynamics 365 plugin development that works in conjunction with Microsoft.PowerApps.MSBuild.Plugin package.
+
+Key capabilities:
+- **Plugin Development** - Streamlined plugin project templates and build processes
+- **Metadata Management** - Automatic generation of plugin metadata and registration info
+- **Version Control Integration** - Tightly couple UIDs with corresponding source code in version control
+- **Package Management** - Plugin packaging for distribution and deployment
+- **Testing Integration** - Unit testing framework integration for plugin development
+
+## Installation
+
+```xml
+<PackageReference Include="OpenStrata.MSBuild.Plugin" Version="1.*" />
+```
+
+### Future Functionality
+
+Planned enhancements include:
+- Automatic generation of plugin metadata ensuring publishers can manage and tightly couple version control UIDs with corresponding source code
+- Enhanced plugin registration automation
+- Advanced testing and validation tools
 
 Install **[OpenStrata.NET.Templates](https://www.nuget.org/packages/OpenStrata.NET.Templates)** to get started.
 
