@@ -116,13 +116,17 @@ Share your Strati packages with your organization:
 dotnet nuget push YourPackage.Strati.1.0.0.nupkg --source https://your-internal-feed
 ```
 
-##  Documentation & Resources
+## 📚 Documentation & Resources
 
 ### For Power Platform Developers
 
 - **Templates Documentation** - [OpenStrata.NET.Templates Repository](https://github.com/Open-Strata/OpenStrata.NET.Templates)
 - **Getting Started Guide** - See template documentation for detailed walkthroughs
 - **Best Practices** - [Community Wiki](https://github.com/Open-Strata/OpenStrata.MSBuild/wiki)
+
+### Technical Deep Dive
+
+- **[How It Works](HOW-IT-WORKS.md)** - Technical architecture and implementation details under the hood
 
 ### For Contributors & Builders
 
