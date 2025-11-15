@@ -9,7 +9,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 Copyright (c) Open-Strata contributors. All rights reserved.. All rights reserved.
 ***********************************************************************************************
 -->
-<Project  xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+<Project>
 
 	<PropertyGroup Condition="'$(OpenStrataBuildSolutionAssemblyFile)' == ''">
 		<OpenStrataBuildPluginAssemblyFile>$(MSBuildThisFileDirectory)..\tasks\OpenStrata.MSBuild.Plugin.dll</OpenStrataBuildPluginAssemblyFile>
